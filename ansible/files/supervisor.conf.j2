@@ -7,3 +7,14 @@ stdout_logfile = /var/log/{{projectname}}/{{projectname}}.out.log
 stderr_logfile = /var/log/{{projectname}}/{{projectname}}.err.log
 autostart=true
 autorestart=true
+
+[program:{{projectname}}-rqworker]
+command = /home/www/{{location}}/venv/bin/python manage.py rqworker default high low
+environment=PATH="/home/www/{{location}}/venv/bin:%(ENV_PATH)s"
+directory = /home/www/{{location}}
+user = {{ansible_user}}
+stdout_logfile = /var/log/{{projectname}}/rqworker.out.log
+stderr_logfile = /var/log/{{projectname}}/rqworker.err.log
+autostart=true
+autorestart=true
+numprocs=1

@@ -108,11 +108,11 @@ Uses django-rq for processing:
 - FFmpeg (for video encoding)
 
 ### AI/ML (install based on features needed)
-- `opencv-python` - Image processing
-- `mediapipe` - Pose detection
+- `opencv-python-headless` - Image processing
+- `mediapipe` - Pose detection (install manually, Python 3.12 compatibility varies)
 - `rembg` - Background removal
-- `TTS` (Coqui) - Voice synthesis (optional)
-- `diffusers` - Stable Diffusion for backgrounds (optional)
+- `gTTS` - Voice synthesis (Python 3.12 compatible alternative to Coqui TTS)
+- `diffusers` + `torch` - Stable Diffusion for backgrounds (optional, requires GPU)
 
 ## Frontend
 - Bootstrap 5 (CDN)
@@ -123,11 +123,33 @@ Uses django-rq for processing:
   - Timeline editor
 
 ## Deployment
-Uses Ansible playbooks in `ansible/` directory:
-- `djangodeployubuntu20.yml` - Full deployment
-- `gitpull.yml` - Update from git
 
-Configure `ansible/group_vars/all` with server credentials.
+**Production server:** 140.82.28.166 (Vultr, Ubuntu 24.04)
+**URL:** https://animateadrawing.com
+
+Uses Ansible playbooks in `ansible/` directory. Configure `ansible/group_vars/all` with server credentials.
+
+```bash
+# Deploy updates
+cd ansible
+ansible -i servers all -m shell -a "cd /home/www/animateadrawing && git pull" --become --become-user=animateadrawing
+ansible -i servers all -m shell -a "supervisorctl restart animateadrawing" --become
+
+# Run migrations on server
+ansible -i servers all -m shell -a "/home/www/animateadrawing/venv/bin/python /home/www/animateadrawing/manage.py migrate" --become --become-user=animateadrawing
+
+# Check logs
+ansible -i servers all -m shell -a "tail -50 /var/log/animateadrawing/animateadrawing.err.log" --become
+
+# Full initial deployment
+ansible-playbook -i servers djangodeployubuntu20.yml
+```
+
+**Server paths:**
+- App: `/home/www/animateadrawing`
+- Logs: `/var/log/animateadrawing/`
+- Nginx config: `/etc/nginx/sites-available/animateadrawing.conf`
+- Supervisor config: `/etc/supervisor/conf.d/animateadrawing.conf`
 
 ### User & Authentication
 Custom user model `accounts.CustomUser` with:

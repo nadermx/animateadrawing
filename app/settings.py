@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'core',
     'animator',
     'django_select2',
+    'captcha',
 ]
 
 MIDDLEWARE = [

@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/accounts/', include('accounts.urls')),
     path('ipns/', include('finances.urls.payment')),
     path('animator/', include('animator.urls')),
+    path('captcha/', include('captcha.urls')),
     path('', include('core.urls')),
 ]
 
