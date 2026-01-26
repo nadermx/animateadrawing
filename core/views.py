@@ -124,6 +124,66 @@ class PrivacyPage(View):
         )
 
 
+class HowItWorksPage(View):
+    def get(self, request):
+        settings = GlobalVars.get_globals(request)
+        return render(
+            request,
+            'how-it-works.html',
+            {
+                'title': f"How It Works | {config.PROJECT_NAME}",
+                'description': 'Learn how to animate your drawings in 4 simple steps: upload, detect, animate, and export.',
+                'page': 'how-it-works',
+                'g': settings
+            }
+        )
+
+
+class ExamplesPage(View):
+    def get(self, request):
+        settings = GlobalVars.get_globals(request)
+        return render(
+            request,
+            'examples.html',
+            {
+                'title': f"Examples | {config.PROJECT_NAME}",
+                'description': 'See examples of drawings animated with our AI-powered platform.',
+                'page': 'examples',
+                'g': settings
+            }
+        )
+
+
+class TutorialsPage(View):
+    def get(self, request):
+        settings = GlobalVars.get_globals(request)
+        return render(
+            request,
+            'tutorials.html',
+            {
+                'title': f"Tutorials | {config.PROJECT_NAME}",
+                'description': 'Learn how to get the best results from Animate a Drawing with our tutorials and guides.',
+                'page': 'tutorials',
+                'g': settings
+            }
+        )
+
+
+class FAQPage(View):
+    def get(self, request):
+        settings = GlobalVars.get_globals(request)
+        return render(
+            request,
+            'faq.html',
+            {
+                'title': f"FAQ | {config.PROJECT_NAME}",
+                'description': 'Frequently asked questions about Animate a Drawing - features, pricing, technical details, and more.',
+                'page': 'faq',
+                'g': settings
+            }
+        )
+
+
 class LoginPage(View):
     template_name = 'login.html'
 

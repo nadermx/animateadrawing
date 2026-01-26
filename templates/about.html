@@ -1,213 +1,162 @@
 {% extends 'base.html' %}
 {% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">About Animate a Drawing</h1>
+        <p class="lead mb-0">Making animation accessible to everyone</p>
+    </div>
+</div>
+
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <h1 class="display-4 fw-bold mb-4">{{ g.i18n.about|default:"About Animate a Drawing" }}</h1>
 
-            <p class="lead mb-4">
-                Animate a Drawing is an AI-powered platform that brings your artwork to life. Upload any drawing, and our technology automatically detects poses, creates rigs, and applies animations.
-            </p>
+            <!-- Mission Section -->
+            <section class="mb-5">
+                <h2 class="fw-bold mb-4">Our Mission</h2>
+                <p class="lead">
+                    We believe everyone should be able to create animations, regardless of technical skill or expensive software.
+                </p>
+                <p>
+                    Traditional animation requires years of practice, specialized software, and often expensive hardware. We're changing that by using AI to handle the complex parts - pose detection, rigging, and motion interpolation - so you can focus on what matters: your creativity.
+                </p>
+                <p>
+                    Whether you're a professional artist looking to add motion to your portfolio, a content creator making engaging social media posts, an educator explaining concepts visually, or a parent wanting to bring your child's drawing to life, Animate a Drawing makes it possible.
+                </p>
+            </section>
 
-            <h3 class="mt-5 mb-3">Our Mission</h3>
-            <p>
-                We believe everyone should be able to create animations, regardless of technical skill. Our mission is to democratize animation by providing powerful AI tools that make the process accessible and fun.
-            </p>
+            <!-- Story Section -->
+            <section class="mb-5">
+                <h2 class="fw-bold mb-4">The Story</h2>
+                <p>
+                    {{ g.i18n.about_first|safe|default:"Animate a Drawing was created by John, a developer passionate about making creative tools accessible to everyone." }}
+                </p>
+                <p>
+                    {{ g.i18n.about_second|safe|default:"The idea came from wanting to help artists and content creators bring their static artwork to life without learning complex animation software." }}
+                </p>
+                <p>
+                    After watching friends struggle with traditional animation tools just to create simple character movements, it became clear there had to be a better way. The explosion of AI and machine learning capabilities made it possible to automate the tedious parts of animation while keeping the creative control in the artist's hands.
+                </p>
+                <p>
+                    What started as a side project to animate stick figures has grown into a full platform supporting professional artists, educators, game developers, and hobbyists around the world.
+                </p>
+            </section>
 
-            <h3 class="mt-5 mb-3">How It Works</h3>
-            <p>
-                Our platform uses state-of-the-art open source AI models for pose detection and motion generation:
-            </p>
-            <ul class="mb-4">
-                <li><strong>MediaPipe</strong> for accurate pose detection and skeletal tracking</li>
-                <li><strong>rembg (U2-Net)</strong> for automatic background removal</li>
-                <li><strong>Custom motion models</strong> for generating natural animations from text prompts</li>
-                <li><strong>FFmpeg</strong> for high-quality video encoding</li>
-            </ul>
-
-            <h3 class="mt-5 mb-3">The Creator</h3>
-            <p>
-                {{ g.i18n.about_first|safe|default:"Animate a Drawing was created by John, a developer passionate about making creative tools accessible to everyone." }}
-            </p>
-            <p>
-                {{ g.i18n.about_second|safe|default:"The idea came from wanting to help artists and content creators bring their static artwork to life without learning complex animation software." }}
-            </p>
-            <p>
-                Questions or feedback? <a href="/contact/">Get in touch</a>.
-            </p>
-            <p class="mt-4">
-                <strong>- John</strong>
-            </p>
-        </div>
-    </div>
-
-    <!-- FAQ Section -->
-    <div class="faq-section py-5">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold">About FAQ</h2>
-        </div>
-
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="accordion" id="aboutFaq">
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#afaq1">
-                                Who created Animate a Drawing?
-                            </button>
-                        </h3>
-                        <div id="afaq1" class="accordion-collapse collapse show" data-bs-parent="#aboutFaq">
-                            <div class="accordion-body">
-                                Animate a Drawing was created by John, a developer who wanted to make animation accessible to artists without requiring them to learn complex software.
+            <!-- Technology Section -->
+            <section class="mb-5">
+                <h2 class="fw-bold mb-4">The Technology</h2>
+                <p>
+                    Our platform is built on powerful open source AI technology, carefully integrated to provide a seamless animation experience:
+                </p>
+                <div class="row g-4 mt-3">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">MediaPipe</h5>
+                                <p class="card-text text-muted">
+                                    Google's MediaPipe provides accurate pose detection, identifying 33 body landmarks including face, hands, and body positions. It works remarkably well with drawn characters and adapts to various art styles.
+                                </p>
                             </div>
                         </div>
                     </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq2">
-                                What technology powers the animations?
-                            </button>
-                        </h3>
-                        <div id="afaq2" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
-                            <div class="accordion-body">
-                                We use a combination of open source AI models: MediaPipe for pose detection, rembg (U2-Net) for background removal, and custom motion generation models for creating smooth animations.
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">rembg (U2-Net)</h5>
+                                <p class="card-text text-muted">
+                                    For automatic background removal, we use rembg powered by U2-Net. This allows characters on any background to be isolated automatically, making animation setup seamless.
+                                </p>
                             </div>
                         </div>
                     </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq3">
-                                Is the AI running locally or in the cloud?
-                            </button>
-                        </h3>
-                        <div id="afaq3" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
-                            <div class="accordion-body">
-                                Our AI processing runs on our servers in the cloud. This means you don't need a powerful computer - just upload your artwork and we handle the heavy lifting.
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Motion Generation</h5>
+                                <p class="card-text text-muted">
+                                    Our custom motion models generate natural-looking animations from simple text descriptions. Combined with a library of pre-made motion presets, you can achieve professional results quickly.
+                                </p>
                             </div>
                         </div>
                     </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq4">
-                                What models do you use for pose detection?
-                            </button>
-                        </h3>
-                        <div id="afaq4" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
-                            <div class="accordion-body">
-                                We use MediaPipe Pose, which can detect 33 body landmarks including face, hands, and body positions. It works well with drawn characters and adapts to various art styles.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq5">
-                                How do you handle user privacy?
-                            </button>
-                        </h3>
-                        <div id="afaq5" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
-                            <div class="accordion-body">
-                                Your artwork is stored securely and only used to provide our service. We don't use your drawings to train AI models without explicit consent. See our privacy policy for full details.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq6">
-                                Where are your servers located?
-                            </button>
-                        </h3>
-                        <div id="afaq6" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
-                            <div class="accordion-body">
-                                Our servers are located in the United States. All data transfers are encrypted using HTTPS.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq7">
-                                Do you have a product roadmap?
-                            </button>
-                        </h3>
-                        <div id="afaq7" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
-                            <div class="accordion-body">
-                                We're constantly improving! Upcoming features include more motion presets, improved AI motion generation, real-time collaboration, and a mobile app.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq8">
-                                Can I request features?
-                            </button>
-                        </h3>
-                        <div id="afaq8" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
-                            <div class="accordion-body">
-                                Absolutely! We love hearing from users. Send feature requests through our contact form and we'll consider them for future updates.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq9">
-                                Is there an API available?
-                            </button>
-                        </h3>
-                        <div id="afaq9" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
-                            <div class="accordion-body">
-                                We're working on a public API for developers. Contact us if you're interested in early access for integration with your own applications.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq10">
-                                Do you offer white-label solutions?
-                            </button>
-                        </h3>
-                        <div id="afaq10" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
-                            <div class="accordion-body">
-                                Contact us for enterprise and white-label options if you want to integrate our animation technology into your own platform.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq11">
-                                How can I contact support?
-                            </button>
-                        </h3>
-                        <div id="afaq11" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
-                            <div class="accordion-body">
-                                Use our contact form or email support@animateadrawing.com. We typically respond within 24-48 hours.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq12">
-                                Are you hiring?
-                            </button>
-                        </h3>
-                        <div id="afaq12" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
-                            <div class="accordion-body">
-                                We're a small team but always interested in hearing from talented developers, designers, and AI/ML engineers. Reach out via our contact form!
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title">FFmpeg</h5>
+                                <p class="card-text text-muted">
+                                    For video encoding and export, we rely on FFmpeg - the industry standard for media processing. This ensures high-quality outputs in all common formats.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- Values Section -->
+            <section class="mb-5">
+                <h2 class="fw-bold mb-4">Our Values</h2>
+                <div class="row g-4">
+                    <div class="col-md-4 text-center">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-primary" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                            </svg>
+                        </div>
+                        <h5>Accessibility</h5>
+                        <p class="text-muted small">Animation should be available to everyone, not just those with expensive tools or years of training.</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-success" viewBox="0 0 16 16">
+                                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
+                                <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
+                            </svg>
+                        </div>
+                        <h5>Simplicity</h5>
+                        <p class="text-muted small">Complex technology should be invisible. Upload, choose, export - that's it.</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-warning" viewBox="0 0 16 16">
+                                <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
+                                <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>
+                            </svg>
+                        </div>
+                        <h5>Speed</h5>
+                        <p class="text-muted small">Your time is valuable. Create animations in minutes, not hours or days.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact CTA -->
+            <section class="text-center py-4">
+                <h3 class="mb-3">Questions or Feedback?</h3>
+                <p class="text-muted mb-4">
+                    We'd love to hear from you. Whether you have questions about the platform, feature requests, or just want to share what you've created.
+                </p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="/contact/" class="btn btn-primary">Contact Us</a>
+                    <a href="/faq/" class="btn btn-outline-secondary">View FAQ</a>
+                </div>
+            </section>
+
+            <p class="mt-5 text-end">
+                <strong>- John</strong><br>
+                <span class="text-muted">Creator of Animate a Drawing</span>
+            </p>
+
         </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="section-dark py-5" style="background-color: #111827;">
+    <div class="container text-center text-white">
+        <h2 class="display-5 fw-bold mb-4">Ready to Bring Your Drawings to Life?</h2>
+        <p class="lead mb-4">Join thousands of artists creating animations with AI.</p>
+        <a href="/signup/" class="btn btn-primary btn-lg px-5">Get Started Free</a>
     </div>
 </div>
 {% endblock %}

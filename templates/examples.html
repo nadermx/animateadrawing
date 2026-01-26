@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">Animation Examples</h1>
+        <p class="lead mb-0">See what's possible with Animate a Drawing</p>
+    </div>
+</div>
+
+<!-- Examples Introduction -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <p class="lead text-muted">
+                Browse examples of drawings brought to life with our AI animation platform.
+                From simple sketches to detailed illustrations, see how different art styles animate.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Examples by Category -->
+<div class="container pb-5">
+    <!-- Sketches Category -->
+    <h3 class="mb-4">Sketches & Line Art</h3>
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center mb-3" style="height: 200px;">
+                        <div class="text-center text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                            </svg>
+                            <p class="mt-2 mb-0 small">Walking Animation</p>
+                        </div>
+                    </div>
+                    <h5 class="card-title">Simple Stick Figure</h5>
+                    <p class="card-text text-muted small">Basic stick figure demonstrating walk cycle. Shows how even simple drawings can be animated effectively.</p>
+                    <span class="badge bg-secondary">Walk Preset</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center mb-3" style="height: 200px;">
+                        <div class="text-center text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                            </svg>
+                            <p class="mt-2 mb-0 small">Wave Animation</p>
+                        </div>
+                    </div>
+                    <h5 class="card-title">Pencil Sketch Character</h5>
+                    <p class="card-text text-muted small">Hand-drawn pencil sketch with friendly wave animation. Shows natural motion on traditional media.</p>
+                    <span class="badge bg-secondary">Wave Preset</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center mb-3" style="height: 200px;">
+                        <div class="text-center text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                            </svg>
+                            <p class="mt-2 mb-0 small">Jump Animation</p>
+                        </div>
+                    </div>
+                    <h5 class="card-title">Ink Drawing Character</h5>
+                    <p class="card-text text-muted small">Bold ink outline character with jumping animation. Clean lines work great for pose detection.</p>
+                    <span class="badge bg-secondary">Jump Preset</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Digital Art Category -->
+    <h3 class="mb-4">Digital Art</h3>
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center mb-3" style="height: 200px;">
+                        <div class="text-center text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                            </svg>
+                            <p class="mt-2 mb-0 small">Dance Animation</p>
+                        </div>
+                    </div>
+                    <h5 class="card-title">Anime Style Character</h5>
+                    <p class="card-text text-muted small">Digital anime-style illustration with dance animation. Shows how detailed artwork maintains quality.</p>
+                    <span class="badge bg-secondary">Dance Preset</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center mb-3" style="height: 200px;">
+                        <div class="text-center text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                            </svg>
+                            <p class="mt-2 mb-0 small">Run Animation</p>
+                        </div>
+                    </div>
+                    <h5 class="card-title">Game Character Sprite</h5>
+                    <p class="card-text text-muted small">Pixel-art style game character with running animation. Great for indie game developers.</p>
+                    <span class="badge bg-secondary">Run Preset</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center mb-3" style="height: 200px;">
+                        <div class="text-center text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                            </svg>
+                            <p class="mt-2 mb-0 small">Idle Animation</p>
+                        </div>
+                    </div>
+                    <h5 class="card-title">Flat Design Mascot</h5>
+                    <p class="card-text text-muted small">Corporate mascot in flat design style with subtle breathing idle animation. Perfect for brand content.</p>
+                    <span class="badge bg-secondary">Idle Preset</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kids Drawings Category -->
+    <h3 class="mb-4">Kids' Drawings</h3>
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center mb-3" style="height: 200px;">
+                        <div class="text-center text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                            </svg>
+                            <p class="mt-2 mb-0 small">Wave Animation</p>
+                        </div>
+                    </div>
+                    <h5 class="card-title">Crayon Family Portrait</h5>
+                    <p class="card-text text-muted small">Child's crayon drawing animated with a friendly wave. Bring your kids' artwork to life!</p>
+                    <span class="badge bg-secondary">Wave Preset</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center mb-3" style="height: 200px;">
+                        <div class="text-center text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                            </svg>
+                            <p class="mt-2 mb-0 small">Dance Animation</p>
+                        </div>
+                    </div>
+                    <h5 class="card-title">Marker Superhero</h5>
+                    <p class="card-text text-muted small">Child's marker drawing of a superhero with fun dance moves. Great for creative play and sharing.</p>
+                    <span class="badge bg-secondary">Dance Preset</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center mb-3" style="height: 200px;">
+                        <div class="text-center text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                            </svg>
+                            <p class="mt-2 mb-0 small">Walk Animation</p>
+                        </div>
+                    </div>
+                    <h5 class="card-title">Colored Pencil Pet</h5>
+                    <p class="card-text text-muted small">Child's drawing of their pet with a walking animation. A magical way to make memories come alive.</p>
+                    <span class="badge bg-secondary">Walk Preset</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works Preview -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="display-5 fw-bold mb-4">Want to Create Your Own?</h2>
+                <p class="lead text-muted mb-4">
+                    Animating your drawings is easier than you think. Upload any image and our AI does the heavy lifting.
+                </p>
+                <ul class="list-unstyled text-muted mb-4">
+                    <li class="mb-2">&#10003; Works with any drawing style</li>
+                    <li class="mb-2">&#10003; Automatic pose detection</li>
+                    <li class="mb-2">&#10003; Multiple animation presets</li>
+                    <li class="mb-2">&#10003; Export to GIF, MP4, or WebM</li>
+                </ul>
+                <div class="d-flex gap-3">
+                    <a href="/how-it-works/" class="btn btn-outline-primary">Learn How It Works</a>
+                    <a href="/signup/" class="btn btn-primary">Try It Free</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="bg-white rounded-4 shadow p-4">
+                    <img src="{% static 'gesture.svg' %}" alt="Example drawing" class="img-fluid" style="max-height: 300px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="section-dark py-5" style="background-color: #111827;">
+    <div class="container text-center text-white">
+        <h2 class="display-5 fw-bold mb-4">Ready to Animate Your Drawing?</h2>
+        <p class="lead mb-4">Join thousands of artists bringing their creations to life.</p>
+        <a href="/signup/" class="btn btn-primary btn-lg px-5">Get Started Free</a>
+    </div>
+</div>
+{% endblock %}

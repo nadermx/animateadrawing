@@ -20,4 +20,8 @@ urlpatterns = [
     path('success/', views.SuccessPage.as_view(), name='success'),
     path('cancel/', views.CancelSubscriptionPage.as_view(), name='cancel'),
     path('delete-account/', views.DeleteAccountPage.as_view(), name='delete'),
+    path('how-it-works/', views.HowItWorksPage.as_view(), name='how-it-works'),
+    path('examples/', views.ExamplesPage.as_view(), name='examples'),
+    path('tutorials/', views.TutorialsPage.as_view(), name='tutorials'),
+    path('faq/', views.FAQPage.as_view(), name='faq'),
 ]

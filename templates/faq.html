@@ -1,0 +1,609 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">Frequently Asked Questions</h1>
+        <p class="lead mb-0">Find answers to common questions about Animate a Drawing</p>
+    </div>
+</div>
+
+<!-- FAQ Navigation -->
+<div class="bg-light py-3 sticky-top">
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            <a href="#general" class="btn btn-sm btn-outline-secondary">General</a>
+            <a href="#getting-started" class="btn btn-sm btn-outline-secondary">Getting Started</a>
+            <a href="#animation" class="btn btn-sm btn-outline-secondary">Animation & Features</a>
+            <a href="#pricing" class="btn btn-sm btn-outline-secondary">Pricing & Credits</a>
+            <a href="#technical" class="btn btn-sm btn-outline-secondary">Technical</a>
+            <a href="#account" class="btn btn-sm btn-outline-secondary">Account & Support</a>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <!-- General Section -->
+            <h2 id="general" class="mb-4 pt-3">General</h2>
+            <div class="accordion faq-accordion mb-5" id="faqGeneral">
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#g1">
+                            What is Animate a Drawing?
+                        </button>
+                    </h3>
+                    <div id="g1" class="accordion-collapse collapse show" data-bs-parent="#faqGeneral">
+                        <div class="accordion-body">
+                            Animate a Drawing is an AI-powered platform that brings your drawings to life. Upload any illustration, sketch, or character art, and our AI automatically detects the pose, creates a rig, and applies motion to create animations you can export as GIFs or videos.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#g2">
+                            What types of drawings work best?
+                        </button>
+                    </h3>
+                    <div id="g2" class="accordion-collapse collapse" data-bs-parent="#faqGeneral">
+                        <div class="accordion-body">
+                            Any drawing with a clear character outline works well. Hand-drawn sketches, digital art, and illustrations all work. Characters with defined body parts (head, arms, legs) get the best results from our AI pose detection. High contrast drawings with solid backgrounds are ideal.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#g3">
+                            Do I need any animation experience?
+                        </button>
+                    </h3>
+                    <div id="g3" class="accordion-collapse collapse" data-bs-parent="#faqGeneral">
+                        <div class="accordion-body">
+                            No! Our platform is designed to be accessible to everyone. The AI handles the complex parts of animation like rigging and motion interpolation. Just upload your drawing, choose a motion, and export.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#g4">
+                            Can I use animations commercially?
+                        </button>
+                    </h3>
+                    <div id="g4" class="accordion-collapse collapse" data-bs-parent="#faqGeneral">
+                        <div class="accordion-body">
+                            Yes! You own your original artwork and any animations created from it. Paid plans include full commercial rights to use your exported animations however you like - YouTube, social media, games, client work, etc.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#g5">
+                            What makes this different from other animation tools?
+                        </button>
+                    </h3>
+                    <div id="g5" class="accordion-collapse collapse" data-bs-parent="#faqGeneral">
+                        <div class="accordion-body">
+                            Traditional animation software requires you to manually rig characters and create frame-by-frame animations. Our AI automates this process - it detects character poses automatically and applies pre-made or AI-generated motion. What might take hours in other tools can be done in minutes here.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#g6">
+                            Is there a mobile app?
+                        </button>
+                    </h3>
+                    <div id="g6" class="accordion-collapse collapse" data-bs-parent="#faqGeneral">
+                        <div class="accordion-body">
+                            Currently, Animate a Drawing is web-based and works on any device with a browser. A mobile app is on our roadmap for future development. The website is mobile-responsive, so you can use it on phones and tablets, though the desktop experience is currently optimal for the full editor.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Getting Started Section -->
+            <h2 id="getting-started" class="mb-4 pt-3">Getting Started</h2>
+            <div class="accordion faq-accordion mb-5" id="faqGettingStarted">
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#gs1">
+                            How do I create my first animation?
+                        </button>
+                    </h3>
+                    <div id="gs1" class="accordion-collapse collapse show" data-bs-parent="#faqGettingStarted">
+                        <div class="accordion-body">
+                            <ol class="mb-0">
+                                <li>Sign up for a free account</li>
+                                <li>Go to Quick Animate</li>
+                                <li>Upload your drawing (PNG, JPG, GIF, or WebP)</li>
+                                <li>Wait for AI to detect the pose</li>
+                                <li>Choose a motion preset (walk, wave, dance, etc.)</li>
+                                <li>Preview and export your animation</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gs2">
+                            What file formats are supported for upload?
+                        </button>
+                    </h3>
+                    <div id="gs2" class="accordion-collapse collapse" data-bs-parent="#faqGettingStarted">
+                        <div class="accordion-body">
+                            We support PNG, JPG, GIF, and WebP images up to 10MB. PNG with transparent backgrounds works best, but any format will work. We automatically remove backgrounds for non-transparent images.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gs3">
+                            What's the difference between Quick Animate and Full Projects?
+                        </button>
+                    </h3>
+                    <div id="gs3" class="accordion-collapse collapse" data-bs-parent="#faqGettingStarted">
+                        <div class="accordion-body">
+                            <strong>Quick Animate:</strong> Upload one drawing, apply a motion preset, export. Perfect for simple GIFs and quick content. Up to 60 seconds duration.<br><br>
+                            <strong>Full Projects:</strong> Multiple characters, scenes, backgrounds, camera movements, audio, and timeline editing. Ideal for more complex animations and stories with no time limit.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gs4">
+                            What's the best image size for uploading?
+                        </button>
+                    </h3>
+                    <div id="gs4" class="accordion-collapse collapse" data-bs-parent="#faqGettingStarted">
+                        <div class="accordion-body">
+                            We recommend images between 500-2000 pixels on the longest side. Very small images may have poor pose detection, while very large images take longer to process. The character should take up most of the frame for best detection results.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gs5">
+                            Can I animate photos of real people?
+                        </button>
+                    </h3>
+                    <div id="gs5" class="accordion-collapse collapse" data-bs-parent="#faqGettingStarted">
+                        <div class="accordion-body">
+                            Our platform is optimized for drawn characters and illustrations. While it may work with photos, the results may not look natural because the system is designed for 2D artwork. For best results, stick to drawings, sketches, and digital illustrations.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gs6">
+                            How do I prepare my drawing for best results?
+                        </button>
+                    </h3>
+                    <div id="gs6" class="accordion-collapse collapse" data-bs-parent="#faqGettingStarted">
+                        <div class="accordion-body">
+                            For best results: use a transparent or solid color background, make sure the character has visible arms and legs (not hidden behind objects), use a front-facing or 3/4 view pose, and ensure high contrast between the character and background. T-pose or arms-away-from-body poses work best for automatic detection.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Animation & Features Section -->
+            <h2 id="animation" class="mb-4 pt-3">Animation & Features</h2>
+            <div class="accordion faq-accordion mb-5" id="faqAnimation">
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#a1">
+                            How does the AI animation work?
+                        </button>
+                    </h3>
+                    <div id="a1" class="accordion-collapse collapse show" data-bs-parent="#faqAnimation">
+                        <div class="accordion-body">
+                            Our AI uses MediaPipe to automatically detect character poses and create a skeleton rig. Once rigged, you can apply motion presets or generate custom animations from text prompts. The system then interpolates between keyframes to create smooth animations.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a2">
+                            What motion presets are available?
+                        </button>
+                    </h3>
+                    <div id="a2" class="accordion-collapse collapse" data-bs-parent="#faqAnimation">
+                        <div class="accordion-body">
+                            We offer a variety of presets including: Walk, Run, Wave, Dance, Jump, Idle (breathing), Talk, Clap, Bow, and more. We're constantly adding new presets based on user feedback. You can preview any preset before applying it to your character.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a3">
+                            Can I create custom animations?
+                        </button>
+                    </h3>
+                    <div id="a3" class="accordion-collapse collapse" data-bs-parent="#faqAnimation">
+                        <div class="accordion-body">
+                            Yes! You can manually adjust the rig, create custom keyframes, or describe the motion you want in text and our AI will generate it. Full projects include a timeline editor for precise animation control and custom keyframe editing.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a4">
+                            What if pose detection doesn't work well on my drawing?
+                        </button>
+                    </h3>
+                    <div id="a4" class="accordion-collapse collapse" data-bs-parent="#faqAnimation">
+                        <div class="accordion-body">
+                            No problem! You can manually adjust the rig using our editor. Click and drag joints to reposition them, add new joints, or connect them differently. Some art styles work better with manual rigging.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a5">
+                            How long can animations be?
+                        </button>
+                    </h3>
+                    <div id="a5" class="accordion-collapse collapse" data-bs-parent="#faqAnimation">
+                        <div class="accordion-body">
+                            Quick Animate supports up to 60 seconds. Full projects can be much longer - short form (up to 60s), medium (up to 5 minutes), and full-length animations with multiple scenes and characters have no hard limit.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a6">
+                            What export formats are available?
+                        </button>
+                    </h3>
+                    <div id="a6" class="accordion-collapse collapse" data-bs-parent="#faqAnimation">
+                        <div class="accordion-body">
+                            You can export as MP4 (best quality, with audio), WebM (smaller file size, web-optimized), GIF (for social media and messaging), or PNG sequence (for advanced editing in other software). Video exports support up to 4K resolution at 24, 30, or 60 FPS.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a7">
+                            Can I add audio and voice to my animations?
+                        </button>
+                    </h3>
+                    <div id="a7" class="accordion-collapse collapse" data-bs-parent="#faqAnimation">
+                        <div class="accordion-body">
+                            Yes! Full projects support voice synthesis (text-to-speech), automatic lip sync, background music, and sound effects. You can generate AI voices from text or upload your own audio files.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a8">
+                            Can I animate multiple characters in one scene?
+                        </button>
+                    </h3>
+                    <div id="a8" class="accordion-collapse collapse" data-bs-parent="#faqAnimation">
+                        <div class="accordion-body">
+                            Yes, in Full Projects you can add multiple characters to each scene. Each character can have its own animation, and you can control their positioning and layering in the scene editor.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing & Credits Section -->
+            <h2 id="pricing" class="mb-4 pt-3">Pricing & Credits</h2>
+            <div class="accordion faq-accordion mb-5" id="faqPricing">
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#p1">
+                            Is there a free plan?
+                        </button>
+                    </h3>
+                    <div id="p1" class="accordion-collapse collapse show" data-bs-parent="#faqPricing">
+                        <div class="accordion-body">
+                            Yes! Free accounts get limited credits each month to try the service. This is enough to create several Quick Animate projects and see how the platform works. Upgrade to a paid plan for more credits and advanced features.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p2">
+                            How do credits work?
+                        </button>
+                    </h3>
+                    <div id="p2" class="accordion-collapse collapse" data-bs-parent="#faqPricing">
+                        <div class="accordion-body">
+                            Credits are used for AI features like pose detection, motion generation, and video exports. Each plan includes a monthly credit allowance. Credits refresh monthly and don't roll over to the next month.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p3">
+                            What uses credits?
+                        </button>
+                    </h3>
+                    <div id="p3" class="accordion-collapse collapse" data-bs-parent="#faqPricing">
+                        <div class="accordion-body">
+                            <ul class="mb-0">
+                                <li>Pose detection on a new character</li>
+                                <li>AI motion generation from text prompts</li>
+                                <li>Background removal</li>
+                                <li>Exporting animations (based on length and resolution)</li>
+                                <li>Voice synthesis</li>
+                                <li>AI background generation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p4">
+                            Can I upgrade or downgrade my plan?
+                        </button>
+                    </h3>
+                    <div id="p4" class="accordion-collapse collapse" data-bs-parent="#faqPricing">
+                        <div class="accordion-body">
+                            Yes, you can change your plan at any time from your account settings. Upgrades take effect immediately with prorated billing. Downgrades take effect at the next billing cycle.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p5">
+                            What payment methods do you accept?
+                        </button>
+                    </h3>
+                    <div id="p5" class="accordion-collapse collapse" data-bs-parent="#faqPricing">
+                        <div class="accordion-body">
+                            We accept major credit cards (Visa, MasterCard, American Express, Discover) through Stripe, as well as PayPal and Square payments. All transactions are securely processed.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p6">
+                            Is there a refund policy?
+                        </button>
+                    </h3>
+                    <div id="p6" class="accordion-collapse collapse" data-bs-parent="#faqPricing">
+                        <div class="accordion-body">
+                            Yes, we offer refunds within 14 days of purchase if you're not satisfied with the service. Contact support with your transaction details. Refunds are processed to the original payment method.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p7">
+                            Do unused credits roll over?
+                        </button>
+                    </h3>
+                    <div id="p7" class="accordion-collapse collapse" data-bs-parent="#faqPricing">
+                        <div class="accordion-body">
+                            No, credits reset each billing cycle and don't accumulate. We designed this to keep subscription costs affordable while ensuring fair usage.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p8">
+                            Can I cancel my subscription anytime?
+                        </button>
+                    </h3>
+                    <div id="p8" class="accordion-collapse collapse" data-bs-parent="#faqPricing">
+                        <div class="accordion-body">
+                            Yes, you can cancel your subscription at any time from your account settings. You'll retain access to paid features until the end of your current billing period. Your projects and exports will remain accessible even after cancellation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Section -->
+            <h2 id="technical" class="mb-4 pt-3">Technical</h2>
+            <div class="accordion faq-accordion mb-5" id="faqTechnical">
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#t1">
+                            What technology powers the animations?
+                        </button>
+                    </h3>
+                    <div id="t1" class="accordion-collapse collapse show" data-bs-parent="#faqTechnical">
+                        <div class="accordion-body">
+                            We use a combination of open source AI models: MediaPipe for pose detection, rembg (U2-Net) for background removal, custom motion generation models, and FFmpeg for video encoding. All processing happens on our servers.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#t2">
+                            Is the AI running locally or in the cloud?
+                        </button>
+                    </h3>
+                    <div id="t2" class="accordion-collapse collapse" data-bs-parent="#faqTechnical">
+                        <div class="accordion-body">
+                            Our AI processing runs on our servers in the cloud. This means you don't need a powerful computer or GPU - just upload your artwork and we handle the heavy lifting. Your browser only needs to display the results.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#t3">
+                            How long does processing take?
+                        </button>
+                    </h3>
+                    <div id="t3" class="accordion-collapse collapse" data-bs-parent="#faqTechnical">
+                        <div class="accordion-body">
+                            Pose detection typically takes 5-15 seconds depending on image size. Exporting a Quick Animate GIF usually takes 10-30 seconds. Longer videos and higher resolutions take more time. Full project exports show progress status.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#t4">
+                            What browsers are supported?
+                        </button>
+                    </h3>
+                    <div id="t4" class="accordion-collapse collapse" data-bs-parent="#faqTechnical">
+                        <div class="accordion-body">
+                            We support all modern browsers: Chrome, Firefox, Safari, Edge. For the best experience, we recommend using the latest version of Chrome. Some features may have limited functionality on mobile browsers.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#t5">
+                            Is there an API available?
+                        </button>
+                    </h3>
+                    <div id="t5" class="accordion-collapse collapse" data-bs-parent="#faqTechnical">
+                        <div class="accordion-body">
+                            We're working on a public API for developers. Contact us if you're interested in early access for integration with your own applications or if you have enterprise needs.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#t6">
+                            Where are your servers located?
+                        </button>
+                    </h3>
+                    <div id="t6" class="accordion-collapse collapse" data-bs-parent="#faqTechnical">
+                        <div class="accordion-body">
+                            Our servers are located in the United States. All data transfers are encrypted using HTTPS. We use reliable cloud infrastructure to ensure high availability and fast processing times.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account & Support Section -->
+            <h2 id="account" class="mb-4 pt-3">Account & Support</h2>
+            <div class="accordion faq-accordion mb-5" id="faqAccount">
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ac1">
+                            Is my artwork stored on your servers?
+                        </button>
+                    </h3>
+                    <div id="ac1" class="accordion-collapse collapse show" data-bs-parent="#faqAccount">
+                        <div class="accordion-body">
+                            Your artwork is stored securely while you work on projects. Quick Animate temporary files are deleted within 24 hours. Full project files remain until you delete them or close your account. We never use your artwork to train AI models without explicit consent.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ac2">
+                            Can I collaborate with others?
+                        </button>
+                    </h3>
+                    <div id="ac2" class="accordion-collapse collapse" data-bs-parent="#faqAccount">
+                        <div class="accordion-body">
+                            Yes! You can invite collaborators to your projects via email. They can view, edit, or have full access depending on the permissions you set. Perfect for teams working on animations together.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ac3">
+                            How do I delete my account?
+                        </button>
+                    </h3>
+                    <div id="ac3" class="accordion-collapse collapse" data-bs-parent="#faqAccount">
+                        <div class="accordion-body">
+                            You can delete your account from your account settings page. This will cancel any active subscriptions and permanently delete all your projects and data. This action cannot be undone.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ac4">
+                            How can I contact support?
+                        </button>
+                    </h3>
+                    <div id="ac4" class="accordion-collapse collapse" data-bs-parent="#faqAccount">
+                        <div class="accordion-body">
+                            Use our <a href="/contact/">contact form</a> or email support@animateadrawing.com. We typically respond within 24-48 hours. For faster help, include your account email and a description of the issue.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ac5">
+                            Can I request features?
+                        </button>
+                    </h3>
+                    <div id="ac5" class="accordion-collapse collapse" data-bs-parent="#faqAccount">
+                        <div class="accordion-body">
+                            Absolutely! We love hearing from users. Send feature requests through our contact form and we'll consider them for future updates. Many of our features came from user suggestions.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ac6">
+                            How do I reset my password?
+                        </button>
+                    </h3>
+                    <div id="ac6" class="accordion-collapse collapse" data-bs-parent="#faqAccount">
+                        <div class="accordion-body">
+                            Click "Forgot Password" on the login page and enter your email address. We'll send you a link to reset your password. The link expires after 24 hours for security.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Still Have Questions -->
+<div class="bg-light py-5">
+    <div class="container text-center">
+        <h2 class="mb-3">Still Have Questions?</h2>
+        <p class="text-muted mb-4">Can't find what you're looking for? We're here to help.</p>
+        <a href="/contact/" class="btn btn-primary btn-lg">Contact Support</a>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="section-dark py-5" style="background-color: #111827;">
+    <div class="container text-center text-white">
+        <h2 class="display-5 fw-bold mb-4">Ready to Start Animating?</h2>
+        <p class="lead mb-4">Create your first animation in under a minute. No credit card required.</p>
+        <a href="/signup/" class="btn btn-primary btn-lg px-5">Get Started Free</a>
+    </div>
+</div>
+{% endblock %}

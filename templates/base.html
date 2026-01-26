@@ -36,13 +36,13 @@
                         <a class="nav-link{% if page == 'home' %} active{% endif %}" href="/?lang={{ g.lang.iso }}">{{ g.i18n.home|default:"Home" }}</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link{% if page == 'how-it-works' %} active{% endif %}" href="/how-it-works/?lang={{ g.lang.iso }}">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link{% if page == 'examples' %} active{% endif %}" href="/examples/?lang={{ g.lang.iso }}">Examples</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link{% if page == 'pricing' %} active{% endif %}" href="/pricing/?lang={{ g.lang.iso }}">{{ g.i18n.pricing|default:"Pricing" }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link{% if page == 'about' %} active{% endif %}" href="/about/?lang={{ g.lang.iso }}">{{ g.i18n.about_us|default:"About" }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link{% if page == 'contact' %} active{% endif %}" href="/contact/?lang={{ g.lang.iso }}">{{ g.i18n.contact|default:"Contact" }}</a>
                     </li>
                 </ul>
 
@@ -83,15 +83,49 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="bg-light py-4 mt-auto">
-        <div class="container text-center">
-            <p class="mb-2">
-                <a href="/privacy/" class="text-decoration-none me-3">{{ g.i18n.privacy_policy|default:"Privacy Policy" }}</a>
-                <a href="/terms/" class="text-decoration-none me-3">{{ g.i18n.terms_of_service|default:"Terms of Service" }}</a>
-                <a href="/about/" class="text-decoration-none me-3">{{ g.i18n.about_us|default:"About Us" }}</a>
-                <a href="/contact/" class="text-decoration-none">{{ g.i18n.contact_us|default:"Contact Us" }}</a>
-            </p>
-            <p class="text-muted mb-0">&copy; {% now "Y" %} {{ g.i18n.site_name|default:"Animate a Drawing" }}</p>
+    <footer class="bg-dark text-light py-5 mt-auto">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="text-white mb-3">{{ g.i18n.site_name|default:"Animate a Drawing" }}</h5>
+                    <p class="text-muted small">
+                        Bring your drawings to life with AI-powered animation. Upload any drawing and watch it move.
+                    </p>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="text-white mb-3">Product</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="/how-it-works/" class="text-muted text-decoration-none">How It Works</a></li>
+                        <li class="mb-2"><a href="/examples/" class="text-muted text-decoration-none">Examples</a></li>
+                        <li class="mb-2"><a href="/pricing/" class="text-muted text-decoration-none">{{ g.i18n.pricing|default:"Pricing" }}</a></li>
+                        <li class="mb-2"><a href="/tutorials/" class="text-muted text-decoration-none">Tutorials</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="text-white mb-3">Support</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="/faq/" class="text-muted text-decoration-none">FAQ</a></li>
+                        <li class="mb-2"><a href="/contact/" class="text-muted text-decoration-none">{{ g.i18n.contact|default:"Contact" }}</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="text-white mb-3">Company</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="/about/" class="text-muted text-decoration-none">{{ g.i18n.about_us|default:"About" }}</a></li>
+                        <li class="mb-2"><a href="/privacy/" class="text-muted text-decoration-none">{{ g.i18n.privacy_policy|default:"Privacy" }}</a></li>
+                        <li class="mb-2"><a href="/terms/" class="text-muted text-decoration-none">{{ g.i18n.terms_of_service|default:"Terms" }}</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="text-white mb-3">Get Started</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="/signup/" class="text-muted text-decoration-none">{{ g.i18n.sign_up|default:"Sign Up" }}</a></li>
+                        <li class="mb-2"><a href="/login/" class="text-muted text-decoration-none">{{ g.i18n.login|default:"Login" }}</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <p class="text-muted text-center mb-0 small">&copy; {% now "Y" %} {{ g.i18n.site_name|default:"Animate a Drawing" }}. All rights reserved.</p>
         </div>
     </footer>
 
