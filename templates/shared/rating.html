@@ -1,0 +1,53 @@
+<hr>
+<div class="container text-center">
+    <form id="rating"
+          action="{% url 'rating' %}"
+          method="post"
+          role="form">
+        <h4 class="h4footer">{{ g.i18n.rate_this_tool }}</h4>
+        <div class="form-group margin-less">
+            <div class="rating center-block">
+                {% csrf_token %}
+                <input type="hidden"
+                       name="tool"
+                       value="{{ tool }}">
+                <input id="star5"
+                       name="star"
+                       type="radio"
+                       value="5"
+                       class="radio-btn radio-btn-lg hide">
+                <label for="star5">☆</label>
+                <input id="star4"
+                       name="star"
+                       type="radio"
+                       value="4"
+                       class="radio-btn hide">
+                <label for="star4">☆</label>
+                <input id="star3"
+                       name="star"
+                       type="radio"
+                       value="3"
+                       class="radio-btn hide">
+                <label for="star3">☆</label>
+                <input id="star2"
+                       name="star"
+                       type="radio"
+                       value="2"
+                       class="radio-btn hide">
+                <label for="star2">☆</label>
+                <input id="star1"
+                       name="star"
+                       type="radio"
+                       value="1"
+                       class="radio-btn hide">
+                <label for="star1">☆</label>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </form>
+    <div class="form-group">
+        <div id="ratingresult"><span class="avg-votes">{{ rating.stars }}</span>/5 -
+            <span class="total-votes">{{ rating.q }}</span> {{ g.i18n.votos }}
+        </div>
+    </div>
+</div>

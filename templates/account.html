@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <h1 class="page-header">{{ g.i18n.account_label }}</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3>{{ g.i18n.total_credits }}: {{ credits }}</h3>
+                {% if user.plan_subscribed %}
+                    <p>
+                        Plan subscribed:
+                        {% if user.is_plan_active %}
+                            <span class="badge badge-success">{{ user.plan_subscribed | title }}</span>
+                        {% else %}
+                            <span class="badge badge-danger">{{ user.plan_subscribed | title }}</span>
+                        {% endif %}
+                        <br>
+                        {% if user.next_billing_date %}
+                            Next billing date: {{ user.next_billing_date | date }}<br>
+                            <a href="{{ request.path }}"
+                               class="btn btn-danger btn-sm cancel-subscription"
+                               data-toggle="modal"
+                               data-target="#cancelSubscription">{{ g.i18n.cancel_subscription }}</a>
+                        {% else %}
+                            <span class="badge badge-warning">{{ g.i18n.plan_not_active }}</span>
+                        {% endif %}
+                    </p>
+                {% endif %}
+                <p>{{ g.i18n.one_credit_equals }}</p>
+                <p><strong>{{ g.i18n.api_token }}:</strong> {{ user.api_token }}</p>
+                {% if status %}
+                    <a href="/cancel/">{{ g.i18n.cancel_subscription }}</a>
+                {% else %}
+                    <a class="btn btn-primary btn-sm"
+                       href="/pricing/">{{ g.i18n.get_credits }}</a>
+                {% endif %}
+            </div>
+            <div class="col">
+                <h3>{{ g.i18n.hello }} {{ user }}</h3>
+                <p>
+                    <a class="btn btn-outline-secondary btn-sm"
+                       href="/restore-password/">{{ g.i18n.change_password }}</a>
+                    <a class="btn btn-outline-danger btn-sm"
+                       href="/delete-account/">{{ g.i18n.delete_account }}</a>
+                </p>
+
+            </div>
+        </div>
+        <hr>
+        <br><br>
+        <h3>{{ g.i18n.billing_history }}</h3>
+        <hr>
+        <div class="row">
+            <div class="col">{{ g.i18n.processor}}</div>
+            <div class="col">{{ g.i18n.amount }}</div>
+            <div class="col">{{ g.i18n.date }}</div>
+        </div>
+        <hr>
+        {% if payments %}
+            {% for payment in payments %}
+                <div id="{{ payment.id }}"
+                     class="row">
+                    <div class="col">
+                        {% if payment.status == 'success' %}
+                            <span class="payment-status success">{% include 'svgs/payment-success.html' %}</span>
+                        {% elif payment.status == 'failed' %}
+                            <span class="payment-status failed">{% include 'svgs/payment-failed.html' %}</span>
+                        {% elif payment.status == 'refunded' %}
+                            <span class="payment-status pending">{% include 'svgs/payment-refund.html' %}</span>
+                        {% else %}
+                            <span class="payment-status pending">{% include 'svgs/payment-pending.html' %}</span>
+                        {% endif %}
+                        {{ payment.processor | title }}</div>
+                    <div class="col">US$ {{ payment.amount }}.00</div>
+                    <div class="col">{{ payment.created_at }}</div>
+                </div>
+                <hr>
+            {% endfor %}
+        {% else %}
+            <div class="row">
+                <div class="col">{{ g.i18n.no_payments}}</div>
+            </div>
+            <hr>
+        {% endif %}
+        <br><br>
+        <h3>{{ g.i18n.conversion_history }}</h3>
+        <div class="row">
+            <table class="table">
+                <tr>
+                    <th>{{ g.i18n.date }}</th>
+                    <th>Filename</th>
+                    <th>{{ g.i18n.conversion_type }}</th>
+                    <th></th>
+                </tr>
+                {% if not files %}
+                    <tr>
+                        <td colspan="10">No files</td>
+                    </tr>
+                {% endif %}
+                {% for f in files %}
+                    <tr>
+                        <td>{{ f.created_at }}</td>
+                        <td>{{ f.filename }}</td>
+                        <td>{{ f.tool | default:'-' }}</td>
+                        <td>
+                            <a href="{{ api_domain }}/{{ f.url }}"
+                               target="_blank"
+                               download="{{ f.filename }}">{{ g.i18n.download }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% if user.is_plan_active %}
+        <div class="modal fade"
+             id="cancelSubscription"
+             tabindex="-1"
+             role="dialog"
+             aria-labelledby="exampleModalLongTitle"
+             aria-hidden="true">
+            <div class="modal-dialog"
+                 role="document">
+                <form class="modal-content cancel-subscription-form">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="alert alert-warning">
+                            {{ g.i18n.are_you_sure }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default"
+                           data-dismiss="modal">{{ g.i18n.close }}
+                        </a>
+                        <button class="btn btn-danger">{{ g.i18n.cancel_subscription }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block scripts %}
+    <script src="/static/js/utils.js?{{ g.scripts_version }}"></script>
+    <script defer>
+        (function () {
+            'use strict';
+            $(document).ready(
+                function () {
+                    $('.page-container').on('submit', '.cancel-subscription-form', onCancelSubscription);
+
+                    function onCancelSubscription(e) {
+                        e.preventDefault();
+                        var target = $(this);
+                        var p = utils.promiseRequest(
+                            null,
+                            'post',
+                            '{% url 'cancel-subscription' %}',
+                            utils.formDataToJSON(target)
+                        );
+
+                        p.then(
+                            function () {
+                                window.location.reload();
+                            }, function (errors) {
+                                alert(errors);
+                            }
+                        );
+                    }
+                }
+            );
+        }());
+    </script>
+{% endblock %}

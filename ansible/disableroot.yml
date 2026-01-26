@@ -1,0 +1,23 @@
+---
+- hosts: all
+  vars:
+    ansible_user: root
+    ansible_password: "Q4+s*Pzd*GfWG9Bn"
+    ansible_sudo_pass: "Q4+s*Pzd*GfWG9Bn"
+    newuser: estacaido
+    newpassword: "a)5QQNer"
+
+  tasks:
+    - name: create a new user called {{ newuser }}
+      become: true
+      user:
+          name: "{{ newuser }}"
+          state: present
+          groups: sudo
+          password: "{{ newpassword | password_hash('sha512') }}"
+
+    - name: Disable root login
+      become: true
+      user:
+        name: root
+        password_lock: true

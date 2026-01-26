@@ -1,0 +1,88 @@
+{
+    "plan1": {
+        "code_name": "plan1",
+        "price": 3,
+        "coinbase": "1803c2bc-404f-4f2d-a323-afa3b64fa98a",
+        "credits": 300
+    },
+    "plan2": {
+        "code_name": "plan2",
+        "price": 6,
+        "coinbase": "4afaa6d2-205a-4f29-9183-dcdb96020489",
+        "credits": 600,
+        "monthly": true
+    },
+    "plan3": {
+        "code_name": "plan3",
+        "price": 54,
+        "coinbase": "e18c9be5-679f-4b82-bda4-bdde7a20412f",
+        "credits": 5400,
+        "monthly": true
+    },
+    "plan4": {
+        "code_name": "plan4",
+        "price": 184,
+        "coinbase": "ec8ec00d-bb66-4cbe-9542-a133f36f63be",
+        "credits": 18400,
+        "monthly": true
+    },
+    "normal1": {
+        "code_name": "normal1",
+        "price": 4,
+        "coinbase": "",
+        "credits": 0,
+        "days": 1
+    },
+    "normal2": {
+        "code_name": "normal2",
+        "price": 8,
+        "coinbase": "",
+        "credits": 0,
+        "subscription": true,
+        "days": 31
+    },
+    "normal3": {
+        "code_name": "normal3",
+        "price": 72,
+        "label_price": 6,
+        "coinbase": "",
+        "credits": 0,
+        "subscription": true,
+        "yearly": true,
+        "days": 366
+    },
+    "api1": {
+        "code_name": "api1",
+        "price": 3,
+        "coinbase": "",
+        "credits": 300,
+        "days": 1
+    },
+    "api2": {
+        "code_name": "api2",
+        "price": 6,
+        "coinbase": "",
+        "credits": 600,
+        "subscription": true,
+        "api_plan": true,
+        "days": 31
+    },
+    "api3": {
+        "code_name": "api3",
+        "price": 9,
+        "coinbase": "",
+        "credits": 900,
+        "subscription": true,
+        "api_plan": true,
+        "days": 31
+    },
+    "api": {
+        "code_name": "api4",
+        "price": 18,
+        "coinbase": "",
+        "credits": 1800,
+        "subscription": true,
+        "api_plan": true,
+        "days": 31
+    }
+}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container hero-container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="hero-description margin-less">
+                <h1>{{ g.i18n.about }}</h1>
+                <br>
+                {{ g.i18n.hello }}
+                <p>{{ g.i18n.about_first | safe }}</p>
+                <p>{{ g.i18n.about_second | safe}}</p>
+                <p>{{ g.i18n.about_third | safe }}</p>
+                <p>{{ g.i18n.about_third_half | safe }}</p>
+                <p>{{ g.i18n.about_fourth | safe}}</p>
+                <p>{{ g.i18n.dude_in_pic | safe }}</p>
+                <p>John</p>
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="home-hero">
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br><br>
+{% endblock %}

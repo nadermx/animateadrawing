@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 mb-4">{{ g.i18n.welcome_title|default:"Welcome" }}</h1>
+            <p class="lead mb-4">{{ g.i18n.welcome_subtitle|default:"Your project description goes here." }}</p>
+
+            {% if not user.is_authenticated %}
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-primary btn-lg px-4 me-md-2">{{ g.i18n.get_started|default:"Get Started" }}</a>
+                <a href="/about/?lang={{ g.lang.iso }}" class="btn btn-outline-secondary btn-lg px-4">{{ g.i18n.learn_more|default:"Learn More" }}</a>
+            </div>
+            {% else %}
+            <a href="/account/" class="btn btn-primary btn-lg">{{ g.i18n.go_to_account|default:"Go to Account" }}</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

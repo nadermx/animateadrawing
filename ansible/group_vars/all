@@ -1,0 +1,10 @@
+---
+ansible_user: your_user
+ansible_password: "your_password"
+ansible_sudo_pass: "your_sudo_password"
+location: animateadrawing
+githuburl: https://github.com/nadermx/animateadrawing.git
+githubuser: your_github_user
+githubpassword: "your_github_pat"
+projectname: animateadrawing
+domain: animateadrawing.com

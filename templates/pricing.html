@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container text-center">
+        <h1 class="page-header">{{ g.i18n.pricing }}</h1>
+        <h2>{{ g.i18n.one_credit_equals }}</h2>
+    </div>
+    <form class="container-md pricing-form"
+          action="{% url 'checkout' %}"
+          method="get">
+        <div class="row">
+            {% for plan in plans %}
+                <div class="col">
+                    <div class="form-check">
+                        <input class="form-check-input"
+                               type="radio"
+                               name="plan"
+                               id="{{ plan.code_name }}"
+                               value="{{ plan.code_name }}"
+                               {% if forloop.first %}checked{% endif %} >
+                        <label class="form-check-label"
+                               for="{{ plan.code_name }}">
+                                <span class="price-wrapper">
+                                    <span class="price-value">US$ {{ plan.price }}</span><br>
+                                    {% if plan.is_subscription %}
+                                        {{ g.i18n.monthly }}
+                                    {% else %}
+                                        {{ g.i18n.single_charge }}
+                                    {% endif %}
+                                </span>
+                            <br>
+                            <spam class="plan-check">
+                                {% include 'svgs/check.html' %}
+                                {% if plan.is_subscription %}
+                                    <span>{{ g.i18n.convert_at_least}} <u>{{ plan.credits }}</u> {{g.i18n.files }}</span>
+                                {% else %}
+                                    <span>{{ g.i18n.convert_up_to}} <u>{{ plan.credits }}</u> {{g.i18n.files }}</span>
+                                {% endif %}
+                            </spam>
+                        </label>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <hr>
+        <button id="pricingbutton"
+                class="btn btn-success btn-lg">{{ g.i18n.purchase }}</button>
+        <br>
+        <p class="small">
+            <strong>{{ g.i18n.risk_free }}:</strong> {{ g.i18n.money_back }}<br>
+            <strong>{{ g.i18n.flexible }}:</strong> {{ g.i18n.change_plan_whenever }}<br>
+            <strong>{{ g.i18n.fair }}:</strong> {{ g.i18n.never_expire | safe }}
+        </p>
+    </form>
+{% endblock %}

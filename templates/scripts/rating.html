@@ -1,0 +1,36 @@
+<script defer>
+    (function () {
+        'use strict';
+        $(document).ready(
+            function () {
+                var container = $('.page-container');
+
+                container.on('change', '#rating input[type=radio]', onChangeStar);
+                container.on('submit', '#rating', onRateTool);
+
+                function onChangeStar() {
+                    container.find('#rating').submit();
+                }
+
+                function onRateTool(e) {
+                    e.preventDefault();
+
+                    var target = $(this);
+                    var p = utils.promiseRequest(
+                        target,
+                        'post',
+                        {% url 'rating' %},
+                        utils.formDataToJSON(target)
+                    );
+
+                    p.then(
+                        function (response) {
+                            container.find('.avg-votes').text(response.metrics.stars);
+                            container.find('.total-votes').text(response.metrics.q);
+                        }
+                    );
+                }
+            }
+        );
+    }());
+</script>
