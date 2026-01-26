@@ -5,7 +5,14 @@ import requests
 import stripe
 from django.db import models
 from django.utils import timezone
-from square.client import Client
+
+try:
+    from square import Client
+except ImportError:
+    try:
+        from square.client import Client
+    except ImportError:
+        Client = None
 
 from accounts.models import CustomUser
 from app.utils import Utils
