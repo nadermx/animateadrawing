@@ -67,14 +67,14 @@ class Payment(models.Model):
 
         try:
             plan = Plan.objects.get(paypal_key=resource.get('plan_id'))
-        except:
+        except Plan.DoesNotExist:
             return None, 'Plan not found'
 
         try:
             payment = Payment.objects.get(
                 payment_token=resource.get('id')
             )
-        except:
+        except Payment.DoesNotExist:
             return None, 'Payment not pending'
 
         payment.payment_data = webhook
@@ -125,7 +125,7 @@ class Payment(models.Model):
                 uuid=uuid,
                 user__email=email
             )
-        except:
+        except Payment.DoesNotExist:
             return None, ['payment_not_found']
 
         if payment.status != Payment.SUCCESS:
@@ -254,7 +254,7 @@ class Payment(models.Model):
 
         try:
             plan = Plan.objects.get(code_name=plan)
-        except:
+        except Plan.DoesNotExist:
             return None, None, 'Plan not found'
 
         if plan.is_subscription:
@@ -443,7 +443,7 @@ class Payment(models.Model):
                 amount=amount * 100,
                 currency='usd',
                 customer=customer,
-                description='EstaCaido.com'
+                description='Animate a Drawing'
             )
 
             return charge, None
@@ -608,7 +608,7 @@ class Payment(models.Model):
         )
         body = {
             'email_address': user.email,
-            'note': 'EstaCaido.com'
+            'note': 'Animate a Drawing'
         }
         result = client.customers.create_customer(body)
 

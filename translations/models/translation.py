@@ -33,7 +33,7 @@ class Translation(models.Model):
 
         try:
             translation = Translation.objects.get(code_name=code_name, language=language)
-        except:
+        except Translation.DoesNotExist:
             translation = Translation(
                 code_name=code_name,
                 language=language

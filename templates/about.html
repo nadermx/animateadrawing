@@ -1,27 +1,213 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container hero-container">
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="hero-description margin-less">
-                <h1>{{ g.i18n.about }}</h1>
-                <br>
-                {{ g.i18n.hello }}
-                <p>{{ g.i18n.about_first | safe }}</p>
-                <p>{{ g.i18n.about_second | safe}}</p>
-                <p>{{ g.i18n.about_third | safe }}</p>
-                <p>{{ g.i18n.about_third_half | safe }}</p>
-                <p>{{ g.i18n.about_fourth | safe}}</p>
-                <p>{{ g.i18n.dude_in_pic | safe }}</p>
-                <p>John</p>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="display-4 fw-bold mb-4">{{ g.i18n.about|default:"About Animate a Drawing" }}</h1>
 
-            </div>
+            <p class="lead mb-4">
+                Animate a Drawing is an AI-powered platform that brings your artwork to life. Upload any drawing, and our technology automatically detects poses, creates rigs, and applies animations.
+            </p>
+
+            <h3 class="mt-5 mb-3">Our Mission</h3>
+            <p>
+                We believe everyone should be able to create animations, regardless of technical skill. Our mission is to democratize animation by providing powerful AI tools that make the process accessible and fun.
+            </p>
+
+            <h3 class="mt-5 mb-3">How It Works</h3>
+            <p>
+                Our platform uses state-of-the-art open source AI models for pose detection and motion generation:
+            </p>
+            <ul class="mb-4">
+                <li><strong>MediaPipe</strong> for accurate pose detection and skeletal tracking</li>
+                <li><strong>rembg (U2-Net)</strong> for automatic background removal</li>
+                <li><strong>Custom motion models</strong> for generating natural animations from text prompts</li>
+                <li><strong>FFmpeg</strong> for high-quality video encoding</li>
+            </ul>
+
+            <h3 class="mt-5 mb-3">The Creator</h3>
+            <p>
+                {{ g.i18n.about_first|safe|default:"Animate a Drawing was created by John, a developer passionate about making creative tools accessible to everyone." }}
+            </p>
+            <p>
+                {{ g.i18n.about_second|safe|default:"The idea came from wanting to help artists and content creators bring their static artwork to life without learning complex animation software." }}
+            </p>
+            <p>
+                Questions or feedback? <a href="/contact/">Get in touch</a>.
+            </p>
+            <p class="mt-4">
+                <strong>- John</strong>
+            </p>
         </div>
-        <div class="col-sm-6">
-            <div class="home-hero">
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section py-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">About FAQ</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="aboutFaq">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#afaq1">
+                                Who created Animate a Drawing?
+                            </button>
+                        </h3>
+                        <div id="afaq1" class="accordion-collapse collapse show" data-bs-parent="#aboutFaq">
+                            <div class="accordion-body">
+                                Animate a Drawing was created by John, a developer who wanted to make animation accessible to artists without requiring them to learn complex software.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq2">
+                                What technology powers the animations?
+                            </button>
+                        </h3>
+                        <div id="afaq2" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
+                            <div class="accordion-body">
+                                We use a combination of open source AI models: MediaPipe for pose detection, rembg (U2-Net) for background removal, and custom motion generation models for creating smooth animations.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq3">
+                                Is the AI running locally or in the cloud?
+                            </button>
+                        </h3>
+                        <div id="afaq3" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
+                            <div class="accordion-body">
+                                Our AI processing runs on our servers in the cloud. This means you don't need a powerful computer - just upload your artwork and we handle the heavy lifting.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq4">
+                                What models do you use for pose detection?
+                            </button>
+                        </h3>
+                        <div id="afaq4" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
+                            <div class="accordion-body">
+                                We use MediaPipe Pose, which can detect 33 body landmarks including face, hands, and body positions. It works well with drawn characters and adapts to various art styles.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq5">
+                                How do you handle user privacy?
+                            </button>
+                        </h3>
+                        <div id="afaq5" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
+                            <div class="accordion-body">
+                                Your artwork is stored securely and only used to provide our service. We don't use your drawings to train AI models without explicit consent. See our privacy policy for full details.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq6">
+                                Where are your servers located?
+                            </button>
+                        </h3>
+                        <div id="afaq6" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
+                            <div class="accordion-body">
+                                Our servers are located in the United States. All data transfers are encrypted using HTTPS.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq7">
+                                Do you have a product roadmap?
+                            </button>
+                        </h3>
+                        <div id="afaq7" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
+                            <div class="accordion-body">
+                                We're constantly improving! Upcoming features include more motion presets, improved AI motion generation, real-time collaboration, and a mobile app.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq8">
+                                Can I request features?
+                            </button>
+                        </h3>
+                        <div id="afaq8" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
+                            <div class="accordion-body">
+                                Absolutely! We love hearing from users. Send feature requests through our contact form and we'll consider them for future updates.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq9">
+                                Is there an API available?
+                            </button>
+                        </h3>
+                        <div id="afaq9" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
+                            <div class="accordion-body">
+                                We're working on a public API for developers. Contact us if you're interested in early access for integration with your own applications.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq10">
+                                Do you offer white-label solutions?
+                            </button>
+                        </h3>
+                        <div id="afaq10" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
+                            <div class="accordion-body">
+                                Contact us for enterprise and white-label options if you want to integrate our animation technology into your own platform.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq11">
+                                How can I contact support?
+                            </button>
+                        </h3>
+                        <div id="afaq11" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
+                            <div class="accordion-body">
+                                Use our contact form or email support@animateadrawing.com. We typically respond within 24-48 hours.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#afaq12">
+                                Are you hiring?
+                            </button>
+                        </h3>
+                        <div id="afaq12" class="accordion-collapse collapse" data-bs-parent="#aboutFaq">
+                            <div class="accordion-body">
+                                We're a small team but always interested in hearing from talented developers, designers, and AI/ML engineers. Reach out via our contact form!
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<br><br><br><br>
 {% endblock %}

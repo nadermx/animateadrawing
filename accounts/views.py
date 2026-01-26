@@ -38,7 +38,7 @@ class GlobalVars:
 class RateLimit(APIView):
     def post(self, request):
         ip = Utils.get_ip(request)
-        user_agent = request.headers['User_Agent']
+        user_agent = request.headers.get('User-Agent', 'unknown')
         cache_key = '%s %s' % (ip, user_agent)
         cache_key = cache_key.encode()
         cache_key = md5(cache_key)

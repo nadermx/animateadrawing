@@ -252,7 +252,7 @@ class RestorePasswordPage(View):
         if not token:
             if request.user.is_authenticated:
                 token = Utils.generate_hex_uuid()
-                user = CustomUser.objects.get(email=request.user)
+                user = CustomUser.objects.get(email=request.user.email)
                 user.restore_password_token = token
                 user.save()
             else:
@@ -338,7 +338,7 @@ class AccountPage(View):
         from finances.models.plan import Plan
         try:
             plan_subscribed = Plan.objects.get(code_name=request.user.plan_subscribed)
-        except:
+        except Plan.DoesNotExist:
             plan_subscribed = None
         return render(
             request,
@@ -387,7 +387,7 @@ class CheckoutPage(View):
         try:
             from finances.models.plan import Plan
             plan = Plan.objects.get(code_name=plan_code)
-        except:
+        except Plan.DoesNotExist:
             return redirect('pricing')
         settings = GlobalVars.get_globals(request)
         return render(
@@ -416,7 +416,7 @@ class CheckoutPage(View):
         try:
             from finances.models.plan import Plan
             plan = Plan.objects.get(code_name=plan_code)
-        except:
+        except Plan.DoesNotExist:
             return redirect('pricing')
         settings = GlobalVars.get_globals(request)
         payment, errors = CustomUser.upgrade_account(request.user, data, settings)

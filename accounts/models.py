@@ -104,7 +104,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         try:
             from finances.models.plan import Plan
             plan = Plan.objects.get(code_name=self.plan_subscribed)
-        except:
+        except Plan.DoesNotExist:
             self.is_plan_active = False
             self.save()
             return
@@ -220,7 +220,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         try:
             from finances.models.plan import Plan
             plan = Plan.objects.get(code_name=plan)
-        except:
+        except Plan.DoesNotExist:
             return None, ['Plan not found']
 
         amount = plan.price
@@ -358,7 +358,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
         try:
             user = CustomUser.objects.get(restore_password_token=token)
-        except:
+        except CustomUser.DoesNotExist:
             return None, [settings.get('i18n').get('invalid_restore_token', 'invalid_restore_token')]
 
         user.set_password(password)
@@ -377,7 +377,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
         try:
             validate_email(email)
-        except:
+        except Exception:
             return None, [settings.get('i18n').get('invalid_email', 'invalid_email')]
 
         try:
@@ -385,7 +385,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
             if not user:
                 return None, [settings.get('i18n').get('invalid_email', 'invalid_email')]
-        except:
+        except CustomUser.DoesNotExist:
             return None, [settings.get('i18n').get('invalid_email', 'invalid_email')]
 
         if user.lost_password_email_sent_at and (timezone.now() - user.lost_password_email_sent_at).seconds < 600:
@@ -425,7 +425,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
         try:
             validate_email(email)
-        except:
+        except Exception:
             return None, [settings.get('i18n').get('invalid_email', 'invalid_email')]
 
         try:
@@ -433,7 +433,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
             if not user:
                 return None, [settings.get('i18n').get('wrong_credentials', 'wrong_credentials')]
-        except:
+        except CustomUser.DoesNotExist:
             return None, [settings.get('i18n').get('wrong_credentials', 'wrong_credentials')]
 
         if not user.check_password(password):
@@ -466,7 +466,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
         try:
             validate_email(email)
-        except:
+        except Exception:
             return None, [settings.get('i18n').get('invalid_email', 'invalid_email')]
 
         try:
@@ -474,7 +474,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
             if found:
                 return None, [settings.get('i18n').get('email_taken', 'email_taken')]
-        except:
+        except CustomUser.DoesNotExist:
             pass
 
         user = CustomUser.objects.create(
@@ -521,7 +521,7 @@ class EmailAddress(models.Model):
 
         try:
             validate_email(email)
-        except:
+        except Exception:
             return None, settings.get('i18n').get('invalid_email', 'invalid_email')
 
         try:
@@ -529,7 +529,7 @@ class EmailAddress(models.Model):
 
             if found:
                 return None, settings.get('i18n').get('duplicate_email', 'duplicate_email')
-        except:
+        except EmailAddress.DoesNotExist:
             pass
 
         email = EmailAddress.objects.create(

@@ -1,60 +1,72 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container hero-container">
-        <div class="row">
-            <div class="col d-none d-sm-block"></div>
-            <div class="col">
-                <div class="hero-description margin-less box-shadowed">
-                    <p>{{ g.i18n.need_help }}</p>
-                    <a href="/cancel/">{{ g.i18n.cancel_subscription }}</a><br>
-                    <a href="/refund/">{{ g.i18n.request_refund }}</a>
-                    <hr>
-                    <h1>{{ g.i18n.contact }}</h1>
-                    {% if errors %}
-                        <div class="alert alert-danger">
-                            <ul>
-                                {% for error in errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h1 class="text-center mb-4">{{ g.i18n.contact|default:"Contact Us" }}</h1>
+
+                        <p class="text-center text-muted mb-4">{{ g.i18n.need_help|default:"Need help with your animations? We're here to assist." }}</p>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <div class="p-3 border rounded text-center">
+                                    <h5>Support</h5>
+                                    <a href="mailto:support@animateadrawing.com">support@animateadrawing.com</a>
+                                    <p class="small text-muted mt-2 mb-0">Response within 24-48 hours</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 border rounded text-center">
+                                    <h5>Quick Links</h5>
+                                    <a href="/cancel/" class="d-block">{{ g.i18n.cancel_subscription|default:"Cancel Subscription" }}</a>
+                                    <a href="/refund/" class="d-block">{{ g.i18n.request_refund|default:"Request Refund" }}</a>
+                                </div>
+                            </div>
                         </div>
-                    {% endif %}
-                    <form action="{{ request.path }}"
-                          method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label>{{ g.i18n.email_address }}</label>
-                            <input type="email"
-                                   class="form-control"
-                                   name="email"
-                                   value="{{ data.email | default:'' }}"
-                                   placeholder="john@doe.com">
-                        </div>
-                        <div class="form-group">
-                            <label>{{ g.i18n.message }}</label>
-                            <textarea name="message"
-                                      rows="5"
-                                      class="form-control">{{ data.message | default:'' }}</textarea>
-                        </div>
-                        <div class="form-group">
-                            {{ form }}
-                        </div>
-                        <button class="btn btn-primary btn-lg btn-block">{{ g.i18n.send }}</button>
-                    </form>
-                    <hr>
-                    <p>{{ g.i18n.or_contact | safe }}</p>
-                    <p><a class="text-dark"
-                          href="https://vps.org">VPS.org</a> LLC</p>
-                    <p>Attn: EstaCaido.com</p>
-                    <p> 850 Clark st.</p>
-                    <p> P.O. Box 1232</p>
-                    <p> South Windsor CT 06074</p>
+
+                        <hr class="my-4">
+
+                        <h4 class="mb-3">Send us a message</h4>
+
+                        {% if errors %}
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    {% for error in errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        <form action="{{ request.path }}" method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label">{{ g.i18n.email_address|default:"Email Address" }}</label>
+                                <input type="email"
+                                       class="form-control"
+                                       name="email"
+                                       value="{{ data.email|default:'' }}"
+                                       placeholder="your@email.com"
+                                       required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">{{ g.i18n.message|default:"Message" }}</label>
+                                <textarea name="message"
+                                          rows="5"
+                                          class="form-control"
+                                          placeholder="How can we help you?"
+                                          required>{{ data.message|default:'' }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                {{ form }}
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg w-100">{{ g.i18n.send|default:"Send Message" }}</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <div class="col d-none d-sm-block"></div>
-
         </div>
-
     </div>
-    <br><br><br><br>
 {% endblock %}

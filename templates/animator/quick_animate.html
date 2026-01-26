@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function() {
         displayImage(currentImage);
 
         // Draw bones
-        ctx.strokeStyle = '#00ff00';
+        ctx.strokeStyle = '#374151';
         ctx.lineWidth = 2;
         for (const [joint1, joint2] of rig.bones) {
             const p1 = rig.joints[joint1];
@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Draw joints
-        ctx.fillStyle = '#ff0000';
+        ctx.fillStyle = '#111827';
         for (const joint of Object.values(rig.joints)) {
             ctx.beginPath();
             ctx.arc(joint.x, joint.y, 5, 0, Math.PI * 2);

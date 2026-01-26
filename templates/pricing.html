@@ -1,54 +1,284 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container text-center">
-        <h1 class="page-header">{{ g.i18n.pricing }}</h1>
-        <h2>{{ g.i18n.one_credit_equals }}</h2>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">{{ g.i18n.pricing|default:"Simple, Transparent Pricing" }}</h1>
+        <p class="lead text-muted">Choose the plan that fits your animation needs</p>
     </div>
-    <form class="container-md pricing-form"
-          action="{% url 'checkout' %}"
-          method="get">
-        <div class="row">
+
+    <form class="pricing-form" action="{% url 'checkout' %}" method="get">
+        <div class="row g-4 justify-content-center mb-5">
             {% for plan in plans %}
-                <div class="col">
-                    <div class="form-check">
-                        <input class="form-check-input"
-                               type="radio"
-                               name="plan"
-                               id="{{ plan.code_name }}"
-                               value="{{ plan.code_name }}"
-                               {% if forloop.first %}checked{% endif %} >
-                        <label class="form-check-label"
-                               for="{{ plan.code_name }}">
-                                <span class="price-wrapper">
-                                    <span class="price-value">US$ {{ plan.price }}</span><br>
-                                    {% if plan.is_subscription %}
-                                        {{ g.i18n.monthly }}
-                                    {% else %}
-                                        {{ g.i18n.single_charge }}
-                                    {% endif %}
-                                </span>
-                            <br>
-                            <spam class="plan-check">
-                                {% include 'svgs/check.html' %}
-                                {% if plan.is_subscription %}
-                                    <span>{{ g.i18n.convert_at_least}} <u>{{ plan.credits }}</u> {{g.i18n.files }}</span>
-                                {% else %}
-                                    <span>{{ g.i18n.convert_up_to}} <u>{{ plan.credits }}</u> {{g.i18n.files }}</span>
-                                {% endif %}
-                            </spam>
-                        </label>
+            <div class="col-md-4">
+                <div class="card pricing-card h-100 {% if plan.is_featured %}featured{% endif %}">
+                    {% if plan.is_featured %}
+                    <div class="card-header bg-dark text-white text-center py-2">
+                        <small class="fw-bold text-uppercase">Most Popular</small>
+                    </div>
+                    {% endif %}
+                    <div class="card-body text-center p-4">
+                        <h3 class="card-title">{{ plan.name }}</h3>
+                        <div class="display-5 fw-bold my-3">
+                            ${{ plan.price }}
+                            <small class="fs-6 text-muted fw-normal">
+                                {% if plan.is_subscription %}/month{% endif %}
+                            </small>
+                        </div>
+
+                        <p class="text-muted mb-4">
+                            {% if plan.is_subscription %}
+                            {{ plan.credits }} credits per month
+                            {% else %}
+                            {{ plan.credits }} credits (one-time)
+                            {% endif %}
+                        </p>
+
+                        <div class="form-check d-flex justify-content-center mb-4">
+                            <input class="form-check-input me-2" type="radio" name="plan"
+                                   id="{{ plan.code_name }}" value="{{ plan.code_name }}"
+                                   {% if current_plan == plan.code_name %}checked{% elif forloop.first and not current_plan %}checked{% endif %}>
+                            <label class="form-check-label" for="{{ plan.code_name }}">
+                                Select Plan
+                            </label>
+                        </div>
+
+                        <ul class="list-unstyled text-start mb-4">
+                            <li class="mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
+                                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                                AI pose detection
+                            </li>
+                            <li class="mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
+                                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                                Motion preset library
+                            </li>
+                            <li class="mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
+                                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                                MP4, GIF, WebM exports
+                            </li>
+                            {% if plan.is_subscription %}
+                            <li class="mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
+                                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                                Commercial use rights
+                            </li>
+                            <li class="mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
+                                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                                Priority rendering
+                            </li>
+                            {% endif %}
+                        </ul>
                     </div>
                 </div>
+            </div>
             {% endfor %}
         </div>
-        <hr>
-        <button id="pricingbutton"
-                class="btn btn-success btn-lg">{{ g.i18n.purchase }}</button>
-        <br>
-        <p class="small">
-            <strong>{{ g.i18n.risk_free }}:</strong> {{ g.i18n.money_back }}<br>
-            <strong>{{ g.i18n.flexible }}:</strong> {{ g.i18n.change_plan_whenever }}<br>
-            <strong>{{ g.i18n.fair }}:</strong> {{ g.i18n.never_expire | safe }}
-        </p>
+
+        <div class="text-center mb-5">
+            <button type="submit" class="btn btn-primary btn-lg px-5">
+                {{ g.i18n.purchase|default:"Continue to Checkout" }}
+            </button>
+        </div>
     </form>
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-10">
+            <div class="card bg-light border-0">
+                <div class="card-body p-4">
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <h5>{{ g.i18n.risk_free|default:"Risk Free" }}</h5>
+                            <p class="text-muted mb-0">{{ g.i18n.money_back|default:"7-day money-back guarantee if you haven't used credits" }}</p>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <h5>{{ g.i18n.flexible|default:"Flexible" }}</h5>
+                            <p class="text-muted mb-0">{{ g.i18n.change_plan_whenever|default:"Cancel or change your plan anytime" }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Secure Payment</h5>
+                            <p class="text-muted mb-0">Stripe, PayPal, and Square accepted</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section py-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Pricing FAQ</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="pricingFaq">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq1">
+                                What payment methods do you accept?
+                            </button>
+                        </h3>
+                        <div id="pfaq1" class="accordion-collapse collapse show" data-bs-parent="#pricingFaq">
+                            <div class="accordion-body">
+                                We accept all major credit cards through Stripe, PayPal, and Square. This includes Visa, Mastercard, American Express, and Discover.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq2">
+                                Can I cancel anytime?
+                            </button>
+                        </h3>
+                        <div id="pfaq2" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+                            <div class="accordion-body">
+                                Yes! You can cancel your subscription at any time from your account page. You'll continue to have access until the end of your billing period.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq3">
+                                Is there a free trial?
+                            </button>
+                        </h3>
+                        <div id="pfaq3" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+                            <div class="accordion-body">
+                                Free accounts include limited credits to try our service. You can create animations and export them to see how the platform works before upgrading.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq4">
+                                What happens when I run out of credits?
+                            </button>
+                        </h3>
+                        <div id="pfaq4" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+                            <div class="accordion-body">
+                                If you have a subscription, your credits refresh at the start of each billing cycle. You can also upgrade to a higher plan for more credits. One-time purchases can be made anytime.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq5">
+                                Do credits expire?
+                            </button>
+                        </h3>
+                        <div id="pfaq5" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+                            <div class="accordion-body">
+                                Subscription credits refresh monthly and don't roll over. One-time purchase credits remain available as long as your account is active.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq6">
+                                Can I upgrade or downgrade plans?
+                            </button>
+                        </h3>
+                        <div id="pfaq6" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+                            <div class="accordion-body">
+                                Yes, you can change your plan anytime. Upgrades take effect immediately with prorated billing. Downgrades take effect at the next billing cycle.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq7">
+                                Is there a refund policy?
+                            </button>
+                        </h3>
+                        <div id="pfaq7" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+                            <div class="accordion-body">
+                                We offer a 7-day money-back guarantee if you haven't used any credits. Contact support within 7 days of purchase for a full refund.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq8">
+                                Do you offer team or enterprise plans?
+                            </button>
+                        </h3>
+                        <div id="pfaq8" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+                            <div class="accordion-body">
+                                Contact us for team and enterprise pricing with custom credit allocations, priority support, and volume discounts.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq9">
+                                How are credits calculated?
+                            </button>
+                        </h3>
+                        <div id="pfaq9" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+                            <div class="accordion-body">
+                                AI pose detection uses 1 credit. Motion generation uses 1-3 credits depending on complexity. Exports use credits based on duration and resolution. Check your account for current credit costs.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq10">
+                                Can I buy more credits without upgrading?
+                            </button>
+                        </h3>
+                        <div id="pfaq10" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+                            <div class="accordion-body">
+                                Yes! You can purchase one-time credit packs in addition to your subscription. These credits don't expire and are used after your monthly credits.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq11">
+                                Are there student or nonprofit discounts?
+                            </button>
+                        </h3>
+                        <div id="pfaq11" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+                            <div class="accordion-body">
+                                Contact us with proof of student status or nonprofit registration for special pricing. We're happy to support education and charitable causes.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq12">
+                                What's included in each plan?
+                            </button>
+                        </h3>
+                        <div id="pfaq12" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
+                            <div class="accordion-body">
+                                All plans include AI pose detection, motion presets, and video exports. Subscription plans add commercial use rights, priority rendering, and access to new features first.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

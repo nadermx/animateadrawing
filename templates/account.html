@@ -20,8 +20,8 @@
                             Next billing date: {{ user.next_billing_date | date }}<br>
                             <a href="{{ request.path }}"
                                class="btn btn-danger btn-sm cancel-subscription"
-                               data-toggle="modal"
-                               data-target="#cancelSubscription">{{ g.i18n.cancel_subscription }}</a>
+                               data-bs-toggle="modal"
+                               data-bs-target="#cancelSubscription">{{ g.i18n.cancel_subscription }}</a>
                         {% else %}
                             <span class="badge badge-warning">{{ g.i18n.plan_not_active }}</span>
                         {% endif %}
@@ -130,8 +130,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-default"
-                           data-dismiss="modal">{{ g.i18n.close }}
+                        <a class="btn btn-secondary"
+                           data-bs-dismiss="modal">{{ g.i18n.close }}
                         </a>
                         <button class="btn btn-danger">{{ g.i18n.cancel_subscription }}
                         </button>

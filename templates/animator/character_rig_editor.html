@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.restore();
 
         // Draw bones
-        ctx.strokeStyle = '#00ff00';
+        ctx.strokeStyle = '#374151';
         ctx.lineWidth = 3;
         for (const [joint1, joint2] of rig.bones) {
             const p1 = rig.joints[joint1];
@@ -204,13 +204,13 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.arc(joint.x * zoom, joint.y * zoom, 8, 0, Math.PI * 2);
 
             if (name === selectedJoint) {
-                ctx.fillStyle = '#ff0000';
+                ctx.fillStyle = '#3b82f6';
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = 2;
                 ctx.fill();
                 ctx.stroke();
             } else {
-                ctx.fillStyle = '#00ff00';
+                ctx.fillStyle = '#111827';
                 ctx.fill();
             }
 

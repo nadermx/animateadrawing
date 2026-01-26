@@ -26,7 +26,7 @@ class Message(models.Model):
             self.responded_at = timezone.now()
             Utils.send_contact_email(
                 recipients=[self.email],
-                subject='EstaCaido.com',
+                subject='Animate a Drawing',
                 template='response-contact-message',
                 data={
                     'message': self
@@ -51,7 +51,7 @@ class Message(models.Model):
 
             try:
                 validate_email(email)
-            except:
+            except Exception:
                 errors.append(i18n.get('invalid_email', 'invalid_email'))
 
         if not message:

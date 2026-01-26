@@ -484,7 +484,11 @@ def motion_preset_preview(request, preset_id):
     preset = get_object_or_404(MotionPreset, id=preset_id)
 
     if preset.preview_gif:
-        return FileResponse(preset.preview_gif.open('rb'))
+        try:
+            if preset.preview_gif.storage.exists(preset.preview_gif.name):
+                return FileResponse(preset.preview_gif.open('rb'))
+        except Exception:
+            pass
 
     raise Http404("No preview available")
 
@@ -582,13 +586,27 @@ def collaborator_invite(request, project_id):
         permission = request.POST.get('permission', 'edit')
 
         if email:
-            CollaborationInvite.objects.create(
+            invite = CollaborationInvite.objects.create(
                 project=project,
                 invited_by=request.user,
                 invited_email=email,
                 permission=permission,
             )
-            # TODO: Send email invitation
+            # Send email invitation
+            from app.utils import Utils
+            from accounts.views import GlobalVars
+            g = GlobalVars.get_globals(request)
+            Utils.send_email(
+                recipients=[email],
+                subject=f"You've been invited to collaborate on \"{project.name}\"",
+                template='collaboration-invite',
+                data={
+                    'project': project,
+                    'invite': invite,
+                    'invited_by': request.user,
+                    'i18n': g.get('i18n'),
+                }
+            )
 
     return redirect('animator:collaborator_list', project_id=project.id)
 

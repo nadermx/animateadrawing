@@ -1,28 +1,86 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
-    <h2 class="text-center">Privacy Policy</h2>
-    <p>Your privacy is important to us. It is EstaCaido.com's policy to respect your privacy regarding any information we may
-        collect from you across our website, <a href="https://estacaido.com">https://estacaido.com</a>, and other sites we own and
-        operate.</p>
-    <p>We only ask for personal information when we truly need it to provide a service to you. We collect it by fair and
-        lawful means, with your knowledge and consent. We also let you know why we’re collecting it and how it will be
-        used.</p>
-    <p>We only retain collected information for as long as necessary to provide you with your requested service. What
-        data we store, we’ll protect within commercially acceptable means to prevent loss and theft, as well as
-        unauthorised access, disclosure, copying, use or modification.</p>
-    <p>We don’t share any personally identifying information publicly or with third-parties, except when required to by
-        law.</p>
-    <p>Our website may link to external sites that are not operated by us. Please be aware that we have no control over
-        the content and practices of these sites, and cannot accept responsibility or liability for their respective
-        privacy policies.</p>
-    <p>You are free to refuse our request for your personal information, with the understanding that we may be unable to
-        provide you with some of your desired services.</p>
-    <p>Your continued use of our website will be regarded as acceptance of our practices around privacy and personal
-        information. If you have any questions about how we handle user data and personal information, feel free to
-        contact us.</p>
-    <p>This policy is effective as of 6 June 2019.</p>
-    <p>Files uploaded are deleted after two hours and files converted are deleted after 24 hours. In order to limit the
-        abuse, we log the IP address that did a conversion when a file is converted, there is no association to files
-        and IP address. After one hour the IP address is deleted so it is free to do another conversion.</p>
-    {% endblock %}
+<div class="container py-4">
+    <h1 class="text-center mb-4">Privacy Policy</h1>
+
+    <p class="lead">Your privacy is important to us. This policy explains how Animate a Drawing collects, uses, and protects your information.</p>
+
+    <p><strong>Effective Date:</strong> January 2026</p>
+
+    <h3>1. Information We Collect</h3>
+    <p>We collect information you provide directly to us, including:</p>
+    <ul>
+        <li><strong>Account Information:</strong> Email address and password when you create an account</li>
+        <li><strong>Drawings and Media:</strong> Images you upload for animation processing</li>
+        <li><strong>Payment Information:</strong> Billing details processed securely through our payment providers (Stripe, PayPal, Square)</li>
+        <li><strong>Usage Data:</strong> Information about how you use our services</li>
+    </ul>
+
+    <h3>2. How We Use Your Information</h3>
+    <p>We use collected information to:</p>
+    <ul>
+        <li>Provide, maintain, and improve our animation services</li>
+        <li>Process your uploaded drawings using AI pose detection</li>
+        <li>Generate animations based on your selections</li>
+        <li>Process payments and manage your subscription</li>
+        <li>Send service-related communications</li>
+        <li>Respond to your comments and questions</li>
+    </ul>
+
+    <h3>3. Data Retention</h3>
+    <ul>
+        <li><strong>Uploaded Drawings:</strong> Stored for the duration of your account plus 30 days after deletion</li>
+        <li><strong>Processed Animations:</strong> Stored until you delete them or close your account</li>
+        <li><strong>Quick Animate Files:</strong> Temporary files are automatically deleted within 24 hours</li>
+        <li><strong>Account Data:</strong> Retained while your account is active</li>
+    </ul>
+
+    <h3>4. How We Process Your Drawings</h3>
+    <p>When you upload a drawing:</p>
+    <ul>
+        <li>Our AI analyzes the image to detect character poses using MediaPipe</li>
+        <li>Background removal is performed using open-source models (rembg/U2-Net)</li>
+        <li>Your original images remain your property</li>
+        <li>We do not use your drawings to train AI models without explicit consent</li>
+    </ul>
+
+    <h3>5. Data Protection</h3>
+    <p>We implement industry-standard security measures including:</p>
+    <ul>
+        <li>HTTPS encryption for all data transfers</li>
+        <li>Secure payment processing through PCI-compliant providers</li>
+        <li>Regular security audits and updates</li>
+    </ul>
+
+    <h3>6. Third-Party Services</h3>
+    <p>We use the following third-party services:</p>
+    <ul>
+        <li>Payment processors (Stripe, PayPal, Square) for billing</li>
+        <li>Cloud storage for media files</li>
+        <li>Analytics services to improve our platform</li>
+    </ul>
+
+    <h3>7. Your Rights</h3>
+    <p>You have the right to:</p>
+    <ul>
+        <li>Access your personal data</li>
+        <li>Correct inaccurate data</li>
+        <li>Delete your account and associated data</li>
+        <li>Export your data</li>
+        <li>Opt out of marketing communications</li>
+    </ul>
+
+    <h3>8. GDPR Compliance</h3>
+    <p>For users in the European Economic Area (EEA), we process data based on legitimate business interests, consent, or contractual necessity. You may contact us to exercise your GDPR rights.</p>
+
+    <h3>9. CCPA Compliance</h3>
+    <p>California residents have additional rights under the CCPA, including the right to know what personal information is collected and the right to request deletion.</p>
+
+    <h3>10. Contact Us</h3>
+    <p>If you have questions about this privacy policy, please contact us at:</p>
+    <p>Email: <a href="mailto:privacy@animateadrawing.com">privacy@animateadrawing.com</a></p>
+
+    <h3>11. Changes to This Policy</h3>
+    <p>We may update this policy from time to time. We will notify you of significant changes by email or through our website.</p>
+</div>
+{% endblock %}
