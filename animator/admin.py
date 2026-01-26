@@ -31,9 +31,32 @@ class BackgroundAdmin(admin.ModelAdmin):
 
 @admin.register(MotionPreset)
 class MotionPresetAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'is_system', 'duration_seconds', 'created_at']
-    list_filter = ['category', 'is_system']
+    list_display = ['name', 'category', 'animation_method', 'is_system', 'duration_seconds', 'created_at']
+    list_filter = ['category', 'animation_method', 'is_system']
     search_fields = ['name', 'description']
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'description', 'category', 'animation_method', 'duration_seconds')
+        }),
+        ('Transform Animation Settings', {
+            'fields': ('transform_settings',),
+            'classes': ('collapse',),
+            'description': 'Used when animation_method is "transform". Example: {"rotation_amplitude": 5, "translation_x": 10, "translation_y": 8, "scale_amplitude": 0.02, "frequency": 2}'
+        }),
+        ('AI Video Settings', {
+            'fields': ('ai_motion_bucket', 'ai_noise_strength'),
+            'classes': ('collapse',),
+            'description': 'Used when animation_method is "ai_video" (Stable Video Diffusion).'
+        }),
+        ('Skeletal Animation', {
+            'fields': ('motion_data',),
+            'classes': ('collapse',),
+            'description': 'BVH or custom motion data for skeletal animation.'
+        }),
+        ('Ownership & Preview', {
+            'fields': ('is_system', 'user', 'preview_gif', 'thumbnail')
+        }),
+    )
 
 
 @admin.register(Scene)

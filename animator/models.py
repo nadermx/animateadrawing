@@ -138,13 +138,43 @@ class MotionPreset(models.Model):
         ('custom', 'Custom'),
     ]
 
+    ANIMATION_METHOD_CHOICES = [
+        ('transform', 'Transform-Based (Fast, preserves original art perfectly)'),
+        ('ai_video', 'AI Video Generation (Slower, adds realistic motion)'),
+        ('skeletal', 'Skeletal Animation (Requires rigged character)'),
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    animation_method = models.CharField(
+        max_length=20,
+        choices=ANIMATION_METHOD_CHOICES,
+        default='transform',
+        help_text='Transform: applies rotation/translation/scale. AI Video: uses Stable Video Diffusion. Skeletal: uses character rig.'
+    )
 
-    # Motion data (BVH or custom format)
+    # Motion data (BVH or custom format for skeletal animation)
     motion_data = models.JSONField(default=dict)
+
+    # Transform animation settings (used when animation_method='transform')
+    # These define how the image moves during animation
+    transform_settings = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text='Settings for transform animation: rotation_amplitude, translation_x, translation_y, scale_amplitude, etc.'
+    )
+
+    # AI video settings (used when animation_method='ai_video')
+    ai_motion_bucket = models.IntegerField(
+        default=100,
+        help_text='Motion bucket ID for Stable Video Diffusion (1-255, higher=more motion)'
+    )
+    ai_noise_strength = models.FloatField(
+        default=0.02,
+        help_text='Noise augmentation strength for SVD (0-1, lower=preserves original better)'
+    )
 
     # Duration of the motion
     duration_seconds = models.FloatField(default=2.0)
