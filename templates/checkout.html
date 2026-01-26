@@ -1,256 +1,196 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% if 'squareup' in processors %}
-        <style>
-            #form-container {
-                position: relative;
-                margin: 0 auto;
-            }
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h1 class="h4 mb-0">{{ g.i18n.checkout|default:"Checkout" }}</h1>
+                </div>
+                <div class="card-body">
+                    <!-- Order Summary -->
+                    <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-light rounded">
+                        <div>
+                            <strong>{{ plan.name|default:plan }}</strong>
+                            {% if plan.is_subscription %}
+                            <small class="text-muted d-block">{{ g.i18n.monthly_subscription|default:"Monthly Subscription" }}</small>
+                            {% else %}
+                            <small class="text-muted d-block">{{ g.i18n.one_time_purchase|default:"One-time Purchase" }}</small>
+                            {% endif %}
+                        </div>
+                        <div class="text-end">
+                            <strong class="h5 mb-0">US$ {{ plan.price }}</strong>
+                            {% if plan.is_subscription %}<small class="text-muted">/{{ g.i18n.month|default:"month" }}</small>{% endif %}
+                        </div>
+                    </div>
 
-            .third {
-                float: left;
-                width: calc((100% - 32px) / 3);
-                padding: 0;
-                margin: 0 16px 16px 0;
-            }
+                    {% if errors %}
+                    <div class="alert alert-danger">
+                        {% for error in errors %}
+                        {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
 
-            .third:last-of-type {
-                margin-right: 0;
-            }
+                    <!-- Payment Methods -->
+                    <ul class="nav nav-pills mb-4" role="tablist">
+                        {% for processor in processors %}
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link {% if forloop.first %}active{% endif %}"
+                                    id="{{ processor }}-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#{{ processor }}"
+                                    type="button"
+                                    role="tab">
+                                {% if processor == 'stripe' %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-2zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
+                                </svg>
+                                {{ g.i18n.credit_card|default:"Card" }}
+                                {% elif processor == 'paypal' %}
+                                PayPal
+                                {% elif processor == 'coinbase' %}
+                                Bitcoin
+                                {% else %}
+                                {{ processor|title }}
+                                {% endif %}
+                            </button>
+                        </li>
+                        {% endfor %}
+                    </ul>
 
-            .sq-input {
-                height: 54px;
-                box-sizing: border-box;
-                border: 1px solid #ddd;
-                background-color: white;
-                border-radius: 3px;
-                display: inline-block;
-                -webkit-transition: border-color .2s ease-in-out;
-                -moz-transition: border-color .2s ease-in-out;
-                -ms-transition: border-color .2s ease-in-out;
-                transition: border-color .2s ease-in-out;
-            }
-
-            .sq-input--focus {
-                border: 1px solid #6E4EEC;
-            }
-
-            .sq-input--error {
-                border: 1px solid #E02F2F;
-            }
-
-            .button-credit-card {
-                border-radius: 50px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08),
-                0 1px 3px rgba(0, 0, 0, 0.04);
-                height: auto;
-                font-size: 16px;
-                letter-spacing: 0.5px;
-                line-height: 24px;
-                margin-top: 16px;
-                padding: 16px;
-                position: relative;
-                text-transform: uppercase;
-                width: 100%;
-                z-index: 1;
-                background: linear-gradient(180deg, #8E72FF -57.14%, #6E4EEC 125%);
-                border: none;
-                color: #fff;
-            }
-
-            .button-credit-card:hover {
-                background: linear-gradient(180deg, #a791ff -57.14%, #856aef 125%);
-                color: #fff;
-            }
-        </style>
-    {% endif %}
-    <h1 class="text-center page-header">{{ g.i18n.checkout }}</h1>
-    <div class="container-sm">
-        <p><strong>{{ g.i18n.total }}: US$ {{ plan.price }}</strong>{% if plan.price != 3%} / {{ g.i18n.month }}{%endif%}</p>
-        <hr>
-        <ul class="nav nav-tabs"
-            role="tablist">
-            {% for processor in processors %}
-                <li class="nav-item"
-                    role="presentation">
-                    <a class="nav-link {% if forloop.first %}active{% endif %}"
-                       id="{{ processor }}-tab"
-                       data-bs-toggle="tab"
-                       href="#{{ processor }}"
-                       role="tab"
-                       aria-selected="true">
-                        {% if processor == 'coinbase' %}
-                            Bitcoin
-                        {% else %}
-                            {{ processor | title }}
+                    <div class="tab-content">
+                        {% for processor in processors %}
+                        {% if processor == 'stripe' %}
+                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="{{ processor }}" role="tabpanel">
+                            <form action="{% url 'checkout' %}" method="post" class="stripe-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="plan" value="{{ plan }}">
+                                <input type="hidden" name="processor" value="stripe">
+                                <input type="hidden" name="processing" value="">
+                                <input type="hidden" name="nonce" value="">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ g.i18n.credit_card_info|default:"Card Information" }}</label>
+                                    <div id="card-element" class="form-control" style="padding: 12px;"></div>
+                                    <div id="card-element-errors" class="text-danger small mt-1" role="alert"></div>
+                                </div>
+                                <div class="d-grid">
+                                    <button class="btn btn-success btn-lg" type="submit">
+                                        {{ g.i18n.pay_now|default:"Pay" }} US$ {{ plan.price }}
+                                    </button>
+                                </div>
+                                <p class="text-center text-muted small mt-3 mb-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                                    </svg>
+                                    {{ g.i18n.payment_secured|default:"Secured by" }} Stripe
+                                </p>
+                            </form>
+                        </div>
                         {% endif %}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-        {% if errors %}
-            <div class="alert alert-danger">
-                {% for error in errors %}
-                    {{ error }}<br>
-                {% endfor %}
-            </div>
-        {% endif %}
-        <div class="tab-content">
-            {% for processor in processors %}
-                {% if processor == 'stripe' %}
-                    <div class="tab-pane {% if forloop.first %}active{% endif %}"
-                         id="{{ processor }}"
-                         role="tabpanel">
-                        <form action="{% url 'checkout' %}"
-                              method="post"
-                              class="stripe-form">
-                            {% csrf_token %}
-                            <input type="hidden"
-                                   name="plan"
-                                   value="{{ plan }}">
-                            <input type="hidden"
-                                   name="processor"
-                                   value="stripe">
-                            <input type="hidden"
-                                   name="processing"
-                                   value="">
-                            <input type="hidden"
-                                   name="nonce"
-                                   value="">
-                            <div class="form-group">
-                                <label>{{ g.i18n.credit_card_info}}</label>
-                                <div id="card-element"></div>
-                                <div id="card-element-errors"
-                                     role="alert"></div>
-                            </div>
-                            <br>
-                            <button class="btn btn-success btn-block">{{ g.i18n.purchase }}</button>
-                            <p>🔒 {{ g.i18n.payment_secured }} Stripe</p>
-                        </form>
-                    </div>
-                {% endif %}
-                {% if processor == 'squareup' %}
-                    <div class="tab-pane {% if forloop.first %}active{% endif %}"
-                         id="{{ processor }}"
-                         role="tabpanel">
-                        <form action="{% url 'checkout' %}"
-                              method="post"
-                              class="squareup-form">
-                            {% csrf_token %}
-                            <input type="hidden"
-                                   name="plan"
-                                   value="{{ plan }}">
-                            <input type="hidden"
-                                   name="processor"
-                                   value="squareup">
-                            <input type="hidden"
-                                   name="processing"
-                                   value="">
-                            <input type="hidden"
-                                   name="nonce"
-                                   value="">
-                            <div class="form-group">
-                                <label>{{ g.i18n.card_number}}</label>
-                                <div id="sq-card-number"></div>
-                            </div>
-                            <label>{{ g.i18n.expiration_date}}</label>
-                            <div class="form-group">
-                                <div class="third"
-                                     id="sq-expiration-date"></div>
-                                <div class="third"
-                                     id="sq-cvv"></div>
-                                <div class="third"
-                                     id="sq-postal-code"></div>
-                            </div>
-                            <br>
-                            <button class="btn btn-success btn-block">{{ g.i18n.purchase}}</button>
-                            <p>🔒 {{ g.i18n.payment_secured}} Squareup</p>
-                        </form>
-                    </div>
-                {% endif %}
-                {% if processor == 'paypal' %}
-                    <div class="tab-pane {% if forloop.first %}active{% endif %}"
-                         id="{{ processor }}"
-                         role="tabpanel"
-                         aria-labelledby="home-tab">
-                        <form action="{% url 'checkout' %}"
-                              method="post"
-                              class="paypal-form">
-                            {% csrf_token %}
-                            <input type="hidden"
-                                   name="plan"
-                                   value="{{ plan }}">
-                            <input type="hidden"
-                                   name="processor"
-                                   value="paypal">
-                            <input type="hidden"
-                                   name="processing"
-                                   value="">
-                            <input type="hidden"
-                                   name="nonce"
-                                   value="">
-                            <div class="paypal">
-                                <div id="paypal-button"></div>
-                            </div>
-                        </form>
-                    </div>
-                {% endif %}
-                {% if processor == 'coinbase' %}
-                    <div class="tab-pane {% if forloop.first %}active{% endif %} text-center"
-                         id="{{ processor }}"
-                         role="tabpanel"
-                         aria-labelledby="home-tab">
-                        {% if plan.coinbase_key %}
-                            <a class="buy-with-crypto"
+
+                        {% if processor == 'squareup' %}
+                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="{{ processor }}" role="tabpanel">
+                            <form action="{% url 'checkout' %}" method="post" class="squareup-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="plan" value="{{ plan }}">
+                                <input type="hidden" name="processor" value="squareup">
+                                <input type="hidden" name="processing" value="">
+                                <input type="hidden" name="nonce" value="">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ g.i18n.card_number|default:"Card Number" }}</label>
+                                    <div id="sq-card-number" class="form-control"></div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label class="form-label">{{ g.i18n.expiration_date|default:"Expiry" }}</label>
+                                        <div id="sq-expiration-date" class="form-control"></div>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label">{{ g.i18n.cvv|default:"CVV" }}</label>
+                                        <div id="sq-cvv" class="form-control"></div>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label">{{ g.i18n.postal_code|default:"ZIP" }}</label>
+                                        <div id="sq-postal-code" class="form-control"></div>
+                                    </div>
+                                </div>
+                                <div class="d-grid">
+                                    <button class="btn btn-success btn-lg" type="submit">
+                                        {{ g.i18n.pay_now|default:"Pay" }} US$ {{ plan.price }}
+                                    </button>
+                                </div>
+                                <p class="text-center text-muted small mt-3 mb-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                                    </svg>
+                                    {{ g.i18n.payment_secured|default:"Secured by" }} Square
+                                </p>
+                            </form>
+                        </div>
+                        {% endif %}
+
+                        {% if processor == 'paypal' %}
+                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="{{ processor }}" role="tabpanel">
+                            <form action="{% url 'checkout' %}" method="post" class="paypal-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="plan" value="{{ plan }}">
+                                <input type="hidden" name="processor" value="paypal">
+                                <input type="hidden" name="processing" value="">
+                                <input type="hidden" name="nonce" value="">
+                                <div id="paypal-button" class="mb-3"></div>
+                            </form>
+                        </div>
+                        {% endif %}
+
+                        {% if processor == 'coinbase' %}
+                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %} text-center" id="{{ processor }}" role="tabpanel">
+                            {% if plan.coinbase_key %}
+                            <p class="text-muted mb-3">{{ g.i18n.pay_with_crypto|default:"Pay with Bitcoin, Ethereum, or other cryptocurrencies" }}</p>
+                            <a class="buy-with-crypto btn btn-warning btn-lg"
                                data-custom="{{ user.email }}"
                                href="https://commerce.coinbase.com/checkout/{{ plan.coinbase_key }}">
-                                {{ g.i18n.crypto }}
+                                {{ g.i18n.pay_with_crypto|default:"Pay with Crypto" }}
                             </a>
-                            <script src="https://commerce.coinbase.com/v1/checkout.js?version=201807">
-                            </script>
-                            <p>🔒 {{ g.i18n.payment_secured }} CoinBase</p>
-                        {% else %}
-                            This plan has no coinbase button
+                            <script src="https://commerce.coinbase.com/v1/checkout.js?version=201807"></script>
+                            <p class="text-center text-muted small mt-3 mb-0">
+                                {{ g.i18n.payment_secured|default:"Secured by" }} Coinbase
+                            </p>
+                            {% else %}
+                            <p class="text-muted">{{ g.i18n.crypto_unavailable|default:"Crypto payment not available for this plan." }}</p>
+                            {% endif %}
+                        </div>
                         {% endif %}
+                        {% endfor %}
                     </div>
-                {% endif %}
-            {% endfor %}
-            <div class="tab-pane"
-                 id="profile"
-                 role="tabpanel"
-                 aria-labelledby="profile-tab">...
+                </div>
             </div>
-            <div class="tab-pane"
-                 id="messages"
-                 role="tabpanel"
-                 aria-labelledby="messages-tab">...
-            </div>
-            <div class="tab-pane"
-                 id="settings"
-                 role="tabpanel"
-                 aria-labelledby="settings-tab">...
-            </div>
+
+            <p class="text-center text-muted small mt-3">
+                {{ g.i18n.checkout_terms|default:"By completing this purchase, you agree to our" }}
+                <a href="/terms/">{{ g.i18n.terms_of_service|default:"Terms of Service" }}</a>
+            </p>
         </div>
     </div>
+</div>
 {% endblock %}
+
 {% block scripts %}
-    <script src="/static/js/utils.js?{{ g.scripts_version }}"></script>
-    {% if 'stripe' in processors %}
-        <script src="https://js.stripe.com/v3/"></script>
-        {% include 'scripts/stripe.html' %}
-    {% endif %}
-    {% if 'squareup' in processors %}
-        {% if square.env == 'sandbox' %}
-            <script type="text/javascript"
-                    src="https://js.squareupsandbox.com/v2/paymentform"></script>
-        {% else %}
-            <script type="text/javascript"
-                    src="https://js.squareup.com/v2/paymentform"></script>
-        {% endif %}
-        {% include 'scripts/squareup.html' %}
-    {% endif %}
-    {% if 'paypal' in processors %}
-        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-        {% include 'scripts/paypal.html' %}
-    {% endif %}
+<script src="/static/js/utils.js?{{ g.scripts_version }}"></script>
+{% if 'stripe' in processors %}
+<script src="https://js.stripe.com/v3/"></script>
+{% include 'scripts/stripe.html' %}
+{% endif %}
+{% if 'squareup' in processors %}
+{% if square.env == 'sandbox' %}
+<script type="text/javascript" src="https://js.squareupsandbox.com/v2/paymentform"></script>
+{% else %}
+<script type="text/javascript" src="https://js.squareup.com/v2/paymentform"></script>
+{% endif %}
+{% include 'scripts/squareup.html' %}
+{% endif %}
+{% if 'paypal' in processors %}
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+{% include 'scripts/paypal.html' %}
+{% endif %}
 {% endblock %}

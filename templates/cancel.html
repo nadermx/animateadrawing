@@ -1,16 +1,32 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>{{ g.i18n.cancel }}</h1>
-<div class="container">
-    <div class="row">
-        <h3>{{ g.i18n.cancelled_instantly}}</h3>
-        <form action="/cancel/" method="post">
-            {% csrf_token %}
-            <button class="btn btn-danger">{{ g.i18n.cancel_subscription }}</button>
-        </form>
-        <p>{{ g.i18n.credits_dont_expire }}</p>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4 text-center">
+                    <div class="mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="text-warning" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                    </div>
+                    <h1 class="h3 mb-3">{{ g.i18n.cancel_subscription|default:"Cancel Subscription" }}</h1>
+                    <p class="text-muted mb-4">{{ g.i18n.cancelled_instantly|default:"Your subscription will be cancelled immediately. You will lose access to premium features at the end of your current billing period." }}</p>
 
+                    <div class="alert alert-info text-start">
+                        <strong>{{ g.i18n.good_news|default:"Good news:" }}</strong> {{ g.i18n.credits_dont_expire|default:"Your remaining credits don't expire and can still be used after cancellation." }}
+                    </div>
+
+                    <form action="/cancel/" method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-danger btn-lg" type="submit">{{ g.i18n.confirm_cancellation|default:"Yes, Cancel My Subscription" }}</button>
+                            <a href="{% url 'account' %}" class="btn btn-outline-secondary">{{ g.i18n.keep_subscription|default:"No, Keep My Subscription" }}</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<br><br><br><br>
 {% endblock %}

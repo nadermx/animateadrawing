@@ -1,49 +1,52 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container hero-container">
-        <div class="row">
-            <div class="col d-none d-sm-block"></div>
-            <div class="col">
-                <div class="hero-description margin-less box-shadowed">
-                    <h1 class="page-header">{{ g.i18n.refund_request }}</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h3 mb-3 text-center">{{ g.i18n.refund_request|default:"Request Refund" }}</h1>
+                    <p class="text-muted text-center mb-4">{{ g.i18n.refund_subtitle|default:"Enter your transaction details to request a refund." }}</p>
+
                     {% if errors %}
-                        {{ errors }}
-                        <div class="alert alert-danger">
-                            <ul>
-                                {% for error in errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            {% for error in errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                     {% endif %}
-                    <form action="{{ request.path }}"
-                          method="post">
+
+                    <form action="{{ request.path }}" method="post">
                         {% csrf_token %}
-                        <div class="form-group">
-                            <label>{{ g.i18n.transaction_id }}</label>
-                            <input type="text"
-                                   name="transaction_id"
-                                   class="form-control"
-                                   value="{{ data.transaction_id_refund | default:'' }}">
+                        <div class="mb-3">
+                            <label class="form-label">{{ g.i18n.transaction_id|default:"Transaction ID" }}</label>
+                            <input type="text" name="transaction_id" class="form-control" value="{{ data.transaction_id|default:'' }}" placeholder="e.g., pi_1234567890" required>
+                            <div class="form-text">{{ g.i18n.transaction_id_help|default:"Found in your payment confirmation email or account billing history." }}</div>
                         </div>
-                        <div class="form-group">
-                            <label>{{ g.i18n.email_address }}</label>
-                            <input type="email"
-                                   name="email_refund"
-                                   class="form-control"
-                                   value="{{ data.email_refund | default:'' }}"
-                                   placeholder="john@doe.com">
+                        <div class="mb-3">
+                            <label class="form-label">{{ g.i18n.email_address|default:"Email Address" }}</label>
+                            <input type="email" name="email_refund" class="form-control" value="{{ data.email_refund|default:'' }}" placeholder="john@example.com" required>
+                            <div class="form-text">{{ g.i18n.email_help|default:"The email address used for the purchase." }}</div>
                         </div>
-                        <button class="btn btn-primary btn-block"
-                                tabindex="3">{{ g.i18n.make_refund}}
-                        </button>
+                        <div class="d-grid mb-3">
+                            <button class="btn btn-primary btn-lg" type="submit">{{ g.i18n.submit_refund|default:"Submit Refund Request" }}</button>
+                        </div>
                     </form>
+
                     <hr>
-                    <p><b>{{ g.i18n.info_where}}</b><br>{{ g.i18n.info_is}}</p>
+
+                    <div class="small text-muted">
+                        <p class="mb-2"><strong>{{ g.i18n.refund_policy|default:"Refund Policy" }}</strong></p>
+                        <ul class="mb-0">
+                            <li>{{ g.i18n.refund_time|default:"Refunds are processed within 5-10 business days." }}</li>
+                            <li>{{ g.i18n.refund_eligibility|default:"Only unused credits are eligible for refund." }}</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div class="col d-none d-sm-block"></div>
         </div>
     </div>
-    <br><br><br><br>
+</div>
 {% endblock %}

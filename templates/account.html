@@ -1,175 +1,208 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container">
-        <h1 class="page-header">{{ g.i18n.account_label }}</h1>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h3>{{ g.i18n.total_credits }}: {{ credits }}</h3>
-                {% if user.plan_subscribed %}
-                    <p>
-                        Plan subscribed:
-                        {% if user.is_plan_active %}
-                            <span class="badge badge-success">{{ user.plan_subscribed | title }}</span>
-                        {% else %}
-                            <span class="badge badge-danger">{{ user.plan_subscribed | title }}</span>
-                        {% endif %}
-                        <br>
-                        {% if user.next_billing_date %}
-                            Next billing date: {{ user.next_billing_date | date }}<br>
-                            <a href="{{ request.path }}"
-                               class="btn btn-danger btn-sm cancel-subscription"
-                               data-bs-toggle="modal"
-                               data-bs-target="#cancelSubscription">{{ g.i18n.cancel_subscription }}</a>
-                        {% else %}
-                            <span class="badge badge-warning">{{ g.i18n.plan_not_active }}</span>
-                        {% endif %}
-                    </p>
-                {% endif %}
-                <p>{{ g.i18n.one_credit_equals }}</p>
-                <p><strong>{{ g.i18n.api_token }}:</strong> {{ user.api_token }}</p>
-                {% if status %}
-                    <a href="/cancel/">{{ g.i18n.cancel_subscription }}</a>
-                {% else %}
-                    <a class="btn btn-primary btn-sm"
-                       href="/pricing/">{{ g.i18n.get_credits }}</a>
-                {% endif %}
-            </div>
-            <div class="col">
-                <h3>{{ g.i18n.hello }} {{ user }}</h3>
-                <p>
-                    <a class="btn btn-outline-secondary btn-sm"
-                       href="/restore-password/">{{ g.i18n.change_password }}</a>
-                    <a class="btn btn-outline-danger btn-sm"
-                       href="/delete-account/">{{ g.i18n.delete_account }}</a>
-                </p>
+<div class="container py-5">
+    <h1 class="h2 mb-4">{{ g.i18n.account_label|default:"My Account" }}</h1>
 
-            </div>
-        </div>
-        <hr>
-        <br><br>
-        <h3>{{ g.i18n.billing_history }}</h3>
-        <hr>
-        <div class="row">
-            <div class="col">{{ g.i18n.processor}}</div>
-            <div class="col">{{ g.i18n.amount }}</div>
-            <div class="col">{{ g.i18n.date }}</div>
-        </div>
-        <hr>
-        {% if payments %}
-            {% for payment in payments %}
-                <div id="{{ payment.id }}"
-                     class="row">
-                    <div class="col">
-                        {% if payment.status == 'success' %}
-                            <span class="payment-status success">{% include 'svgs/payment-success.html' %}</span>
-                        {% elif payment.status == 'failed' %}
-                            <span class="payment-status failed">{% include 'svgs/payment-failed.html' %}</span>
-                        {% elif payment.status == 'refunded' %}
-                            <span class="payment-status pending">{% include 'svgs/payment-refund.html' %}</span>
-                        {% else %}
-                            <span class="payment-status pending">{% include 'svgs/payment-pending.html' %}</span>
+    <div class="row g-4">
+        <!-- Account Overview -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">{{ g.i18n.hello|default:"Hello" }}, {{ user.email }}</h5>
+
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted">{{ g.i18n.total_credits|default:"Credits" }}</span>
+                            <span class="h4 mb-0 text-primary">{{ credits }}</span>
+                        </div>
+                        <small class="text-muted">{{ g.i18n.one_credit_equals|default:"1 credit = 1 animation export" }}</small>
+                    </div>
+
+                    {% if user.plan_subscribed %}
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted">{{ g.i18n.plan|default:"Plan" }}</span>
+                            {% if user.is_plan_active %}
+                            <span class="badge bg-success">{{ user.plan_subscribed|title }}</span>
+                            {% else %}
+                            <span class="badge bg-secondary">{{ user.plan_subscribed|title }}</span>
+                            {% endif %}
+                        </div>
+                        {% if user.next_billing_date %}
+                        <small class="text-muted">{{ g.i18n.next_billing|default:"Next billing" }}: {{ user.next_billing_date|date }}</small>
                         {% endif %}
-                        {{ payment.processor | title }}</div>
-                    <div class="col">US$ {{ payment.amount }}.00</div>
-                    <div class="col">{{ payment.created_at }}</div>
+                    </div>
+                    {% endif %}
+
+                    <hr>
+
+                    <div class="d-grid gap-2">
+                        <a href="/pricing/" class="btn btn-primary">{{ g.i18n.get_credits|default:"Get More Credits" }}</a>
+                        {% if user.is_plan_active %}
+                        <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#cancelSubscription">
+                            {{ g.i18n.cancel_subscription|default:"Cancel Subscription" }}
+                        </button>
+                        {% endif %}
+                    </div>
                 </div>
-                <hr>
-            {% endfor %}
-        {% else %}
-            <div class="row">
-                <div class="col">{{ g.i18n.no_payments}}</div>
             </div>
-            <hr>
-        {% endif %}
-        <br><br>
-        <h3>{{ g.i18n.conversion_history }}</h3>
-        <div class="row">
-            <table class="table">
-                <tr>
-                    <th>{{ g.i18n.date }}</th>
-                    <th>Filename</th>
-                    <th>{{ g.i18n.conversion_type }}</th>
-                    <th></th>
-                </tr>
-                {% if not files %}
-                    <tr>
-                        <td colspan="10">No files</td>
-                    </tr>
-                {% endif %}
-                {% for f in files %}
-                    <tr>
-                        <td>{{ f.created_at }}</td>
-                        <td>{{ f.filename }}</td>
-                        <td>{{ f.tool | default:'-' }}</td>
-                        <td>
-                            <a href="{{ api_domain }}/{{ f.url }}"
-                               target="_blank"
-                               download="{{ f.filename }}">{{ g.i18n.download }}</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
         </div>
-    </div>
-    {% if user.is_plan_active %}
-        <div class="modal fade"
-             id="cancelSubscription"
-             tabindex="-1"
-             role="dialog"
-             aria-labelledby="exampleModalLongTitle"
-             aria-hidden="true">
-            <div class="modal-dialog"
-                 role="document">
-                <form class="modal-content cancel-subscription-form">
-                    {% csrf_token %}
-                    <div class="modal-body">
-                        <div class="alert alert-warning">
-                            {{ g.i18n.are_you_sure }}
+
+        <!-- Quick Actions -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">{{ g.i18n.quick_actions|default:"Quick Actions" }}</h5>
+
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'animator:quick_animate' %}" class="btn btn-outline-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+                            </svg>
+                            {{ g.i18n.quick_animate|default:"Quick Animate" }}
+                        </a>
+                        <a href="{% url 'animator:dashboard' %}" class="btn btn-outline-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                                <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0h2A1.5 1.5 0 0 1 5 1.5v2A1.5 1.5 0 0 1 3.5 5h-2A1.5 1.5 0 0 1 0 3.5v-2zM0 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8z"/>
+                            </svg>
+                            {{ g.i18n.my_projects|default:"My Projects" }}
+                        </a>
+                    </div>
+
+                    <hr>
+
+                    <h6 class="text-muted mb-2">{{ g.i18n.account_settings|default:"Account Settings" }}</h6>
+                    <div class="d-grid gap-2">
+                        <a href="/restore-password/" class="btn btn-outline-secondary btn-sm">{{ g.i18n.change_password|default:"Change Password" }}</a>
+                        <a href="/delete-account/" class="btn btn-outline-danger btn-sm">{{ g.i18n.delete_account|default:"Delete Account" }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Access -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">{{ g.i18n.api_access|default:"API Access" }}</h5>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small">{{ g.i18n.api_token|default:"API Token" }}</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm font-monospace" value="{{ user.api_token }}" readonly id="apiToken">
+                            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="navigator.clipboard.writeText(document.getElementById('apiToken').value)">
+                                {{ g.i18n.copy|default:"Copy" }}
+                            </button>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <a class="btn btn-secondary"
-                           data-bs-dismiss="modal">{{ g.i18n.close }}
-                        </a>
-                        <button class="btn btn-danger">{{ g.i18n.cancel_subscription }}
-                        </button>
-                    </div>
-                </form>
+
+                    <a href="/tutorials/" class="btn btn-link btn-sm p-0">{{ g.i18n.api_docs|default:"View API Documentation" }} &rarr;</a>
+                </div>
             </div>
         </div>
-    {% endif %}
+    </div>
+
+    <!-- Billing History -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-transparent">
+            <h5 class="mb-0">{{ g.i18n.billing_history|default:"Billing History" }}</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>{{ g.i18n.status|default:"Status" }}</th>
+                            <th>{{ g.i18n.processor|default:"Processor" }}</th>
+                            <th>{{ g.i18n.amount|default:"Amount" }}</th>
+                            <th>{{ g.i18n.date|default:"Date" }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if payments %}
+                            {% for payment in payments %}
+                            <tr>
+                                <td>
+                                    {% if payment.status == 'success' %}
+                                    <span class="badge bg-success">{{ g.i18n.success|default:"Success" }}</span>
+                                    {% elif payment.status == 'failed' %}
+                                    <span class="badge bg-danger">{{ g.i18n.failed|default:"Failed" }}</span>
+                                    {% elif payment.status == 'refunded' %}
+                                    <span class="badge bg-warning">{{ g.i18n.refunded|default:"Refunded" }}</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">{{ g.i18n.pending|default:"Pending" }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ payment.processor|title }}</td>
+                                <td>US$ {{ payment.amount }}.00</td>
+                                <td>{{ payment.created_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">{{ g.i18n.no_payments|default:"No payment history yet." }}</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Subscription Modal -->
+{% if user.is_plan_active %}
+<div class="modal fade" id="cancelSubscription" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content cancel-subscription-form">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title">{{ g.i18n.cancel_subscription|default:"Cancel Subscription" }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    {{ g.i18n.are_you_sure|default:"Are you sure you want to cancel your subscription?" }}
+                </div>
+                <p class="text-muted small">{{ g.i18n.cancel_info|default:"Your subscription will be cancelled at the end of the current billing period. You will keep your remaining credits." }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ g.i18n.close|default:"Close" }}</button>
+                <button type="submit" class="btn btn-danger">{{ g.i18n.cancel_subscription|default:"Cancel Subscription" }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
+
 {% block scripts %}
-    <script src="/static/js/utils.js?{{ g.scripts_version }}"></script>
-    <script defer>
-        (function () {
-            'use strict';
-            $(document).ready(
-                function () {
-                    $('.page-container').on('submit', '.cancel-subscription-form', onCancelSubscription);
-
-                    function onCancelSubscription(e) {
-                        e.preventDefault();
-                        var target = $(this);
-                        var p = utils.promiseRequest(
-                            null,
-                            'post',
-                            '{% url 'cancel-subscription' %}',
-                            utils.formDataToJSON(target)
-                        );
-
-                        p.then(
-                            function () {
-                                window.location.reload();
-                            }, function (errors) {
-                                alert(errors);
-                            }
-                        );
+<script src="/static/js/utils.js?{{ g.scripts_version }}"></script>
+<script defer>
+(function () {
+    'use strict';
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.querySelector('.cancel-subscription-form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                fetch('{% url "cancel-subscription" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'
                     }
-                }
-            );
-        }());
-    </script>
+                })
+                .then(function() {
+                    window.location.reload();
+                })
+                .catch(function(error) {
+                    alert('Error: ' + error);
+                });
+            });
+        }
+    });
+}());
+</script>
 {% endblock %}
