@@ -221,6 +221,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentImage = null;
     let currentRig = null;
 
+    // Animation state
+    const animationCanvas = document.getElementById('animation-canvas');
+    let animationId = null;
+    let isPlaying = false;
+    let animationTime = 0;
+    let animationSpeed = 1;
+    let selectedMotion = 'idle';
+
     // Drag and drop
     dropZone.addEventListener('click', () => imageInput.click());
 
@@ -308,14 +316,6 @@ document.addEventListener('DOMContentLoaded', function() {
         currentRig = null;
         btnExport.disabled = true;
     });
-
-    // Animation state
-    const animationCanvas = document.getElementById('animation-canvas');
-    let animationId = null;
-    let isPlaying = false;
-    let animationTime = 0;
-    let animationSpeed = 1;
-    let selectedMotion = 'idle';
 
     // Auto-detect pose
     document.getElementById('btn-detect-pose').addEventListener('click', async () => {
