@@ -271,12 +271,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function displayImage(img) {
         const ctx = previewCanvas.getContext('2d');
-        const maxWidth = previewCanvas.parentElement.clientWidth;
+        // Use a reasonable default if parent width is 0
+        const parentWidth = previewCanvas.parentElement.clientWidth;
+        const maxWidth = parentWidth > 100 ? parentWidth : 600;
         const maxHeight = 500;
 
         let width = img.width;
         let height = img.height;
 
+        // Scale down if needed
         if (width > maxWidth) {
             height = height * (maxWidth / width);
             width = maxWidth;
@@ -286,9 +289,14 @@ document.addEventListener('DOMContentLoaded', function() {
             height = maxHeight;
         }
 
+        // Ensure minimum size
+        width = Math.max(width, 200);
+        height = Math.max(height, 150);
+
         previewCanvas.width = width;
         previewCanvas.height = height;
         ctx.drawImage(img, 0, 0, width, height);
+        console.log('Image displayed:', width, 'x', height);
     }
 
     // Change image button
