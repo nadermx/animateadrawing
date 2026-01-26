@@ -29,6 +29,10 @@ SECRET_KEY = 'a5z51#6w3_h-v_poldy1b-wsk1*a=btqfhjhc8_&rxpi_b4@j$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEBUG
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://animateadrawing.com",
+    "https://www.animateadrawing.com",
+]
 
 
 # Application definition
