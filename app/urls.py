@@ -15,6 +15,7 @@ urlpatterns = [
     path('ads.txt', TemplateView.as_view(template_name='ads.txt', content_type='text/plain')),
     path('api/accounts/', include('accounts.urls')),
     path('ipns/', include('finances.urls.payment')),
+    path('animator/', include('animator.urls')),
     path('', include('core.urls')),
 ]
 

@@ -1,0 +1,452 @@
+{% extends 'base.html' %}
+
+{% block title %}Rig Editor - {{ character.name }} - {{ g.pn }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <div class="row mb-3">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{% url 'animator:project_detail' project_id=project.id %}">{{ project.name }}</a></li>
+                    <li class="breadcrumb-item active">{{ character.name }} - Rig Editor</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col-auto">
+            <button type="button" class="btn btn-primary" id="btn-save-rig">
+                Save Rig
+            </button>
+            <a href="{% url 'animator:project_detail' project_id=project.id %}" class="btn btn-outline-secondary">
+                Back to Project
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Canvas Area -->
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-body p-0 position-relative">
+                    <canvas id="rig-canvas" class="w-100" style="cursor: crosshair;"></canvas>
+
+                    <!-- Toolbar -->
+                    <div class="position-absolute top-0 start-0 m-3">
+                        <div class="btn-group-vertical bg-white shadow-sm rounded">
+                            <button type="button" class="btn btn-outline-secondary" id="btn-auto-detect" title="Auto-detect pose">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary active" id="btn-move" title="Move joints">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708l2-2zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10zM.146 8.354a.5.5 0 0 1 0-.708l2-2a.5.5 0 1 1 .708.708L1.707 7.5H5.5a.5.5 0 0 1 0 1H1.707l1.147 1.146a.5.5 0 0 1-.708.708l-2-2zM10 8a.5.5 0 0 1 .5-.5h3.793l-1.147-1.146a.5.5 0 0 1 .708-.708l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L14.293 8.5H10.5A.5.5 0 0 1 10 8z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" id="btn-add-joint" title="Add joint">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" id="btn-add-bone" title="Add bone">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-outline-danger" id="btn-delete" title="Delete selected">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Zoom controls -->
+                    <div class="position-absolute bottom-0 end-0 m-3">
+                        <div class="btn-group bg-white shadow-sm">
+                            <button type="button" class="btn btn-outline-secondary" id="btn-zoom-out">-</button>
+                            <span class="btn btn-outline-secondary disabled" id="zoom-level">100%</span>
+                            <button type="button" class="btn btn-outline-secondary" id="btn-zoom-in">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Joint List -->
+        <div class="col-lg-3">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h6 class="mb-0">Character Type</h6>
+                </div>
+                <div class="card-body">
+                    <select class="form-select" id="character-type">
+                        <option value="humanoid" {% if character.character_type == 'humanoid' %}selected{% endif %}>Humanoid</option>
+                        <option value="quadruped" {% if character.character_type == 'quadruped' %}selected{% endif %}>Quadruped</option>
+                        <option value="bird" {% if character.character_type == 'bird' %}selected{% endif %}>Bird</option>
+                        <option value="custom" {% if character.character_type == 'custom' %}selected{% endif %}>Custom</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Joints</h6>
+                    <span class="badge bg-secondary" id="joint-count">0</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush" id="joint-list" style="max-height: 300px; overflow-y: auto;">
+                        <!-- Joints will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h6 class="mb-0">Selected Joint</h6>
+                </div>
+                <div class="card-body" id="joint-details">
+                    <p class="text-muted mb-0">Select a joint to edit</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Help</h6>
+                </div>
+                <div class="card-body small">
+                    <ul class="mb-0 ps-3">
+                        <li>Click <strong>Auto-detect</strong> to automatically find joints</li>
+                        <li><strong>Drag</strong> joints to adjust positions</li>
+                        <li>Use <strong>Add Joint</strong> to create new joints</li>
+                        <li>Use <strong>Add Bone</strong> to connect joints</li>
+                        <li><strong>Delete</strong> removes selected joint/bone</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('rig-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const characterImage = new Image();
+    characterImage.src = '{% if character.processed_image %}{{ character.processed_image.url }}{% else %}{{ character.original_image.url }}{% endif %}';
+
+    let rig = {{ character.rig_data|safe|default:"{}" }};
+    if (!rig.joints) rig.joints = {};
+    if (!rig.bones) rig.bones = [];
+
+    let selectedJoint = null;
+    let isDragging = false;
+    let zoom = 1;
+    let mode = 'move'; // move, add-joint, add-bone
+    let boneStartJoint = null;
+
+    characterImage.onload = function() {
+        resizeCanvas();
+        render();
+        updateJointList();
+    };
+
+    function resizeCanvas() {
+        const container = canvas.parentElement;
+        const maxWidth = container.clientWidth;
+        const maxHeight = window.innerHeight - 200;
+
+        let width = characterImage.width;
+        let height = characterImage.height;
+
+        if (width > maxWidth) {
+            height = height * (maxWidth / width);
+            width = maxWidth;
+        }
+        if (height > maxHeight) {
+            width = width * (maxHeight / height);
+            height = maxHeight;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw image
+        ctx.save();
+        ctx.scale(zoom, zoom);
+        const scale = Math.min(canvas.width / characterImage.width, canvas.height / characterImage.height);
+        ctx.drawImage(characterImage, 0, 0, characterImage.width * scale, characterImage.height * scale);
+        ctx.restore();
+
+        // Draw bones
+        ctx.strokeStyle = '#00ff00';
+        ctx.lineWidth = 3;
+        for (const [joint1, joint2] of rig.bones) {
+            const p1 = rig.joints[joint1];
+            const p2 = rig.joints[joint2];
+            if (p1 && p2) {
+                ctx.beginPath();
+                ctx.moveTo(p1.x * zoom, p1.y * zoom);
+                ctx.lineTo(p2.x * zoom, p2.y * zoom);
+                ctx.stroke();
+            }
+        }
+
+        // Draw joints
+        for (const [name, joint] of Object.entries(rig.joints)) {
+            ctx.beginPath();
+            ctx.arc(joint.x * zoom, joint.y * zoom, 8, 0, Math.PI * 2);
+
+            if (name === selectedJoint) {
+                ctx.fillStyle = '#ff0000';
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.fill();
+                ctx.stroke();
+            } else {
+                ctx.fillStyle = '#00ff00';
+                ctx.fill();
+            }
+
+            // Draw label
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '10px sans-serif';
+            ctx.fillText(name, joint.x * zoom + 10, joint.y * zoom - 5);
+        }
+    }
+
+    function updateJointList() {
+        const list = document.getElementById('joint-list');
+        list.innerHTML = '';
+
+        for (const name of Object.keys(rig.joints)) {
+            const item = document.createElement('a');
+            item.href = '#';
+            item.className = 'list-group-item list-group-item-action' + (name === selectedJoint ? ' active' : '');
+            item.textContent = name;
+            item.onclick = (e) => {
+                e.preventDefault();
+                selectedJoint = name;
+                updateJointList();
+                updateJointDetails();
+                render();
+            };
+            list.appendChild(item);
+        }
+
+        document.getElementById('joint-count').textContent = Object.keys(rig.joints).length;
+    }
+
+    function updateJointDetails() {
+        const details = document.getElementById('joint-details');
+
+        if (selectedJoint && rig.joints[selectedJoint]) {
+            const joint = rig.joints[selectedJoint];
+            details.innerHTML = `
+                <div class="mb-2">
+                    <label class="form-label small">Name</label>
+                    <input type="text" class="form-control form-control-sm" id="joint-name" value="${selectedJoint}">
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label class="form-label small">X</label>
+                        <input type="number" class="form-control form-control-sm" id="joint-x" value="${Math.round(joint.x)}">
+                    </div>
+                    <div class="col">
+                        <label class="form-label small">Y</label>
+                        <input type="number" class="form-control form-control-sm" id="joint-y" value="${Math.round(joint.y)}">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteSelectedJoint()">Delete Joint</button>
+            `;
+
+            document.getElementById('joint-x').onchange = (e) => {
+                rig.joints[selectedJoint].x = parseInt(e.target.value);
+                render();
+            };
+            document.getElementById('joint-y').onchange = (e) => {
+                rig.joints[selectedJoint].y = parseInt(e.target.value);
+                render();
+            };
+        } else {
+            details.innerHTML = '<p class="text-muted mb-0">Select a joint to edit</p>';
+        }
+    }
+
+    window.deleteSelectedJoint = function() {
+        if (selectedJoint) {
+            delete rig.joints[selectedJoint];
+            rig.bones = rig.bones.filter(([a, b]) => a !== selectedJoint && b !== selectedJoint);
+            selectedJoint = null;
+            updateJointList();
+            updateJointDetails();
+            render();
+        }
+    };
+
+    // Canvas mouse events
+    canvas.addEventListener('mousedown', function(e) {
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / zoom;
+        const y = (e.clientY - rect.top) / zoom;
+
+        // Check if clicking on a joint
+        for (const [name, joint] of Object.entries(rig.joints)) {
+            const dist = Math.sqrt((x - joint.x) ** 2 + (y - joint.y) ** 2);
+            if (dist < 15) {
+                if (mode === 'add-bone' && boneStartJoint) {
+                    rig.bones.push([boneStartJoint, name]);
+                    boneStartJoint = null;
+                    mode = 'move';
+                    render();
+                    return;
+                } else if (mode === 'add-bone') {
+                    boneStartJoint = name;
+                    selectedJoint = name;
+                    updateJointList();
+                    updateJointDetails();
+                    render();
+                    return;
+                }
+
+                selectedJoint = name;
+                isDragging = true;
+                updateJointList();
+                updateJointDetails();
+                render();
+                return;
+            }
+        }
+
+        // Add new joint if in add mode
+        if (mode === 'add-joint') {
+            const name = prompt('Joint name:');
+            if (name) {
+                rig.joints[name] = { x: x, y: y, visibility: 1 };
+                selectedJoint = name;
+                updateJointList();
+                updateJointDetails();
+                render();
+            }
+            mode = 'move';
+        }
+    });
+
+    canvas.addEventListener('mousemove', function(e) {
+        if (isDragging && selectedJoint) {
+            const rect = canvas.getBoundingClientRect();
+            rig.joints[selectedJoint].x = (e.clientX - rect.left) / zoom;
+            rig.joints[selectedJoint].y = (e.clientY - rect.top) / zoom;
+            render();
+            updateJointDetails();
+        }
+    });
+
+    canvas.addEventListener('mouseup', function() {
+        isDragging = false;
+    });
+
+    // Toolbar buttons
+    document.getElementById('btn-auto-detect').addEventListener('click', async function() {
+        this.disabled = true;
+        this.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+        try {
+            const response = await fetch('{% url "animator:api_detect_character" character_id=character.id %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            // Poll for result or wait
+            setTimeout(() => {
+                location.reload();
+            }, 3000);
+        } catch (error) {
+            alert('Detection failed: ' + error);
+            this.disabled = false;
+            this.innerHTML = 'Auto-detect';
+        }
+    });
+
+    document.getElementById('btn-move').addEventListener('click', () => {
+        mode = 'move';
+        document.querySelectorAll('.btn-group-vertical .btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-move').classList.add('active');
+    });
+
+    document.getElementById('btn-add-joint').addEventListener('click', () => {
+        mode = 'add-joint';
+        document.querySelectorAll('.btn-group-vertical .btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-add-joint').classList.add('active');
+    });
+
+    document.getElementById('btn-add-bone').addEventListener('click', () => {
+        mode = 'add-bone';
+        boneStartJoint = null;
+        document.querySelectorAll('.btn-group-vertical .btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-add-bone').classList.add('active');
+        alert('Click two joints to connect them with a bone');
+    });
+
+    document.getElementById('btn-delete').addEventListener('click', deleteSelectedJoint);
+
+    // Zoom
+    document.getElementById('btn-zoom-in').addEventListener('click', () => {
+        zoom = Math.min(zoom + 0.1, 2);
+        document.getElementById('zoom-level').textContent = Math.round(zoom * 100) + '%';
+        resizeCanvas();
+        render();
+    });
+
+    document.getElementById('btn-zoom-out').addEventListener('click', () => {
+        zoom = Math.max(zoom - 0.1, 0.5);
+        document.getElementById('zoom-level').textContent = Math.round(zoom * 100) + '%';
+        resizeCanvas();
+        render();
+    });
+
+    // Save
+    document.getElementById('btn-save-rig').addEventListener('click', async function() {
+        this.disabled = true;
+        this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+
+        try {
+            const response = await fetch('{% url "animator:api_save_rig" character_id=character.id %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ rig: rig })
+            });
+
+            const result = await response.json();
+            if (result.status === 'saved') {
+                alert('Rig saved successfully!');
+            } else {
+                alert('Error saving rig');
+            }
+        } catch (error) {
+            alert('Error: ' + error);
+        }
+
+        this.disabled = false;
+        this.textContent = 'Save Rig';
+    });
+
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+        render();
+    });
+});
+</script>
+{% endblock %}

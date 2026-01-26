@@ -33,3 +33,23 @@ django-select2>=8.2
 # Utilities
 python-dateutil>=2.9
 pytz>=2024.1
+
+# Animation & AI Processing
+opencv-python>=4.9
+numpy>=1.26
+scipy>=1.12
+
+# Background Removal
+rembg>=2.0
+
+# Pose Detection
+mediapipe>=0.10
+
+# Text-to-Speech (optional, for voice synthesis)
+TTS>=0.22
+
+# Image Generation (optional, for AI backgrounds)
+diffusers>=0.27
+transformers>=4.38
+accelerate>=0.27
+torch>=2.2

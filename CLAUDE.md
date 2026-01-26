@@ -4,7 +4,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DjangoBase is a reusable Django 5.x project template with built-in user authentication, credits-based billing, multi-processor payments, and a custom database-driven translation system.
+**Animate a Drawing** (animateadrawing.com) is a Django-based web application that allows users to animate their drawings using AI and open source models. Users can upload drawings, auto-detect character poses, apply motion presets or AI-generated animations, and export to video formats.
+
+### Key Features
+- Quick animation: Upload a drawing and get an animated GIF/video in seconds
+- AI pose detection using MediaPipe for automatic character rigging
+- Motion preset library (walk, run, dance, jump, wave, etc.)
+- AI motion generation from text prompts
+- Multi-scene project editor with timeline
+- Background removal using rembg (U2-Net)
+- Voice synthesis and lip-sync support
+- Multiple export formats (MP4, WebM, GIF, PNG sequence)
+- Storyboard planning for full-length animations
+- Collaboration features
 
 ## Common Commands
 
@@ -16,31 +28,106 @@ python manage.py migrate
 python manage.py set_languages  # Initialize available languages
 python manage.py runserver
 
-# Translations
-python manage.py run_translation  # Translate untranslated TextBase entries via Google Translate API
+# Background workers (for animation processing)
+python manage.py rqworker default high low
 
-# PayPal Setup (if using subscriptions)
-python manage.py create_paypal_product
-python manage.py create_paypal_plans
+# Translations
+python manage.py run_translation  # Translate untranslated TextBase entries
 ```
 
 ## Architecture
 
+### Apps
+- `animator/` - Main animation functionality (models, views, AI services)
+- `accounts/` - Custom user model, authentication, credits system
+- `core/` - Homepage and static pages
+- `finances/` - Payment processing, plans, subscriptions
+- `translations/` - Database-driven translation system
+- `contact_messages/` - Contact form
+
+### Animator App Structure
+```
+animator/
+├── models.py          # Project, Character, Scene, Animation, Export models
+├── views.py           # All animator views and API endpoints
+├── urls.py            # URL routing
+├── admin.py           # Django admin configuration
+├── tasks.py           # Background tasks (django-rq)
+└── services/          # AI processing services
+    ├── pose_detection.py    # MediaPipe pose detection
+    ├── image_processing.py  # Background removal (rembg)
+    ├── motion_generation.py # Motion presets and AI generation
+    ├── renderer.py          # Animation rendering to video
+    ├── voice_synthesis.py   # TTS using Coqui TTS
+    ├── lipsync.py           # Lip sync from audio
+    └── image_generation.py  # AI background generation (Stable Diffusion)
+```
+
+### Key Models
+- `Project` - Container for animation projects (quick, short, medium, full-length)
+- `Character` - Character from uploaded drawing with rig data
+- `Scene` - Individual scene with background and camera settings
+- `SceneCharacter` - Character placement in a scene
+- `Animation` - Animation applied to character (preset or custom keyframes)
+- `MotionPreset` - Pre-made or user motion presets
+- `Export` - Rendered animation output
+
 ### Configuration
-Settings split between `app/settings.py` (Django defaults) and `config.py` (secrets/env-specific). The `config.py` is gitignored - copy from `config_example.py`.
+Settings split between `app/settings.py` (Django defaults) and `config.py` (secrets/env-specific).
 
 Key config values:
-- `PROJECT_NAME` - Used in templates and emails
-- `PROJECT_DOMAIN` - Your domain for email sending
-- `EMAIL_*` - SMTP settings (uses native Postfix, not third-party services)
+- `PROJECT_NAME` - "Animate a Drawing"
+- `PROJECT_DOMAIN` - animateadrawing.com
+- `EMAIL_*` - SMTP settings (uses native Postfix)
 
-### Custom Translation System
-**Not Django's built-in i18n.** Uses three models in `translations/`:
-- `Language` - available languages (populated via `set_languages` command from JSON)
-- `TextBase` - source text entries with `code_name` identifier and `translated` flag
-- `Translation` - translated text per language
+### API Endpoints
+All animator API endpoints are prefixed with `/animator/api/`:
+- `POST /api/characters/<id>/detect/` - Auto-detect character pose
+- `POST /api/characters/<id>/rig/` - Save character rig
+- `GET /api/scenes/<id>/data/` - Get scene data as JSON
+- `POST /api/scenes/<id>/save/` - Save scene data
+- `POST /api/animations/generate/` - Generate motion from text prompt
+- `GET /api/export/<id>/status/` - Check export progress
 
-Usage in views: `Translation.get_text_by_lang('en')` returns dict of `{code_name: text}`. Add new text via admin at `Translations > Text bases`, then run `python manage.py run_translation`.
+### Background Tasks
+Uses django-rq for processing:
+- `detect_character_rig` - AI pose detection
+- `process_character_image` - Background removal
+- `generate_motion_from_prompt` - AI motion generation
+- `render_export` - Video rendering
+- `generate_background` - AI background generation
+- `synthesize_voice` - Text-to-speech
+- `generate_lipsync_data` - Lip sync from audio
+
+## Dependencies
+
+### Required
+- Django 5.x
+- PostgreSQL
+- Redis (for caching and task queue)
+- FFmpeg (for video encoding)
+
+### AI/ML (install based on features needed)
+- `opencv-python` - Image processing
+- `mediapipe` - Pose detection
+- `rembg` - Background removal
+- `TTS` (Coqui) - Voice synthesis (optional)
+- `diffusers` - Stable Diffusion for backgrounds (optional)
+
+## Frontend
+- Bootstrap 5 (CDN)
+- Custom JavaScript for:
+  - Canvas-based rig editor
+  - Drag-and-drop upload
+  - Animation preview
+  - Timeline editor
+
+## Deployment
+Uses Ansible playbooks in `ansible/` directory:
+- `djangodeployubuntu20.yml` - Full deployment
+- `gitpull.yml` - Update from git
+
+Configure `ansible/group_vars/all` with server credentials.
 
 ### User & Authentication
 Custom user model `accounts.CustomUser` with:
@@ -49,50 +136,8 @@ Custom user model `accounts.CustomUser` with:
 - Subscription tracking (`is_plan_active`, `next_billing_date`, `plan_subscribed`)
 - Payment processor tokens stored per user
 
-### Email System
-Uses Django's native SMTP backend with local Postfix. See `EMAIL_SETUP.md` for:
-- Postfix configuration
-- DKIM/SPF/DMARC DNS setup
-- Testing deliverability
-
-For development, set in config.py:
-```python
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-```
-
 ### Payment Processing
 `finances/` supports Stripe, Square, PayPal. Plans defined in admin with `is_subscription` flag.
 
 ### View Pattern
 Views use `GlobalVars.get_globals(request)` from `accounts/views.py` to get translation dict (`i18n`) and other settings. All templates receive this as `g` context variable.
-
-### Frontend
-- Bootstrap 5 (loaded via CDN)
-- Custom styles in `static/css/styles.css`
-
-### Infrastructure
-- PostgreSQL database
-- Redis for caching (`django-redis`) and job queues (`django-rq`)
-
-## Project Structure
-
-```
-├── app/              # Django settings, URLs, utilities
-├── accounts/         # Custom user model, authentication
-├── core/             # Main views (index, auth pages, account)
-├── contact_messages/ # Contact form
-├── finances/         # Payment processing, plans
-├── translations/     # Database translation system
-├── templates/        # HTML templates (Bootstrap 5)
-├── static/           # CSS, JS
-└── ansible/          # Server deployment playbooks
-```
-
-## Creating a New Project from This Base
-
-1. Clone the repository
-2. Update `config.py` with your PROJECT_NAME, PROJECT_DOMAIN, and credentials
-3. Update `DEFAULT_FROM_EMAIL` in config.py
-4. Customize templates in `templates/`
-5. Add your translation TextBase entries
-6. Set up email DNS records (see EMAIL_SETUP.md)

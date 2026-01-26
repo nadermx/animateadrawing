@@ -1,6 +1,6 @@
 # Project Settings
-PROJECT_NAME = 'MyProject'
-PROJECT_DOMAIN = 'example.com'  # Your domain (e.g., myproject.com)
+PROJECT_NAME = 'Animate a Drawing'
+PROJECT_DOMAIN = 'animateadrawing.com'  # Your domain (e.g., myproject.com)
 ROOT_DOMAIN = 'http://localhost:8000'
 DEBUG = True
 

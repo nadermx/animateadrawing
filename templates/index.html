@@ -1,21 +1,230 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <h1 class="display-4 mb-4">{{ g.i18n.welcome_title|default:"Welcome" }}</h1>
-            <p class="lead mb-4">{{ g.i18n.welcome_subtitle|default:"Your project description goes here." }}</p>
-
-            {% if not user.is_authenticated %}
-            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-primary btn-lg px-4 me-md-2">{{ g.i18n.get_started|default:"Get Started" }}</a>
-                <a href="/about/?lang={{ g.lang.iso }}" class="btn btn-outline-secondary btn-lg px-4">{{ g.i18n.learn_more|default:"Learn More" }}</a>
+<!-- Hero Section -->
+<div class="bg-dark text-white py-5 mb-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container">
+        <div class="row align-items-center py-5">
+            <div class="col-lg-6">
+                <h1 class="display-3 fw-bold mb-4">Bring Your Drawings to Life</h1>
+                <p class="lead mb-4">
+                    Upload any drawing and watch it animate with AI-powered motion.
+                    From quick GIFs to full-length animations, create professional content in minutes.
+                </p>
+                <div class="d-grid gap-2 d-md-flex">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'animator:quick_animate' %}" class="btn btn-light btn-lg px-4 me-md-2">
+                        Start Animating
+                    </a>
+                    <a href="{% url 'animator:dashboard' %}" class="btn btn-outline-light btn-lg px-4">
+                        My Dashboard
+                    </a>
+                    {% else %}
+                    <a href="/signup/" class="btn btn-light btn-lg px-4 me-md-2">
+                        Get Started Free
+                    </a>
+                    <a href="#how-it-works" class="btn btn-outline-light btn-lg px-4">
+                        See How It Works
+                    </a>
+                    {% endif %}
+                </div>
             </div>
-            {% else %}
-            <a href="/account/" class="btn btn-primary btn-lg">{{ g.i18n.go_to_account|default:"Go to Account" }}</a>
-            {% endif %}
+            <div class="col-lg-6 text-center">
+                <div class="position-relative">
+                    <div class="bg-white rounded-4 shadow-lg p-3" style="transform: rotate(3deg);">
+                        <img src="/static/gesture.svg" alt="Animation Preview" class="img-fluid rounded" style="max-height: 350px;">
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold">Everything You Need to Animate</h2>
+        <p class="lead text-muted">Professional animation tools powered by open source AI</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-primary" viewBox="0 0 16 16">
+                            <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                            <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+                        </svg>
+                    </div>
+                    <h4>Quick Animation</h4>
+                    <p class="text-muted">Upload a drawing and get an animated GIF in seconds. Perfect for social media and quick content.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-success" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                        </svg>
+                    </div>
+                    <h4>AI Pose Detection</h4>
+                    <p class="text-muted">Our AI automatically detects character poses and creates rigs for smooth, natural animation.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-warning" viewBox="0 0 16 16">
+                            <path d="M11.5 6.027a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm2.5-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm-6.5-3a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm2.5-.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-1.5 1.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+                            <path d="M2.5 0A1.5 1.5 0 0 0 1 1.5v13A1.5 1.5 0 0 0 2.5 16h11a1.5 1.5 0 0 0 1.5-1.5v-13A1.5 1.5 0 0 0 13.5 0h-11zm4.326 10.88H10.5V12h-5l-.002-.627-.26-4.28h1.24l.16 2.65.16 2.637zM5 3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1h3a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-3v-1h-4v1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h1V3zm1 0v1h4V3H6z"/>
+                        </svg>
+                    </div>
+                    <h4>Motion Library</h4>
+                    <p class="text-muted">Choose from dozens of pre-made animations: walk, run, dance, wave, jump, and more.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-info" viewBox="0 0 16 16">
+                            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/>
+                        </svg>
+                    </div>
+                    <h4>Scene Editor</h4>
+                    <p class="text-muted">Build complex scenes with multiple characters, backgrounds, and camera movements.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-danger" viewBox="0 0 16 16">
+                            <path d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476 7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
+                            <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483 5.483 0 0 1 11.025 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z"/>
+                            <path d="M8.707 11.182A4.486 4.486 0 0 0 10.025 8a4.486 4.486 0 0 0-1.318-3.182L8 5.525A3.489 3.489 0 0 1 9.025 8 3.49 3.49 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
+                        </svg>
+                    </div>
+                    <h4>Voice & Audio</h4>
+                    <p class="text-muted">Add AI-generated voices, sound effects, and music. Automatic lip-sync included.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="bg-secondary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-secondary" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                    </div>
+                    <h4>Multiple Exports</h4>
+                    <p class="text-muted">Export to MP4, WebM, GIF, or PNG sequence. Up to 4K resolution supported.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works Section -->
+<div class="bg-light py-5" id="how-it-works">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">How It Works</h2>
+            <p class="lead text-muted">Three simple steps to animated magic</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="display-4 text-primary fw-bold mb-3">1</div>
+                    <h4>Upload Your Drawing</h4>
+                    <p class="text-muted">Upload any drawing, sketch, or character art. Our AI removes the background automatically.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="display-4 text-primary fw-bold mb-3">2</div>
+                    <h4>Choose a Motion</h4>
+                    <p class="text-muted">Pick from our library of animations or describe the motion you want with AI generation.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="display-4 text-primary fw-bold mb-3">3</div>
+                    <h4>Export & Share</h4>
+                    <p class="text-muted">Download your animation as a video or GIF. Share directly to social media.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Use Cases Section -->
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold">Perfect For</h2>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-0 bg-light">
+                <div class="card-body p-4">
+                    <h5>Content Creators</h5>
+                    <p class="text-muted mb-0">Create unique animated content for YouTube, TikTok, and Instagram.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-0 bg-light">
+                <div class="card-body p-4">
+                    <h5>Educators</h5>
+                    <p class="text-muted mb-0">Make educational content engaging with animated characters and explanations.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-0 bg-light">
+                <div class="card-body p-4">
+                    <h5>Game Developers</h5>
+                    <p class="text-muted mb-0">Prototype character animations quickly for games and interactive media.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-0 bg-light">
+                <div class="card-body p-4">
+                    <h5>Artists & Illustrators</h5>
+                    <p class="text-muted mb-0">Bring your artwork to life and showcase your characters in motion.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="bg-dark text-white py-5">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-4">Ready to Animate?</h2>
+        <p class="lead mb-4">Start creating animated content today. No credit card required.</p>
+        {% if user.is_authenticated %}
+        <a href="{% url 'animator:quick_animate' %}" class="btn btn-primary btn-lg px-5">
+            Go to Dashboard
+        </a>
+        {% else %}
+        <a href="/signup/" class="btn btn-primary btn-lg px-5">
+            Create Free Account
+        </a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

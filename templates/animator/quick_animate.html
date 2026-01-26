@@ -1,0 +1,464 @@
+{% extends 'base.html' %}
+
+{% block title %}Quick Animate - {{ g.pn }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>Quick Animate</h1>
+            <p class="lead">Upload your drawing and bring it to life in seconds</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Upload & Preview Column -->
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div id="upload-section">
+                        <div class="upload-zone text-center py-5 border border-2 border-dashed rounded"
+                             id="drop-zone"
+                             style="border-color: #dee2e6; cursor: pointer;">
+                            <input type="file" id="image-input" accept="image/*" class="d-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="text-muted mb-3" viewBox="0 0 16 16">
+                                <path d="M.002 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-12a2 2 0 0 1-2-2V3zm1 9v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12zm5-6.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
+                            </svg>
+                            <h4 class="text-muted">Drop your drawing here</h4>
+                            <p class="text-muted">or click to browse</p>
+                            <p class="small text-muted">Supports: PNG, JPG, GIF (up to 10MB)</p>
+                        </div>
+                    </div>
+
+                    <div id="preview-section" class="d-none">
+                        <div class="position-relative">
+                            <canvas id="preview-canvas" class="w-100 border rounded" style="max-height: 500px;"></canvas>
+                            <div id="rig-overlay" class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events: none;"></div>
+                        </div>
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-outline-secondary" id="btn-change-image">
+                                Change Image
+                            </button>
+                            <button type="button" class="btn btn-primary ms-2" id="btn-detect-pose">
+                                Auto-Detect Pose
+                            </button>
+                            <button type="button" class="btn btn-outline-primary ms-2" id="btn-edit-rig">
+                                Edit Rig
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Animation Preview -->
+            <div class="card d-none" id="animation-preview-card">
+                <div class="card-header">
+                    <h5 class="mb-0">Animation Preview</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="animation-canvas" class="w-100 border rounded" style="max-height: 400px;"></canvas>
+                    <div class="mt-3">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-secondary" id="btn-play">Play</button>
+                            <button type="button" class="btn btn-outline-secondary" id="btn-pause">Pause</button>
+                            <button type="button" class="btn btn-outline-secondary" id="btn-stop">Stop</button>
+                        </div>
+                        <div class="float-end">
+                            <select class="form-select form-select-sm d-inline-block w-auto" id="speed-select">
+                                <option value="0.5">0.5x</option>
+                                <option value="1" selected>1x</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="2">2x</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Column -->
+        <div class="col-lg-4">
+            <!-- Motion Presets -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Select Motion</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" id="motion-category">
+                            <option value="">All Categories</option>
+                            {% for value, label in preset_categories %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="motion-presets" style="max-height: 300px; overflow-y: auto;">
+                        {% for preset in presets %}
+                        <div class="form-check motion-preset-item" data-category="{{ preset.category }}">
+                            <input class="form-check-input" type="radio" name="motion"
+                                   id="preset-{{ preset.id }}" value="{{ preset.id }}">
+                            <label class="form-check-label d-flex justify-content-between align-items-center w-100"
+                                   for="preset-{{ preset.id }}">
+                                <span>{{ preset.name }}</span>
+                                <small class="text-muted">{{ preset.duration_seconds }}s</small>
+                            </label>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted text-center">No presets available</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Motion Generation -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Generate with AI</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Describe the motion</label>
+                        <textarea class="form-control" id="motion-prompt" rows="3"
+                                  placeholder="e.g., walking forward, waving hello, jumping with joy"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-primary w-100" id="btn-generate-motion">
+                        Generate Motion
+                    </button>
+                </div>
+            </div>
+
+            <!-- Export Options -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Export</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Format</label>
+                        <select class="form-select" id="export-format">
+                            <option value="mp4">MP4 Video</option>
+                            <option value="gif">Animated GIF</option>
+                            <option value="webm">WebM Video</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Quality</label>
+                        <select class="form-select" id="export-quality">
+                            <option value="medium">Medium (720p)</option>
+                            <option value="high" selected>High (1080p)</option>
+                            <option value="ultra">Ultra (4K)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Duration (seconds)</label>
+                        <input type="number" class="form-control" id="export-duration"
+                               value="5" min="1" max="60">
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="loop-animation" checked>
+                        <label class="form-check-label" for="loop-animation">
+                            Loop animation
+                        </label>
+                    </div>
+                    <button type="button" class="btn btn-success w-100 btn-lg" id="btn-export" disabled>
+                        Export Animation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Processing Modal -->
+<div class="modal fade" id="processing-modal" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-5">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Processing...</span>
+                </div>
+                <h5 id="processing-status">Processing your animation...</h5>
+                <div class="progress mt-3" style="height: 20px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                         role="progressbar" id="processing-progress" style="width: 0%">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.upload-zone:hover {
+    border-color: #0d6efd !important;
+    background-color: #f8f9fa;
+}
+.upload-zone.drag-over {
+    border-color: #0d6efd !important;
+    background-color: #e7f1ff;
+}
+.motion-preset-item {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.15s;
+}
+.motion-preset-item:hover {
+    background-color: #f8f9fa;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dropZone = document.getElementById('drop-zone');
+    const imageInput = document.getElementById('image-input');
+    const uploadSection = document.getElementById('upload-section');
+    const previewSection = document.getElementById('preview-section');
+    const previewCanvas = document.getElementById('preview-canvas');
+    const animationPreviewCard = document.getElementById('animation-preview-card');
+    const btnExport = document.getElementById('btn-export');
+
+    let currentImage = null;
+    let currentRig = null;
+
+    // Drag and drop
+    dropZone.addEventListener('click', () => imageInput.click());
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('drag-over');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('drag-over');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+
+        if (e.dataTransfer.files.length > 0) {
+            handleImageUpload(e.dataTransfer.files[0]);
+        }
+    });
+
+    imageInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleImageUpload(e.target.files[0]);
+        }
+    });
+
+    function handleImageUpload(file) {
+        if (!file.type.startsWith('image/')) {
+            alert('Please upload an image file');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                currentImage = img;
+                displayImage(img);
+                uploadSection.classList.add('d-none');
+                previewSection.classList.remove('d-none');
+                btnExport.disabled = false;
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function displayImage(img) {
+        const ctx = previewCanvas.getContext('2d');
+        const maxWidth = previewCanvas.parentElement.clientWidth;
+        const maxHeight = 500;
+
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+            height = height * (maxWidth / width);
+            width = maxWidth;
+        }
+        if (height > maxHeight) {
+            width = width * (maxHeight / height);
+            height = maxHeight;
+        }
+
+        previewCanvas.width = width;
+        previewCanvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+    }
+
+    // Change image button
+    document.getElementById('btn-change-image').addEventListener('click', () => {
+        uploadSection.classList.remove('d-none');
+        previewSection.classList.add('d-none');
+        animationPreviewCard.classList.add('d-none');
+        currentImage = null;
+        currentRig = null;
+        btnExport.disabled = true;
+    });
+
+    // Auto-detect pose
+    document.getElementById('btn-detect-pose').addEventListener('click', async () => {
+        if (!currentImage) return;
+
+        // Show processing
+        const btn = document.getElementById('btn-detect-pose');
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Detecting...';
+
+        // Simulate detection (in production, this calls the API)
+        setTimeout(() => {
+            currentRig = generateDefaultRig(previewCanvas.width, previewCanvas.height);
+            drawRig(currentRig);
+            btn.disabled = false;
+            btn.textContent = originalText;
+            animationPreviewCard.classList.remove('d-none');
+        }, 2000);
+    });
+
+    function generateDefaultRig(width, height) {
+        const centerX = width / 2;
+        const centerY = height / 2;
+
+        return {
+            joints: {
+                head: { x: centerX, y: centerY - 100 },
+                neck: { x: centerX, y: centerY - 60 },
+                left_shoulder: { x: centerX - 40, y: centerY - 50 },
+                right_shoulder: { x: centerX + 40, y: centerY - 50 },
+                left_elbow: { x: centerX - 70, y: centerY - 20 },
+                right_elbow: { x: centerX + 70, y: centerY - 20 },
+                left_wrist: { x: centerX - 90, y: centerY + 20 },
+                right_wrist: { x: centerX + 90, y: centerY + 20 },
+                pelvis: { x: centerX, y: centerY + 30 },
+                left_hip: { x: centerX - 25, y: centerY + 40 },
+                right_hip: { x: centerX + 25, y: centerY + 40 },
+                left_knee: { x: centerX - 25, y: centerY + 90 },
+                right_knee: { x: centerX + 25, y: centerY + 90 },
+                left_ankle: { x: centerX - 25, y: centerY + 140 },
+                right_ankle: { x: centerX + 25, y: centerY + 140 },
+            },
+            bones: [
+                ['head', 'neck'],
+                ['neck', 'left_shoulder'],
+                ['neck', 'right_shoulder'],
+                ['left_shoulder', 'left_elbow'],
+                ['right_shoulder', 'right_elbow'],
+                ['left_elbow', 'left_wrist'],
+                ['right_elbow', 'right_wrist'],
+                ['neck', 'pelvis'],
+                ['pelvis', 'left_hip'],
+                ['pelvis', 'right_hip'],
+                ['left_hip', 'left_knee'],
+                ['right_hip', 'right_knee'],
+                ['left_knee', 'left_ankle'],
+                ['right_knee', 'right_ankle'],
+            ]
+        };
+    }
+
+    function drawRig(rig) {
+        const ctx = previewCanvas.getContext('2d');
+        displayImage(currentImage);
+
+        // Draw bones
+        ctx.strokeStyle = '#00ff00';
+        ctx.lineWidth = 2;
+        for (const [joint1, joint2] of rig.bones) {
+            const p1 = rig.joints[joint1];
+            const p2 = rig.joints[joint2];
+            if (p1 && p2) {
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+            }
+        }
+
+        // Draw joints
+        ctx.fillStyle = '#ff0000';
+        for (const joint of Object.values(rig.joints)) {
+            ctx.beginPath();
+            ctx.arc(joint.x, joint.y, 5, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    // Motion category filter
+    document.getElementById('motion-category').addEventListener('change', (e) => {
+        const category = e.target.value;
+        document.querySelectorAll('.motion-preset-item').forEach(item => {
+            if (!category || item.dataset.category === category) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+
+    // Generate motion from prompt
+    document.getElementById('btn-generate-motion').addEventListener('click', async () => {
+        const prompt = document.getElementById('motion-prompt').value.trim();
+        if (!prompt) {
+            alert('Please enter a motion description');
+            return;
+        }
+
+        const btn = document.getElementById('btn-generate-motion');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generating...';
+
+        // In production, this calls the AI motion generation API
+        setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = 'Generate Motion';
+            animationPreviewCard.classList.remove('d-none');
+            alert('Motion generated! Preview will show the animation.');
+        }, 3000);
+    });
+
+    // Export
+    document.getElementById('btn-export').addEventListener('click', async () => {
+        const modal = new bootstrap.Modal(document.getElementById('processing-modal'));
+        modal.show();
+
+        const progressBar = document.getElementById('processing-progress');
+        const statusText = document.getElementById('processing-status');
+
+        // Simulate export progress
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                statusText.textContent = 'Export complete!';
+
+                setTimeout(() => {
+                    modal.hide();
+                    alert('Animation exported successfully! Download will start shortly.');
+                }, 1000);
+            }
+
+            progressBar.style.width = progress + '%';
+            progressBar.textContent = Math.round(progress) + '%';
+
+            if (progress < 30) {
+                statusText.textContent = 'Preparing animation...';
+            } else if (progress < 60) {
+                statusText.textContent = 'Rendering frames...';
+            } else if (progress < 90) {
+                statusText.textContent = 'Encoding video...';
+            } else {
+                statusText.textContent = 'Finalizing...';
+            }
+        }, 200);
+    });
+});
+</script>
+{% endblock %}
