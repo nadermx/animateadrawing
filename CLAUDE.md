@@ -30,19 +30,25 @@ python manage.py collectstatic --noinput
 
 **Production:** 140.82.28.166 (Vultr, Ubuntu 24.04) - https://animateadrawing.com
 
-Always use Ansible for server operations:
-```bash
-cd ansible
+Always use Ansible for server operations. **IMPORTANT:** Run from `/home/john/animateadrawing/ansible` directory.
 
-# Deploy code changes
+```bash
+# FULL DEPLOY (always use this - includes collectstatic)
+ansible -i servers all -m shell -a "cd /home/www/animateadrawing && git pull && /home/www/animateadrawing/venv/bin/python manage.py collectstatic --noinput" --become --become-user=animateadrawing && ansible -i servers all -m shell -a "supervisorctl restart animateadrawing" --become
+
+# Individual commands if needed:
+
+# Deploy code only
 ansible -i servers all -m shell -a "cd /home/www/animateadrawing && git pull" --become --become-user=animateadrawing
+
+# Collect static files (REQUIRED after adding images, CSS, JS)
+ansible -i servers all -m shell -a "/home/www/animateadrawing/venv/bin/python /home/www/animateadrawing/manage.py collectstatic --noinput" --become --become-user=animateadrawing
+
+# Restart app
 ansible -i servers all -m shell -a "supervisorctl restart animateadrawing" --become
 
 # Run migrations
 ansible -i servers all -m shell -a "/home/www/animateadrawing/venv/bin/python /home/www/animateadrawing/manage.py migrate" --become --become-user=animateadrawing
-
-# Collect static files after template/CSS changes
-ansible -i servers all -m shell -a "/home/www/animateadrawing/venv/bin/python /home/www/animateadrawing/manage.py collectstatic --noinput" --become --become-user=animateadrawing
 
 # Check logs
 ansible -i servers all -m shell -a "tail -50 /var/log/animateadrawing/animateadrawing.err.log" --become
@@ -50,6 +56,8 @@ ansible -i servers all -m shell -a "tail -50 /var/log/animateadrawing/animateadr
 # Full initial deployment
 ansible-playbook -i servers djangodeployubuntu20.yml
 ```
+
+**NOTE:** If you add or modify static files (images, CSS, JS), `collectstatic` MUST be run or they won't appear on production.
 
 **Server paths:**
 - App: `/home/www/animateadrawing`
