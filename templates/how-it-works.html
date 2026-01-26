@@ -62,7 +62,14 @@
                 </ul>
             </div>
             <div class="col-lg-6 text-center">
-                <img src="{% static 'stepone.png' %}" alt="Step 1: Upload your drawing" class="img-fluid rounded shadow" style="max-height: 300px;">
+                <div class="bg-white rounded-4 shadow p-4 d-inline-block">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+                        <rect x="30" y="30" width="140" height="140" rx="10" fill="#f8f9fa" stroke="#dee2e6" stroke-width="2" stroke-dasharray="8,4"/>
+                        <circle cx="100" cy="85" r="25" fill="#6c757d"/>
+                        <path d="M70 130 L100 100 L130 130" stroke="#6c757d" stroke-width="3" fill="none"/>
+                        <text x="100" y="160" text-anchor="middle" fill="#6c757d" font-size="14">Drop image here</text>
+                    </svg>
+                </div>
             </div>
         </div>
 
@@ -88,7 +95,25 @@
                 </p>
             </div>
             <div class="col-lg-6 text-center">
-                <img src="{% static 'steptwo.png' %}" alt="Step 2: AI pose detection" class="img-fluid rounded shadow" style="max-height: 300px;">
+                <div class="bg-white rounded-4 shadow p-4 d-inline-block">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+                        <!-- Stick figure with joints -->
+                        <circle cx="100" cy="40" r="20" fill="none" stroke="#0d6efd" stroke-width="3"/>
+                        <line x1="100" y1="60" x2="100" y2="110" stroke="#0d6efd" stroke-width="3"/>
+                        <line x1="100" y1="75" x2="60" y2="100" stroke="#0d6efd" stroke-width="3"/>
+                        <line x1="100" y1="75" x2="140" y2="100" stroke="#0d6efd" stroke-width="3"/>
+                        <line x1="100" y1="110" x2="70" y2="160" stroke="#0d6efd" stroke-width="3"/>
+                        <line x1="100" y1="110" x2="130" y2="160" stroke="#0d6efd" stroke-width="3"/>
+                        <!-- Joint markers -->
+                        <circle cx="100" cy="40" r="5" fill="#dc3545"/>
+                        <circle cx="100" cy="75" r="5" fill="#dc3545"/>
+                        <circle cx="60" cy="100" r="5" fill="#dc3545"/>
+                        <circle cx="140" cy="100" r="5" fill="#dc3545"/>
+                        <circle cx="100" cy="110" r="5" fill="#dc3545"/>
+                        <circle cx="70" cy="160" r="5" fill="#dc3545"/>
+                        <circle cx="130" cy="160" r="5" fill="#dc3545"/>
+                    </svg>
+                </div>
             </div>
         </div>
 
@@ -124,7 +149,36 @@
                 </p>
             </div>
             <div class="col-lg-6 text-center">
-                <img src="{% static 'stepthree.png' %}" alt="Step 3: Choose animation" class="img-fluid rounded shadow" style="max-height: 300px;">
+                <div class="bg-white rounded-4 shadow p-4 d-inline-block">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+                        <!-- Motion frames showing animation -->
+                        <g opacity="0.3" transform="translate(-30, 0)">
+                            <circle cx="100" cy="50" r="15" fill="none" stroke="#6c757d" stroke-width="2"/>
+                            <line x1="100" y1="65" x2="100" y2="100" stroke="#6c757d" stroke-width="2"/>
+                            <line x1="100" y1="75" x2="75" y2="95" stroke="#6c757d" stroke-width="2"/>
+                            <line x1="100" y1="75" x2="125" y2="95" stroke="#6c757d" stroke-width="2"/>
+                            <line x1="100" y1="100" x2="80" y2="140" stroke="#6c757d" stroke-width="2"/>
+                            <line x1="100" y1="100" x2="120" y2="140" stroke="#6c757d" stroke-width="2"/>
+                        </g>
+                        <g opacity="0.6" transform="translate(0, 0)">
+                            <circle cx="100" cy="50" r="15" fill="none" stroke="#0d6efd" stroke-width="2"/>
+                            <line x1="100" y1="65" x2="100" y2="100" stroke="#0d6efd" stroke-width="2"/>
+                            <line x1="100" y1="75" x2="70" y2="85" stroke="#0d6efd" stroke-width="2"/>
+                            <line x1="100" y1="75" x2="130" y2="60" stroke="#0d6efd" stroke-width="2"/>
+                            <line x1="100" y1="100" x2="75" y2="140" stroke="#0d6efd" stroke-width="2"/>
+                            <line x1="100" y1="100" x2="125" y2="140" stroke="#0d6efd" stroke-width="2"/>
+                        </g>
+                        <g transform="translate(30, 0)">
+                            <circle cx="100" cy="50" r="15" fill="none" stroke="#198754" stroke-width="3"/>
+                            <line x1="100" y1="65" x2="100" y2="100" stroke="#198754" stroke-width="3"/>
+                            <line x1="100" y1="75" x2="65" y2="70" stroke="#198754" stroke-width="3"/>
+                            <line x1="100" y1="75" x2="135" y2="50" stroke="#198754" stroke-width="3"/>
+                            <line x1="100" y1="100" x2="70" y2="140" stroke="#198754" stroke-width="3"/>
+                            <line x1="100" y1="100" x2="130" y2="140" stroke="#198754" stroke-width="3"/>
+                        </g>
+                        <text x="100" y="180" text-anchor="middle" fill="#6c757d" font-size="12">Wave Animation</text>
+                    </svg>
+                </div>
             </div>
         </div>
 
@@ -152,7 +206,23 @@
                 </ul>
             </div>
             <div class="col-lg-6 text-center">
-                <img src="{% static 'stepfour.png' %}" alt="Step 4: Export animation" class="img-fluid rounded shadow" style="max-height: 300px;">
+                <div class="bg-white rounded-4 shadow p-4 d-inline-block">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+                        <!-- Export/download icon -->
+                        <rect x="40" y="30" width="120" height="90" rx="8" fill="#f8f9fa" stroke="#dee2e6" stroke-width="2"/>
+                        <rect x="50" y="40" width="40" height="30" rx="4" fill="#0d6efd"/>
+                        <text x="70" y="60" text-anchor="middle" fill="white" font-size="10" font-weight="bold">GIF</text>
+                        <rect x="100" y="40" width="40" height="30" rx="4" fill="#198754"/>
+                        <text x="120" y="60" text-anchor="middle" fill="white" font-size="10" font-weight="bold">MP4</text>
+                        <rect x="50" y="80" width="40" height="30" rx="4" fill="#6f42c1"/>
+                        <text x="70" y="100" text-anchor="middle" fill="white" font-size="10" font-weight="bold">WebM</text>
+                        <rect x="100" y="80" width="40" height="30" rx="4" fill="#fd7e14"/>
+                        <text x="120" y="100" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PNG</text>
+                        <!-- Download arrow -->
+                        <circle cx="100" cy="155" r="25" fill="#0d6efd"/>
+                        <path d="M100 140 L100 165 M90 155 L100 170 L110 155" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
             </div>
         </div>
     </div>
