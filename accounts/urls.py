@@ -7,4 +7,5 @@ urlpatterns = [
     path('consume/', CreditsConsume.as_view(), name='credits-consume'),
     path('resend-verification/', ResendVerificationEmail.as_view(), name='resend-verification'),
     path('cancel-subscription/', CancelSubscription.as_view(), name='cancel-subscription'),
+    path('api/deduct/', APIDeduct.as_view(), name='api-deduct'),
 ]

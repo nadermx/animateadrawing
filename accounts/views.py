@@ -136,3 +136,75 @@ class CancelSubscription(APIView):
             return Response({'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'status': True})
+
+
+class APIDeduct(APIView):
+    """
+    API endpoint for external services to verify and deduct user credits.
+    Used by api.animateadrawing.com for GPU-powered processing.
+
+    Expects POST data:
+        - key: User's API token
+        - file_count: Number of credits to deduct (default: 1)
+
+    Returns:
+        - authorized: True if user exists and has valid API token
+        - credits: True if user has enough credits or active plan
+        - error: Error message if any
+    """
+    def post(self, request):
+        api_key = request.data.get('key') or request.POST.get('key')
+
+        try:
+            file_count = int(request.data.get('file_count', 1) or request.POST.get('file_count', 1))
+        except (ValueError, TypeError):
+            file_count = 1
+
+        if not api_key:
+            return JsonResponse({
+                'authorized': False,
+                'credits': False,
+                'error': 'No API key provided'
+            }, status=400)
+
+        try:
+            user = CustomUser.objects.get(api_token=api_key)
+        except CustomUser.DoesNotExist:
+            return JsonResponse({
+                'authorized': False,
+                'credits': False,
+                'error': 'Invalid API key'
+            }, status=400)
+
+        # User is authorized
+        authorized = True
+
+        # Check if user has active plan (unlimited credits)
+        if user.is_plan_active:
+            return JsonResponse({
+                'authorized': True,
+                'credits': True,
+                'remaining_credits': 'unlimited',
+                'user_email': user.email
+            })
+
+        # Check if user has enough credits
+        if user.credits < file_count:
+            return JsonResponse({
+                'authorized': True,
+                'credits': False,
+                'error': f'Not enough credits. Required: {file_count}, Available: {user.credits}',
+                'remaining_credits': user.credits
+            })
+
+        # Deduct credits
+        user.credits -= file_count
+        user.save()
+
+        return JsonResponse({
+            'authorized': True,
+            'credits': True,
+            'remaining_credits': user.credits,
+            'deducted': file_count,
+            'user_email': user.email
+        })

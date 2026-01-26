@@ -631,43 +631,190 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     });
 
-    // Export
+    // Export using GPU API
     document.getElementById('btn-export').addEventListener('click', async () => {
+        if (!currentImage) {
+            alert('Please upload an image first');
+            return;
+        }
+
         const modal = new bootstrap.Modal(document.getElementById('processing-modal'));
         modal.show();
 
         const progressBar = document.getElementById('processing-progress');
         const statusText = document.getElementById('processing-status');
 
-        // Simulate export progress
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 15;
-            if (progress >= 100) {
-                progress = 100;
-                clearInterval(interval);
-                statusText.textContent = 'Export complete!';
+        // Get export settings
+        const format = document.getElementById('export-format').value;
+        const duration = parseFloat(document.getElementById('export-duration').value) || 2;
+        const motion = selectedMotion || 'wave';
 
-                setTimeout(() => {
-                    modal.hide();
-                    alert('Animation exported successfully! Download will start shortly.');
-                }, 1000);
+        statusText.textContent = 'Uploading image...';
+        progressBar.style.width = '10%';
+        progressBar.textContent = '10%';
+
+        try {
+            // Get the image file from the canvas or original input
+            const blob = await new Promise((resolve) => {
+                previewCanvas.toBlob(resolve, 'image/png');
+            });
+
+            // Create form data
+            const formData = new FormData();
+            formData.append('files', blob, 'drawing.png');
+            formData.append('motion', motion);
+            formData.append('duration', duration);
+            formData.append('fps', '24');
+            formData.append('output_format', format === 'mp4' || format === 'webm' ? 'mp4' : 'gif');
+
+            // Get API token from user's account (you'll need to pass this from the backend)
+            const apiToken = '{{ request.user.api_token|default:"" }}';
+
+            if (!apiToken) {
+                modal.hide();
+                alert('Please log in to export animations. You need an API token.');
+                return;
             }
 
-            progressBar.style.width = progress + '%';
-            progressBar.textContent = Math.round(progress) + '%';
+            statusText.textContent = 'Sending to GPU server...';
+            progressBar.style.width = '20%';
+            progressBar.textContent = '20%';
 
-            if (progress < 30) {
-                statusText.textContent = 'Preparing animation...';
-            } else if (progress < 60) {
-                statusText.textContent = 'Rendering frames...';
-            } else if (progress < 90) {
-                statusText.textContent = 'Encoding video...';
-            } else {
-                statusText.textContent = 'Finalizing...';
+            // Call the GPU API
+            const apiUrl = 'https://api.animateadrawing.com/v1/animate/';
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': apiToken,
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Animation failed');
             }
-        }, 200);
+
+            const data = await response.json();
+            const conversionUuid = data.uuid;
+
+            statusText.textContent = 'Processing animation...';
+            progressBar.style.width = '40%';
+            progressBar.textContent = '40%';
+
+            // Poll for results
+            let attempts = 0;
+            const maxAttempts = 60; // 1 minute max
+
+            const pollResults = async () => {
+                attempts++;
+                if (attempts > maxAttempts) {
+                    throw new Error('Animation processing timed out');
+                }
+
+                const resultResponse = await fetch('https://api.animateadrawing.com/v1/animate/results/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `uuid=${conversionUuid}`
+                });
+
+                const resultData = await resultResponse.json();
+
+                if (resultData.finished && resultData.files && resultData.files.length > 0) {
+                    // Success - download the file
+                    const fileUrl = resultData.files[0].full_url;
+                    statusText.textContent = 'Download ready!';
+                    progressBar.style.width = '100%';
+                    progressBar.textContent = '100%';
+
+                    setTimeout(() => {
+                        modal.hide();
+                        // Trigger download
+                        const link = document.createElement('a');
+                        link.href = fileUrl;
+                        link.download = `animation.${format === 'gif' ? 'gif' : 'mp4'}`;
+                        link.target = '_blank';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }, 500);
+                    return;
+                }
+
+                if (resultData.failed && resultData.failed.length > 0) {
+                    throw new Error(resultData.failed[0].errors || 'Animation failed');
+                }
+
+                // Update progress based on status
+                if (resultData.processing && resultData.processing.length > 0) {
+                    const progress = 40 + (attempts / maxAttempts) * 50;
+                    progressBar.style.width = `${progress}%`;
+                    progressBar.textContent = `${Math.round(progress)}%`;
+                    statusText.textContent = 'Rendering animation...';
+                } else if (resultData.queued && resultData.queued.length > 0) {
+                    statusText.textContent = `In queue (position: ${resultData.queue_count || 'unknown'})...`;
+                }
+
+                // Poll again after 1 second
+                setTimeout(pollResults, 1000);
+            };
+
+            await pollResults();
+
+        } catch (error) {
+            console.error('Export error:', error);
+            modal.hide();
+
+            // Fallback to local animation export if API fails
+            if (confirm(`GPU API unavailable: ${error.message}\n\nWould you like to use local preview export instead?`)) {
+                exportLocalAnimation();
+            }
+        }
     });
+
+    // Local fallback export function
+    async function exportLocalAnimation() {
+        const modal = new bootstrap.Modal(document.getElementById('processing-modal'));
+        modal.show();
+
+        const progressBar = document.getElementById('processing-progress');
+        const statusText = document.getElementById('processing-status');
+
+        statusText.textContent = 'Generating local preview...';
+
+        // Use gif.js or similar library for local GIF generation
+        // For now, we'll create a simple animated canvas recording
+
+        const fps = 24;
+        const duration = parseFloat(document.getElementById('export-duration').value) || 2;
+        const totalFrames = fps * duration;
+
+        // Record frames
+        const frames = [];
+        for (let i = 0; i < totalFrames; i++) {
+            animationTime = i / fps;
+            drawAnimationFrame(animationTime);
+            frames.push(animationCanvas.toDataURL('image/png'));
+
+            const progress = (i / totalFrames) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressBar.textContent = `${Math.round(progress)}%`;
+
+            // Yield to prevent blocking
+            await new Promise(resolve => setTimeout(resolve, 0));
+        }
+
+        statusText.textContent = 'Export complete! (Preview only)';
+        progressBar.style.width = '100%';
+        progressBar.textContent = '100%';
+
+        setTimeout(() => {
+            modal.hide();
+            alert('Local preview recorded. For full export with proper GIF/video encoding, please ensure you are logged in and the GPU API is available.');
+        }, 1000);
+    }
 });
 </script>
 {% endblock %}
