@@ -309,6 +309,14 @@ document.addEventListener('DOMContentLoaded', function() {
         btnExport.disabled = true;
     });
 
+    // Animation state
+    const animationCanvas = document.getElementById('animation-canvas');
+    let animationId = null;
+    let isPlaying = false;
+    let animationTime = 0;
+    let animationSpeed = 1;
+    let selectedMotion = 'idle';
+
     // Auto-detect pose
     document.getElementById('btn-detect-pose').addEventListener('click', async () => {
         if (!currentImage) return;
@@ -326,7 +334,200 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.disabled = false;
             btn.textContent = originalText;
             animationPreviewCard.classList.remove('d-none');
+            initAnimationPreview();
+            startAnimation();
         }, 2000);
+    });
+
+    function initAnimationPreview() {
+        // Set animation canvas to same size as preview
+        animationCanvas.width = previewCanvas.width;
+        animationCanvas.height = previewCanvas.height;
+    }
+
+    function startAnimation() {
+        if (isPlaying) return;
+        isPlaying = true;
+        document.getElementById('btn-play').disabled = true;
+        document.getElementById('btn-pause').disabled = false;
+        animationLoop();
+    }
+
+    function pauseAnimation() {
+        isPlaying = false;
+        document.getElementById('btn-play').disabled = false;
+        document.getElementById('btn-pause').disabled = true;
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+    }
+
+    function stopAnimation() {
+        pauseAnimation();
+        animationTime = 0;
+        drawAnimationFrame(0);
+    }
+
+    function animationLoop() {
+        if (!isPlaying) return;
+
+        animationTime += 0.016 * animationSpeed; // ~60fps
+        drawAnimationFrame(animationTime);
+        animationId = requestAnimationFrame(animationLoop);
+    }
+
+    function drawAnimationFrame(time) {
+        if (!currentImage || !currentRig) return;
+
+        const ctx = animationCanvas.getContext('2d');
+        const width = animationCanvas.width;
+        const height = animationCanvas.height;
+
+        // Clear canvas
+        ctx.clearRect(0, 0, width, height);
+
+        // Draw image
+        ctx.drawImage(currentImage, 0, 0, width, height);
+
+        // Create animated rig based on selected motion
+        const animatedRig = animateRig(currentRig, time, selectedMotion);
+
+        // Draw animated rig
+        ctx.strokeStyle = '#10b981';
+        ctx.lineWidth = 3;
+        for (const [joint1, joint2] of animatedRig.bones) {
+            const p1 = animatedRig.joints[joint1];
+            const p2 = animatedRig.joints[joint2];
+            if (p1 && p2) {
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+            }
+        }
+
+        // Draw joints
+        ctx.fillStyle = '#059669';
+        for (const joint of Object.values(animatedRig.joints)) {
+            ctx.beginPath();
+            ctx.arc(joint.x, joint.y, 6, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function animateRig(baseRig, time, motion) {
+        // Create a deep copy of the rig
+        const rig = JSON.parse(JSON.stringify(baseRig));
+
+        // Apply motion-specific animations
+        const t = time * 2; // Animation speed multiplier
+
+        switch(motion) {
+            case 'wave':
+                // Wave right arm
+                const waveAngle = Math.sin(t * 4) * 0.5;
+                rig.joints.right_elbow.x += Math.sin(t * 4) * 20;
+                rig.joints.right_elbow.y += Math.cos(t * 4) * 10 - 30;
+                rig.joints.right_wrist.x += Math.sin(t * 4) * 30;
+                rig.joints.right_wrist.y += Math.cos(t * 4) * 20 - 50;
+                break;
+
+            case 'walk':
+                // Walking motion - legs and arms swing
+                const walkPhase = Math.sin(t * 3);
+                rig.joints.left_hip.y += walkPhase * 5;
+                rig.joints.right_hip.y -= walkPhase * 5;
+                rig.joints.left_knee.x += walkPhase * 15;
+                rig.joints.right_knee.x -= walkPhase * 15;
+                rig.joints.left_ankle.x += walkPhase * 20;
+                rig.joints.right_ankle.x -= walkPhase * 20;
+                // Arms swing opposite to legs
+                rig.joints.left_wrist.x -= walkPhase * 15;
+                rig.joints.right_wrist.x += walkPhase * 15;
+                break;
+
+            case 'dance':
+                // Fun dance moves
+                const dancePhase = Math.sin(t * 5);
+                const dancePhase2 = Math.cos(t * 5);
+                // Body bounce
+                Object.keys(rig.joints).forEach(key => {
+                    rig.joints[key].y += dancePhase * 8;
+                });
+                // Arms move
+                rig.joints.left_wrist.x -= 20 + dancePhase2 * 25;
+                rig.joints.left_wrist.y -= 30 + dancePhase * 20;
+                rig.joints.right_wrist.x += 20 + dancePhase2 * 25;
+                rig.joints.right_wrist.y -= 30 - dancePhase * 20;
+                rig.joints.left_elbow.y -= 20;
+                rig.joints.right_elbow.y -= 20;
+                break;
+
+            case 'jump':
+                // Jump motion
+                const jumpPhase = Math.abs(Math.sin(t * 2));
+                const jumpHeight = jumpPhase * 40;
+                Object.keys(rig.joints).forEach(key => {
+                    rig.joints[key].y -= jumpHeight;
+                });
+                // Arms up during jump
+                if (jumpPhase > 0.5) {
+                    rig.joints.left_wrist.y -= 40;
+                    rig.joints.right_wrist.y -= 40;
+                    rig.joints.left_elbow.y -= 20;
+                    rig.joints.right_elbow.y -= 20;
+                }
+                break;
+
+            case 'run':
+                // Running motion - faster walk
+                const runPhase = Math.sin(t * 6);
+                rig.joints.left_knee.x += runPhase * 25;
+                rig.joints.right_knee.x -= runPhase * 25;
+                rig.joints.left_ankle.x += runPhase * 35;
+                rig.joints.right_ankle.x -= runPhase * 35;
+                rig.joints.left_wrist.x -= runPhase * 25;
+                rig.joints.right_wrist.x += runPhase * 25;
+                // Slight vertical motion
+                Object.keys(rig.joints).forEach(key => {
+                    rig.joints[key].y += Math.abs(runPhase) * 5;
+                });
+                break;
+
+            case 'idle':
+            default:
+                // Subtle breathing animation
+                const breathe = Math.sin(t) * 3;
+                rig.joints.head.y += breathe * 0.5;
+                rig.joints.neck.y += breathe * 0.3;
+                rig.joints.left_shoulder.y += breathe * 0.5;
+                rig.joints.right_shoulder.y += breathe * 0.5;
+                break;
+        }
+
+        return rig;
+    }
+
+    // Motion preset selection
+    document.querySelectorAll('input[name="motion"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const presetId = e.target.value;
+            const label = e.target.nextElementSibling.querySelector('span').textContent.toLowerCase();
+            selectedMotion = label;
+            if (!isPlaying && currentRig) {
+                drawAnimationFrame(animationTime);
+            }
+        });
+    });
+
+    // Animation controls
+    document.getElementById('btn-play').addEventListener('click', startAnimation);
+    document.getElementById('btn-pause').addEventListener('click', pauseAnimation);
+    document.getElementById('btn-stop').addEventListener('click', stopAnimation);
+
+    document.getElementById('speed-select').addEventListener('change', (e) => {
+        animationSpeed = parseFloat(e.target.value);
     });
 
     function generateDefaultRig(width, height) {
