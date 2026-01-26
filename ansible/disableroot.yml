@@ -2,9 +2,7 @@
 - hosts: all
   vars:
     ansible_user: root
-    ansible_password: "Q4+s*Pzd*GfWG9Bn"
-    ansible_sudo_pass: "Q4+s*Pzd*GfWG9Bn"
-    newuser: estacaido
+    newuser: animateadrawing
     newpassword: "a)5QQNer"
 
   tasks:
@@ -15,6 +13,27 @@
           state: present
           groups: sudo
           password: "{{ newpassword | password_hash('sha512') }}"
+
+    - name: Add SSH key for {{ newuser }}
+      become: true
+      authorized_key:
+        user: "{{ newuser }}"
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+    - name: Enable password authentication in SSH
+      become: true
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication yes'
+        state: present
+
+    - name: Restart SSH service
+      become: true
+      service:
+        name: sshd
+        state: restarted
 
     - name: Disable root login
       become: true

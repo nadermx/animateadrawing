@@ -4,4 +4,4 @@ ansible_python_interpreter=/usr/bin/python3
 pipelining = True
 
 [server]
-45.77.161.73
+140.82.28.166
