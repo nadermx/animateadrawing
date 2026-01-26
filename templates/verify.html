@@ -1,75 +1,73 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container hero-container">
-        <br>
-        <div class="row">
-            <div class="col d-none d-sm-block"></div>
-            <div class="col">
-                <div class="hero-description margin-less box-shadowed">
-                    <h1 class="page-header">{{ g.i18n.verify_email }}</h1>
-                    <p class="sub-menu">{{ g.i18n.verify_email_subtitle }}</p>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h3 mb-3 text-center">{{ g.i18n.verify_email|default:"Verify Your Email" }}</h1>
+                    <p class="text-muted text-center mb-4">{{ g.i18n.verify_email_subtitle|default:"We sent a verification code to your email address. Please enter it below." }}</p>
+
                     {% if errors %}
-                        <div class="alert alert-danger">
-                            <ul>
-                                {% for error in errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            {% for error in errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                     {% endif %}
-                    <form action="{{ request.path }}"
-                          method="post">
+
+                    <form action="{{ request.path }}" method="post">
                         {% csrf_token %}
-                        <div class="form-group">
-                            <label>{{ g.i18n.verification_code }}</label>
-                            <input type="text"
-                                   name="code"
-                                   class="form-control"
-                                   value="{{ data.code | default:'' }}"
-                                   placeholder="--------">
+                        <div class="mb-3">
+                            <label class="form-label">{{ g.i18n.verification_code|default:"Verification Code" }}</label>
+                            <input type="text" name="code" class="form-control form-control-lg text-center" value="{{ data.code|default:'' }}" placeholder="Enter code" required autocomplete="off">
                         </div>
-                        <button class="btn btn-primary btn-lg btn-block">{{ g.i18n.verify_email }}</button>
+                        <div class="d-grid mb-3">
+                            <button class="btn btn-primary btn-lg" type="submit">{{ g.i18n.verify_email|default:"Verify Email" }}</button>
+                        </div>
                     </form>
+
                     <hr>
-                    <p class="resent-wrapper">{{g.i18n.no_email }} <a href="{{ request.path }}" class="resend-verification-email">{{ g.i18n.resend_email}}</a></p>
+
+                    <p class="text-center text-muted mb-0 resent-wrapper">
+                        {{ g.i18n.no_email|default:"Didn't receive the email?" }}
+                        <a href="#" class="resend-verification-email">{{ g.i18n.resend_email|default:"Resend" }}</a>
+                    </p>
                 </div>
             </div>
-            <div class="col d-none d-sm-block"></div>
         </div>
     </div>
-    <br><br><br><br>
+</div>
 {% endblock %}
 {% block scripts %}
-    <script src="/static/js/utils.js?{{ g.scripts_version }}"></script>
-    <script defer>
-    (function () {
-        'use strict';
-        $(document).ready(
-            function () {
-                var container = $('.page-container');
-
-                container.on('click', '.resend-verification-email', onResendVerificationEmail);
-
-                function onResendVerificationEmail(e) {
-                    e.preventDefault();
-                    var p = utils.promiseRequest(
-                        null,
-                        'post',
-                        '{% url 'resend-verification' %}',
-                        {}
-                    );
-
-                    p.then(
-                        function (response) {
-                            container.find('.resent-wrapper').html(response);
-                        },
-                        function (errors) {
-                            alert(errors);
-                        }
-                    );
-                }
-            }
-        );
-    }());
-    </script>
+<script src="/static/js/utils.js?{{ g.scripts_version }}"></script>
+<script defer>
+(function () {
+    'use strict';
+    document.addEventListener('DOMContentLoaded', function () {
+        var resendLink = document.querySelector('.resend-verification-email');
+        if (resendLink) {
+            resendLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                fetch('{% url "resend-verification" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    document.querySelector('.resent-wrapper').innerHTML = data;
+                })
+                .catch(error => {
+                    alert('Error sending email. Please try again.');
+                });
+            });
+        }
+    });
+}());
+</script>
 {% endblock %}

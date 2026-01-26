@@ -195,18 +195,46 @@ main {
     line-height: 1.7;
 }
 
-/* Footer */
-footer {
+/* Footer - Dark theme */
+footer.bg-dark {
+    background-color: #1f2937 !important;
+}
+
+footer.bg-dark h5,
+footer.bg-dark h6 {
+    color: #ffffff !important;
+}
+
+footer.bg-dark p,
+footer.bg-dark .text-muted {
+    color: #9ca3af !important;
+}
+
+footer.bg-dark a {
+    color: #9ca3af !important;
+    transition: color 0.15s;
+}
+
+footer.bg-dark a:hover {
+    color: #ffffff !important;
+}
+
+footer.bg-dark hr {
+    border-color: #374151 !important;
+}
+
+/* Footer - Light theme fallback */
+footer.bg-light {
     background-color: var(--gray-100, #f3f4f6);
     color: var(--gray-600, #4b5563);
 }
 
-footer a {
+footer.bg-light a {
     color: var(--gray-600, #4b5563);
     transition: color 0.15s;
 }
 
-footer a:hover {
+footer.bg-light a:hover {
     color: var(--gray-900, #111827);
 }
 
