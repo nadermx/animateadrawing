@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <!-- Hero Section -->
 <div class="hero-section py-5">
@@ -8,123 +9,157 @@
     </div>
 </div>
 
-<!-- Steps Section -->
+<!-- Visual Steps Overview -->
 <div class="container py-5">
-    <div class="row g-5">
+    <div class="row g-4 text-center mb-5">
+        <div class="col-md-3">
+            <div class="step-number mx-auto mb-3">1</div>
+            <h5>Upload</h5>
+            <p class="text-muted small">Upload any drawing or sketch</p>
+        </div>
+        <div class="col-md-3">
+            <div class="step-number mx-auto mb-3">2</div>
+            <h5>Detect</h5>
+            <p class="text-muted small">AI finds pose landmarks</p>
+        </div>
+        <div class="col-md-3">
+            <div class="step-number mx-auto mb-3">3</div>
+            <h5>Animate</h5>
+            <p class="text-muted small">Choose motion preset</p>
+        </div>
+        <div class="col-md-3">
+            <div class="step-number mx-auto mb-3">4</div>
+            <h5>Export</h5>
+            <p class="text-muted small">Download as GIF or video</p>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Steps Section -->
+<div class="bg-light py-5">
+    <div class="container">
         <!-- Step 1: Upload -->
-        <div class="col-lg-6">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="step-number me-3">1</div>
-                        <h3 class="mb-0">Upload Your Drawing</h3>
-                    </div>
-                    <p class="text-muted mb-3">
-                        Start by uploading any drawing, sketch, or character illustration. Our AI automatically removes the background to isolate your character.
-                    </p>
-                    <h6 class="fw-bold">Supported Formats</h6>
-                    <ul class="text-muted mb-3">
-                        <li>PNG, JPG, GIF, WebP</li>
-                        <li>Up to 10MB file size</li>
-                        <li>Transparent backgrounds work best</li>
-                    </ul>
-                    <h6 class="fw-bold">Tips for Best Results</h6>
-                    <ul class="text-muted mb-0">
-                        <li>Use high contrast between character and background</li>
-                        <li>Draw characters with clear, visible limbs</li>
-                        <li>Front-facing or T-pose works best for detection</li>
-                        <li>Avoid complex overlapping body parts</li>
-                    </ul>
+        <div class="row align-items-center mb-5 pb-5 border-bottom">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="step-number me-3">1</div>
+                    <h3 class="mb-0">Upload Your Drawing</h3>
                 </div>
+                <p class="text-muted mb-3">
+                    Start by uploading any drawing, sketch, or character illustration. Our AI automatically removes the background to isolate your character.
+                </p>
+                <h6 class="fw-bold">Supported Formats</h6>
+                <ul class="text-muted mb-3">
+                    <li>PNG, JPG, GIF, WebP</li>
+                    <li>Up to 10MB file size</li>
+                    <li>Transparent backgrounds work best</li>
+                </ul>
+                <h6 class="fw-bold">Tips for Best Results</h6>
+                <ul class="text-muted mb-0">
+                    <li>Use high contrast between character and background</li>
+                    <li>Draw characters with clear, visible limbs</li>
+                    <li>Front-facing or T-pose works best for detection</li>
+                </ul>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'stepone.png' %}" alt="Step 1: Upload your drawing" class="img-fluid rounded shadow" style="max-height: 300px;">
             </div>
         </div>
 
         <!-- Step 2: Detect -->
-        <div class="col-lg-6">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="step-number me-3">2</div>
-                        <h3 class="mb-0">AI Pose Detection</h3>
-                    </div>
-                    <p class="text-muted mb-3">
-                        Our AI analyzes your drawing and automatically detects body landmarks to create a skeleton rig. This rig is what enables smooth animations.
-                    </p>
-                    <h6 class="fw-bold">What Gets Detected</h6>
-                    <ul class="text-muted mb-3">
-                        <li>Head, neck, and torso positions</li>
-                        <li>Shoulder, elbow, and wrist joints</li>
-                        <li>Hip, knee, and ankle positions</li>
-                        <li>Optional: finger and face landmarks</li>
-                    </ul>
-                    <h6 class="fw-bold">Manual Adjustments</h6>
-                    <p class="text-muted mb-0">
-                        If detection isn't perfect, you can manually adjust joint positions using our visual editor. Click and drag any point to reposition it.
-                    </p>
+        <div class="row align-items-center mb-5 pb-5 border-bottom flex-lg-row-reverse">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="step-number me-3">2</div>
+                    <h3 class="mb-0">AI Pose Detection</h3>
                 </div>
+                <p class="text-muted mb-3">
+                    Our AI analyzes your drawing and automatically detects body landmarks to create a skeleton rig. This rig is what enables smooth animations.
+                </p>
+                <h6 class="fw-bold">What Gets Detected</h6>
+                <ul class="text-muted mb-3">
+                    <li>Head, neck, and torso positions</li>
+                    <li>Shoulder, elbow, and wrist joints</li>
+                    <li>Hip, knee, and ankle positions</li>
+                    <li>Optional: finger and face landmarks</li>
+                </ul>
+                <p class="text-muted mb-0">
+                    <strong>Manual Adjustments:</strong> If detection isn't perfect, you can manually adjust joint positions using our visual editor.
+                </p>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'steptwo.png' %}" alt="Step 2: AI pose detection" class="img-fluid rounded shadow" style="max-height: 300px;">
             </div>
         </div>
 
         <!-- Step 3: Animate -->
-        <div class="col-lg-6">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="step-number me-3">3</div>
-                        <h3 class="mb-0">Choose Your Animation</h3>
-                    </div>
-                    <p class="text-muted mb-3">
-                        Select from our library of motion presets or describe the animation you want and let AI generate it for you.
-                    </p>
-                    <h6 class="fw-bold">Motion Preset Library</h6>
-                    <ul class="text-muted mb-3">
-                        <li><strong>Walk</strong> - Natural walking cycle</li>
-                        <li><strong>Run</strong> - Running animation</li>
-                        <li><strong>Wave</strong> - Friendly hand wave</li>
-                        <li><strong>Dance</strong> - Fun dance moves</li>
-                        <li><strong>Jump</strong> - Jumping motion</li>
-                        <li><strong>Idle</strong> - Subtle breathing animation</li>
-                    </ul>
-                    <h6 class="fw-bold">AI Motion Generation</h6>
-                    <p class="text-muted mb-0">
-                        Describe any motion in plain text: "character doing a backflip" or "waving both hands excitedly" - and our AI generates custom keyframes.
-                    </p>
+        <div class="row align-items-center mb-5 pb-5 border-bottom">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="step-number me-3">3</div>
+                    <h3 class="mb-0">Choose Your Animation</h3>
                 </div>
+                <p class="text-muted mb-3">
+                    Select from our library of motion presets or describe the animation you want and let AI generate it for you.
+                </p>
+                <h6 class="fw-bold">Motion Preset Library</h6>
+                <div class="row text-muted mb-3">
+                    <div class="col-6">
+                        <ul class="mb-0">
+                            <li><strong>Walk</strong> - Natural walking</li>
+                            <li><strong>Run</strong> - Running animation</li>
+                            <li><strong>Wave</strong> - Friendly wave</li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <ul class="mb-0">
+                            <li><strong>Dance</strong> - Fun moves</li>
+                            <li><strong>Jump</strong> - Jumping motion</li>
+                            <li><strong>Idle</strong> - Subtle breathing</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text-muted mb-0">
+                    <strong>AI Motion:</strong> Describe any motion in plain text like "waving both hands excitedly" and our AI generates custom keyframes.
+                </p>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'stepthree.png' %}" alt="Step 3: Choose animation" class="img-fluid rounded shadow" style="max-height: 300px;">
             </div>
         </div>
 
         <!-- Step 4: Export -->
-        <div class="col-lg-6">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="step-number me-3">4</div>
-                        <h3 class="mb-0">Export & Share</h3>
-                    </div>
-                    <p class="text-muted mb-3">
-                        Preview your animation and export it in your preferred format. Download and share directly to social media.
-                    </p>
-                    <h6 class="fw-bold">Export Formats</h6>
-                    <ul class="text-muted mb-3">
-                        <li><strong>GIF</strong> - Perfect for social media and messaging</li>
-                        <li><strong>MP4</strong> - High quality video with audio support</li>
-                        <li><strong>WebM</strong> - Smaller file size, web-optimized</li>
-                        <li><strong>PNG Sequence</strong> - For advanced editing software</li>
-                    </ul>
-                    <h6 class="fw-bold">Quality Options</h6>
-                    <ul class="text-muted mb-0">
-                        <li>Resolution: up to 4K (3840x2160)</li>
-                        <li>Frame rate: 24, 30, or 60 FPS</li>
-                        <li>Duration: up to 60 seconds (Quick Animate)</li>
-                    </ul>
+        <div class="row align-items-center flex-lg-row-reverse">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="step-number me-3">4</div>
+                    <h3 class="mb-0">Export & Share</h3>
                 </div>
+                <p class="text-muted mb-3">
+                    Preview your animation and export it in your preferred format. Download and share directly to social media.
+                </p>
+                <h6 class="fw-bold">Export Formats</h6>
+                <ul class="text-muted mb-3">
+                    <li><strong>GIF</strong> - Perfect for social media and messaging</li>
+                    <li><strong>MP4</strong> - High quality video with audio support</li>
+                    <li><strong>WebM</strong> - Smaller file size, web-optimized</li>
+                    <li><strong>PNG Sequence</strong> - For advanced editing software</li>
+                </ul>
+                <h6 class="fw-bold">Quality Options</h6>
+                <ul class="text-muted mb-0">
+                    <li>Resolution: up to 4K (3840x2160)</li>
+                    <li>Frame rate: 24, 30, or 60 FPS</li>
+                </ul>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'stepfour.png' %}" alt="Step 4: Export animation" class="img-fluid rounded shadow" style="max-height: 300px;">
             </div>
         </div>
     </div>
 </div>
 
 <!-- Quick vs Full Projects -->
-<div class="bg-light py-5">
+<div class="py-5">
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="display-5 fw-bold">Choose Your Workflow</h2>
@@ -143,7 +178,7 @@
                         </div>
                         <h4>Quick Animate</h4>
                         <p class="text-muted">
-                            Upload one drawing, choose a motion preset, and get your animated GIF in seconds. Perfect for social media content and quick projects.
+                            Upload one drawing, choose a motion preset, and get your animated GIF in seconds. Perfect for social media content.
                         </p>
                         <ul class="list-unstyled text-start text-muted">
                             <li class="mb-2">&#10003; Single character animation</li>
@@ -166,13 +201,13 @@
                         </div>
                         <h4>Full Projects</h4>
                         <p class="text-muted">
-                            Create multi-scene animations with multiple characters, backgrounds, camera movements, and audio. Ideal for stories and longer content.
+                            Create multi-scene animations with multiple characters, backgrounds, camera movements, and audio.
                         </p>
                         <ul class="list-unstyled text-start text-muted">
                             <li class="mb-2">&#10003; Multiple characters per scene</li>
                             <li class="mb-2">&#10003; Timeline editor</li>
                             <li class="mb-2">&#10003; Voice and audio support</li>
-                            <li class="mb-2">&#10003; Up to feature-length animations</li>
+                            <li class="mb-2">&#10003; Feature-length animations</li>
                         </ul>
                         <a href="/signup/" class="btn btn-success mt-3">Start a Project</a>
                     </div>
