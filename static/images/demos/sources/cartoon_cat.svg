@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="500" viewBox="0 0 400 500">
+  <rect width="400" height="500" fill="white"/>
+  <!-- Body - oval -->
+  <ellipse cx="200" cy="300" rx="80" ry="100" fill="#F5A623" stroke="#333" stroke-width="4"/>
+  <!-- Head -->
+  <circle cx="200" cy="150" r="70" fill="#F5A623" stroke="#333" stroke-width="4"/>
+  <!-- Ears -->
+  <polygon points="140,100 160,50 180,100" fill="#F5A623" stroke="#333" stroke-width="4"/>
+  <polygon points="260,100 240,50 220,100" fill="#F5A623" stroke="#333" stroke-width="4"/>
+  <!-- Inner ears -->
+  <polygon points="148,95 160,65 172,95" fill="#FFB6C1"/>
+  <polygon points="252,95 240,65 228,95" fill="#FFB6C1"/>
+  <!-- Eyes -->
+  <ellipse cx="170" cy="140" rx="20" ry="25" fill="white"/>
+  <ellipse cx="230" cy="140" rx="20" ry="25" fill="white"/>
+  <circle cx="175" cy="145" r="10" fill="#333"/>
+  <circle cx="235" cy="145" r="10" fill="#333"/>
+  <circle cx="178" cy="142" r="3" fill="white"/>
+  <circle cx="238" cy="142" r="3" fill="white"/>
+  <!-- Nose -->
+  <ellipse cx="200" cy="175" rx="12" ry="8" fill="#FF69B4"/>
+  <!-- Mouth -->
+  <path d="M185 190 Q200 205 215 190" fill="none" stroke="#333" stroke-width="3"/>
+  <line x1="200" y1="183" x2="200" y2="190" stroke="#333" stroke-width="2"/>
+  <!-- Whiskers -->
+  <line x1="140" y1="170" x2="100" y2="165" stroke="#333" stroke-width="2"/>
+  <line x1="140" y1="180" x2="100" y2="185" stroke="#333" stroke-width="2"/>
+  <line x1="260" y1="170" x2="300" y2="165" stroke="#333" stroke-width="2"/>
+  <line x1="260" y1="180" x2="300" y2="185" stroke="#333" stroke-width="2"/>
+  <!-- Front legs -->
+  <ellipse cx="160" cy="380" rx="25" ry="40" fill="#F5A623" stroke="#333" stroke-width="4"/>
+  <ellipse cx="240" cy="380" rx="25" ry="40" fill="#F5A623" stroke="#333" stroke-width="4"/>
+  <!-- Paws -->
+  <ellipse cx="160" cy="415" rx="30" ry="15" fill="#F5A623" stroke="#333" stroke-width="4"/>
+  <ellipse cx="240" cy="415" rx="30" ry="15" fill="#F5A623" stroke="#333" stroke-width="4"/>
+  <!-- Tail -->
+  <path d="M280 350 Q350 300 330 250" fill="none" stroke="#F5A623" stroke-width="25" stroke-linecap="round"/>
+  <path d="M280 350 Q350 300 330 250" fill="none" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+</svg>
