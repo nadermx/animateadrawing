@@ -78,12 +78,33 @@
 
         <!-- Controls Column -->
         <div class="col-lg-4">
-            <!-- Motion Presets -->
+            <!-- Animation Method Toggle -->
             <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Select Motion</h5>
+                <div class="card-header p-0">
+                    <div class="btn-group w-100" role="group" aria-label="Animation method">
+                        <input type="radio" class="btn-check" name="animation-method" id="method-presets" value="presets" checked>
+                        <label class="btn btn-outline-primary rounded-0 rounded-top-start py-3" for="method-presets">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                                <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+                            </svg>
+                            Motion Presets
+                        </label>
+                        <input type="radio" class="btn-check" name="animation-method" id="method-ai" value="ai">
+                        <label class="btn btn-outline-primary rounded-0 rounded-top-end py-3" for="method-ai">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                                <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5ZM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062Zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a24.767 24.767 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25.286 25.286 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135Z"/>
+                                <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2V1.866ZM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5Z"/>
+                            </svg>
+                            AI Generation
+                        </label>
+                    </div>
                 </div>
-                <div class="card-body">
+
+                <!-- Presets Section -->
+                <div class="card-body" id="presets-section">
+                    <div class="alert alert-success py-2 small mb-3">
+                        <strong>Fast & Faithful</strong> - Preserves your original artwork perfectly
+                    </div>
                     <div class="mb-3">
                         <label class="form-label">Category</label>
                         <select class="form-select" id="motion-category">
@@ -94,14 +115,20 @@
                         </select>
                     </div>
 
-                    <div class="motion-presets" style="max-height: 300px; overflow-y: auto;">
+                    <div class="motion-presets" style="max-height: 280px; overflow-y: auto;">
                         {% for preset in presets %}
-                        <div class="form-check motion-preset-item" data-category="{{ preset.category }}">
+                        <div class="form-check motion-preset-item" data-category="{{ preset.category }}" data-method="{{ preset.animation_method }}">
                             <input class="form-check-input" type="radio" name="motion"
-                                   id="preset-{{ preset.id }}" value="{{ preset.id }}">
+                                   id="preset-{{ preset.id }}" value="{{ preset.id }}"
+                                   data-name="{{ preset.name|lower }}" data-method="{{ preset.animation_method }}">
                             <label class="form-check-label d-flex justify-content-between align-items-center w-100"
                                    for="preset-{{ preset.id }}">
-                                <span>{{ preset.name }}</span>
+                                <span>
+                                    {{ preset.name }}
+                                    {% if preset.animation_method == 'ai_video' %}
+                                    <span class="badge bg-info ms-1" style="font-size: 0.65em;">AI</span>
+                                    {% endif %}
+                                </span>
                                 <small class="text-muted">{{ preset.duration_seconds }}s</small>
                             </label>
                         </div>
@@ -110,22 +137,33 @@
                         {% endfor %}
                     </div>
                 </div>
-            </div>
 
-            <!-- AI Motion Generation -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Generate with AI</h5>
-                </div>
-                <div class="card-body">
+                <!-- AI Generation Section -->
+                <div class="card-body d-none" id="ai-section">
+                    <div class="alert alert-info py-2 small mb-3">
+                        <strong>AI-Powered</strong> - Generates realistic motion (takes longer)
+                    </div>
                     <div class="mb-3">
-                        <label class="form-label">Describe the motion</label>
-                        <textarea class="form-control" id="motion-prompt" rows="3"
-                                  placeholder="e.g., walking forward, waving hello, jumping with joy"></textarea>
+                        <label class="form-label">Describe the motion you want</label>
+                        <textarea class="form-control" id="motion-prompt" rows="4"
+                                  placeholder="e.g., walking forward with a bounce in their step, waving hello enthusiastically, dancing happily"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Motion Intensity</label>
+                        <input type="range" class="form-range" id="ai-motion-intensity" min="1" max="5" value="3">
+                        <div class="d-flex justify-content-between small text-muted">
+                            <span>Subtle</span>
+                            <span>Normal</span>
+                            <span>Energetic</span>
+                        </div>
                     </div>
                     <button type="button" class="btn btn-primary w-100" id="btn-generate-motion">
-                        Generate Motion
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                            <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                        </svg>
+                        Generate with AI
                     </button>
+                    <p class="text-muted small mt-2 mb-0 text-center">Uses 5 credits per generation</p>
                 </div>
             </div>
 
@@ -205,6 +243,21 @@
 }
 .motion-preset-item:hover {
     background-color: #f8f9fa;
+}
+/* Animation method toggle styling */
+.btn-group[role="group"] .btn-check:checked + .btn-outline-primary {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+.btn-group[role="group"] .btn-outline-primary {
+    border-bottom: none;
+    font-weight: 500;
+}
+/* Make selected preset more visible */
+.motion-preset-item:has(input:checked) {
+    background-color: #e7f1ff;
+    border-left: 3px solid #0d6efd;
 }
 </style>
 
@@ -597,6 +650,23 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.fill();
         }
     }
+
+    // Animation method toggle (Presets vs AI)
+    document.querySelectorAll('input[name="animation-method"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const method = e.target.value;
+            const presetsSection = document.getElementById('presets-section');
+            const aiSection = document.getElementById('ai-section');
+
+            if (method === 'presets') {
+                presetsSection.classList.remove('d-none');
+                aiSection.classList.add('d-none');
+            } else {
+                presetsSection.classList.add('d-none');
+                aiSection.classList.remove('d-none');
+            }
+        });
+    });
 
     // Motion category filter
     document.getElementById('motion-category').addEventListener('change', (e) => {
