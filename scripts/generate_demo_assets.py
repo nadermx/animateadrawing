@@ -23,6 +23,25 @@ LINE_COLOR = (40, 40, 40)
 BLUE = (59, 130, 246)
 
 
+# Easing functions for smoother animations
+def ease_in_out_sine(t):
+    """Smooth ease-in-out using sine curve"""
+    return -(math.cos(math.pi * t) - 1) / 2
+
+def ease_in_out_quad(t):
+    """Quadratic ease-in-out"""
+    return 2 * t * t if t < 0.5 else 1 - pow(-2 * t + 2, 2) / 2
+
+def ease_out_elastic(t):
+    """Elastic ease-out for bouncy effects"""
+    c4 = (2 * math.pi) / 3
+    if t == 0:
+        return 0
+    if t == 1:
+        return 1
+    return pow(2, -10 * t) * math.sin((t * 10 - 0.75) * c4) + 1
+
+
 def ensure_dirs():
     """Create output directories"""
     os.makedirs(STATIC_DIR, exist_ok=True)
@@ -147,65 +166,42 @@ def create_stick_figure_png(action='neutral'):
 
 
 def create_stick_walk_gif():
-    """Create walking animation GIF - natural stride"""
+    """Create walking animation GIF - natural stride with easing"""
     frames = []
-    num_frames = 24
+    num_frames = 32  # More frames for smoother animation
 
     for i in range(num_frames):
         img = Image.new('RGB', (200, 250), BG_COLOR)
         draw = ImageDraw.Draw(img)
 
+        # Use sine for smooth cyclic motion
         t = i / num_frames * 2 * math.pi
 
-        # Walking motion - moderate leg swing to avoid crossing
-        leg_swing = math.sin(t) * 20  # Leg stride angle (degrees)
-        arm_swing = -math.sin(t) * 25  # Arms swing opposite to legs
+        # Walking motion with natural timing
+        # Legs swing with slight ease at extremes
+        leg_phase = math.sin(t)
+        leg_swing = leg_phase * 22
 
-        # Subtle bounce on each step (highest when legs pass)
-        bounce = abs(math.sin(t)) * 4
+        # Arms swing opposite, slightly behind legs (follow-through)
+        arm_phase = math.sin(t - 0.2)  # Slight delay
+        arm_swing = -arm_phase * 20
 
-        draw_stick_figure(draw, 100, 130 - bounce, scale=1.0, arm_angle=arm_swing, leg_angle=leg_swing)
+        # Bounce highest when legs cross (mid-stride)
+        bounce_raw = abs(math.sin(t * 2))
+        bounce = bounce_raw * 5
+
+        # Subtle forward lean when striding
+        lean = math.sin(t) * 2
+
+        draw_stick_figure(draw, 100, 130 - bounce, scale=1.0,
+                         rotation=lean, arm_angle=arm_swing, leg_angle=leg_swing)
         frames.append(img)
 
     return frames
 
 
 def create_stick_wave_gif():
-    """Create waving animation GIF - one arm waves while standing"""
-    frames = []
-    num_frames = 24
-
-    for i in range(num_frames):
-        img = Image.new('RGB', (200, 250), BG_COLOR)
-        draw = ImageDraw.Draw(img)
-
-        t = i / num_frames * 3 * math.pi
-
-        # Draw base figure standing still
-        draw_stick_figure(draw, 100, 130, scale=1.0)
-
-        # Waving arm - raised up and waving side to side
-        shoulder_y = 130 - 50  # Match figure's shoulder
-        shoulder = (102, shoulder_y)
-        arm_len = 35
-
-        # Arm goes up at angle, waves back and forth
-        base_angle = -60  # Raised up
-        wave = math.sin(t) * 30  # Side to side wave
-
-        hand_x = shoulder[0] + arm_len * math.sin(math.radians(base_angle + wave))
-        hand_y = shoulder[1] - arm_len * math.cos(math.radians(base_angle + wave))
-
-        # Draw the waving arm (overwrites the default right arm)
-        draw.line([shoulder, (hand_x, hand_y)], fill=LINE_COLOR, width=4)
-
-        frames.append(img)
-
-    return frames
-
-
-def create_stick_dance_gif():
-    """Create dancing animation GIF - energetic with body movement"""
+    """Create waving animation GIF - one arm waves with natural motion"""
     frames = []
     num_frames = 30
 
@@ -215,17 +211,67 @@ def create_stick_dance_gif():
 
         t = i / num_frames * 4 * math.pi
 
-        # Dancing motion - side to side sway with bounce
-        sway_x = math.sin(t) * 10
-        bounce = abs(math.sin(t * 2)) * 8
-        rotation = math.sin(t) * 10
+        # Subtle body sway while waving
+        sway = math.sin(t * 0.5) * 2
 
-        # Arms and legs move energetically
-        arm_swing = math.sin(t * 1.5) * 40
-        leg_swing = math.sin(t * 2) * 18
+        # Draw base figure with subtle movement
+        draw_stick_figure(draw, 100 + sway, 130, scale=1.0, rotation=sway * 0.5)
+
+        # Waving arm - raised up and waving energetically
+        shoulder_y = 130 - 50
+        shoulder = (102 + sway, shoulder_y)
+        arm_len = 35
+
+        # Arm raised high, waves back and forth with acceleration
+        base_angle = -70  # Raised up high
+        wave = math.sin(t) * 35  # Wider wave motion
+
+        hand_x = shoulder[0] + arm_len * math.sin(math.radians(base_angle + wave))
+        hand_y = shoulder[1] - arm_len * math.cos(math.radians(base_angle + wave))
+
+        # Draw the waving arm
+        draw.line([shoulder, (hand_x, hand_y)], fill=LINE_COLOR, width=4)
+
+        # Add small hand circle for visibility
+        draw.ellipse([hand_x - 4, hand_y - 4, hand_x + 4, hand_y + 4], fill=LINE_COLOR)
+
+        frames.append(img)
+
+    return frames
+
+
+def create_stick_dance_gif():
+    """Create dancing animation GIF - energetic rhythmic movement"""
+    frames = []
+    num_frames = 36  # More frames for smoother dance
+
+    for i in range(num_frames):
+        img = Image.new('RGB', (200, 250), BG_COLOR)
+        draw = ImageDraw.Draw(img)
+
+        t = i / num_frames * 4 * math.pi
+
+        # Dancing with rhythm - multiple movement components
+        # Primary sway
+        sway_x = math.sin(t) * 12
+
+        # Bounce on beats (faster)
+        bounce = abs(math.sin(t * 2)) * 10
+
+        # Body rotation follows sway
+        rotation = math.sin(t) * 12
+
+        # Arms move with more expression - delayed for follow-through
+        arm_primary = math.sin(t * 1.5) * 45
+        arm_secondary = math.sin(t * 0.75) * 15  # Slower secondary motion
+
+        # Legs step with the beat
+        leg_swing = math.sin(t * 2) * 20
 
         draw_stick_figure(draw, 100 + sway_x, 130 - bounce, scale=1.0,
-                         rotation=rotation, arm_angle=arm_swing, leg_angle=leg_swing)
+                         rotation=rotation,
+                         arm_angle=arm_primary + arm_secondary,
+                         leg_angle=leg_swing)
         frames.append(img)
 
     return frames
