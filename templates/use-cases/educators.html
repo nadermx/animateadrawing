@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Animation Tool for Educators & Teachers | {{ g.project_name }}{% endblock %}
+
+{% block meta_description %}Bring lessons to life with animated drawings. Perfect for teachers, tutors, and educational content creators. Engage students with visual animations.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <span class="badge bg-success mb-3">For Educators</span>
+                <h1 class="display-4 fw-bold text-white mb-4">Bring Your Lessons to Life</h1>
+                <p class="lead text-white-50 mb-4">
+                    Transform hand-drawn diagrams, characters, and concepts into engaging
+                    animations that capture student attention and improve learning outcomes.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-success btn-lg">Start Free Trial</a>
+                    <a href="{% url 'how-it-works' %}" class="btn btn-outline-light btn-lg">See How It Works</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                <div class="bg-white bg-opacity-10 rounded-4 p-4">
+                    <i class="bi bi-mortarboard display-1 text-white mb-3 d-block"></i>
+                    <p class="text-white-50 mb-0">Educational Animation Made Simple</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-4">
+                <h3 class="fw-bold text-primary mb-1">65%</h3>
+                <p class="text-muted mb-0">of people are visual learners</p>
+            </div>
+            <div class="col-md-4">
+                <h3 class="fw-bold text-success mb-1">2x</h3>
+                <p class="text-muted mb-0">better retention with animation</p>
+            </div>
+            <div class="col-md-4">
+                <h3 class="fw-bold text-warning mb-1">89%</h3>
+                <p class="text-muted mb-0">of students prefer visual content</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Why Educators Choose {{ g.project_name }}</h2>
+            <p class="text-muted">Create engaging educational content without technical skills</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-eye fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Visual Learning</h5>
+                        <p class="text-muted mb-0">
+                            Animations help visual learners grasp concepts faster.
+                            Show processes in motion instead of static diagrams.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-person-hearts fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Student Engagement</h5>
+                        <p class="text-muted mb-0">
+                            Animated content holds attention better than static images.
+                            Keep students focused and interested.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-warning bg-opacity-10 text-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-pencil fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Use Your Own Drawings</h5>
+                        <p class="text-muted mb-0">
+                            Draw on a whiteboard, paper, or tablet. Upload and animate
+                            your own teaching style.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-info bg-opacity-10 text-info rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-clock fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Save Preparation Time</h5>
+                        <p class="text-muted mb-0">
+                            Create animations in minutes instead of hours.
+                            Spend more time teaching, less time creating content.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-danger bg-opacity-10 text-danger rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-collection-play fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Reusable Content</h5>
+                        <p class="text-muted mb-0">
+                            Build a library of animated explanations you can use
+                            year after year across different classes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-secondary bg-opacity-10 text-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-globe fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Works Everywhere</h5>
+                        <p class="text-muted mb-0">
+                            Export as GIF or video. Use in presentations, LMS platforms,
+                            or share directly in virtual classrooms.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Use Cases -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Educational Use Cases</h2>
+            <p class="text-muted">Ideas for bringing animation into your teaching</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center">
+                    <div class="card-body p-4">
+                        <i class="bi bi-calculator fs-1 text-primary mb-3"></i>
+                        <h5 class="fw-bold">Math</h5>
+                        <p class="text-muted small mb-0">
+                            Animate geometric transformations, graph movements,
+                            or step-by-step problem solving
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center">
+                    <div class="card-body p-4">
+                        <i class="bi bi-globe-americas fs-1 text-success mb-3"></i>
+                        <h5 class="fw-bold">Science</h5>
+                        <p class="text-muted small mb-0">
+                            Show cell division, planetary motion,
+                            chemical reactions, or physics concepts
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center">
+                    <div class="card-body p-4">
+                        <i class="bi bi-book fs-1 text-warning mb-3"></i>
+                        <h5 class="fw-bold">Language Arts</h5>
+                        <p class="text-muted small mb-0">
+                            Bring story characters to life,
+                            illustrate vocabulary, or animate poems
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center">
+                    <div class="card-body p-4">
+                        <i class="bi bi-clock-history fs-1 text-danger mb-3"></i>
+                        <h5 class="fw-bold">History</h5>
+                        <p class="text-muted small mb-0">
+                            Animate historical figures,
+                            timeline events, or cultural dances
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Teacher Testimonial Style Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-5 text-center">
+                        <i class="bi bi-quote fs-1 text-primary opacity-25 mb-3"></i>
+                        <p class="lead mb-4">
+                            "Creating educational animations used to require expensive software and hours of
+                            learning. Now I can draw a concept on my tablet and have an animation ready for
+                            class in minutes. My students love it."
+                        </p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px;">
+                                <i class="bi bi-person text-white"></i>
+                            </div>
+                            <div class="text-start">
+                                <strong>Middle School Science Teacher</strong>
+                                <p class="text-muted small mb-0">{{ g.project_name }} User</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Student Projects -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Student Projects & Activities</h2>
+            <p class="text-muted">Let students create their own animations</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-pencil-square text-primary me-2"></i>Creative Writing</h5>
+                        <p class="text-muted mb-0">
+                            Students draw their story characters and bring them to life with animation.
+                            Perfect for narrative projects and book reports.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-0">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-lightbulb text-warning me-2"></i>Concept Demonstrations</h5>
+                        <p class="text-muted mb-0">
+                            Have students explain concepts by creating animated diagrams.
+                            Great for science fairs and presentations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-0">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-people text-success me-2"></i>Group Projects</h5>
+                        <p class="text-muted mb-0">
+                            Teams collaborate on animated stories or educational videos.
+                            Combines art, technology, and subject knowledge.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5 bg-success text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Ready to Transform Your Teaching?</h2>
+        <p class="lead mb-4 opacity-75">
+            Start free with 10 credits. Perfect for trying out the platform before committing.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'register' %}" class="btn btn-light btn-lg">Start Free Trial</a>
+            <a href="{% url 'pricing' %}" class="btn btn-outline-light btn-lg">View Educator Pricing</a>
+        </div>
+        <p class="mt-4 mb-0 small opacity-75">
+            <i class="bi bi-info-circle me-1"></i>
+            Contact us about special pricing for schools and educational institutions
+        </p>
+    </div>
+</section>
+{% endblock %}

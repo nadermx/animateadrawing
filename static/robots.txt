@@ -1,0 +1,21 @@
+# robots.txt for Animate a Drawing
+# https://animateadrawing.com
+
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /account/
+Disallow: /animator/
+Disallow: /checkout/
+Disallow: /api/
+
+# Allow static assets
+Allow: /static/
+
+# Sitemap location
+Sitemap: https://animateadrawing.com/sitemap.xml
+
+# Crawl delay (be nice to our servers)
+Crawl-delay: 1

@@ -1,0 +1,398 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Motion Presets Library | {{ g.project_name }}{% endblock %}
+
+{% block meta_description %}Choose from dozens of pre-made animation presets - walk cycles, dance moves, waving, jumping, and more. One click to animate your character.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <span class="badge bg-success mb-3">Feature</span>
+                <h1 class="display-4 fw-bold text-white mb-4">Motion Preset Library</h1>
+                <p class="lead text-white-50 mb-4">
+                    Choose from dozens of professionally designed motion presets. One click
+                    to make your character walk, dance, wave, jump, and more.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-success btn-lg">Try Presets Free</a>
+                    <a href="{% url 'examples' %}" class="btn btn-outline-light btn-lg">See Examples</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                <div class="bg-white bg-opacity-10 rounded-4 p-4">
+                    <i class="bi bi-collection-play display-1 text-white mb-3 d-block"></i>
+                    <p class="text-white-50 mb-0">50+ Motion Presets Available</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Preset Categories -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Motion Categories</h2>
+            <p class="text-muted">Presets organized by type of movement</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Locomotion -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <i class="bi bi-person-walking me-2"></i>Locomotion
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark">Walk Cycle</span>
+                            <span class="badge bg-light text-dark">Run Cycle</span>
+                            <span class="badge bg-light text-dark">Jog</span>
+                            <span class="badge bg-light text-dark">Skip</span>
+                            <span class="badge bg-light text-dark">Sneak</span>
+                            <span class="badge bg-light text-dark">March</span>
+                            <span class="badge bg-light text-dark">Strut</span>
+                            <span class="badge bg-light text-dark">Waddle</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dance -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-danger text-white">
+                        <i class="bi bi-music-note-beamed me-2"></i>Dance
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark">Simple Dance</span>
+                            <span class="badge bg-light text-dark">Hip Hop</span>
+                            <span class="badge bg-light text-dark">Disco</span>
+                            <span class="badge bg-light text-dark">Ballet</span>
+                            <span class="badge bg-light text-dark">Sway</span>
+                            <span class="badge bg-light text-dark">Groove</span>
+                            <span class="badge bg-light text-dark">Celebration</span>
+                            <span class="badge bg-light text-dark">Victory Dance</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-warning text-dark">
+                        <i class="bi bi-lightning me-2"></i>Actions
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark">Jump</span>
+                            <span class="badge bg-light text-dark">Hop</span>
+                            <span class="badge bg-light text-dark">Punch</span>
+                            <span class="badge bg-light text-dark">Kick</span>
+                            <span class="badge bg-light text-dark">Throw</span>
+                            <span class="badge bg-light text-dark">Catch</span>
+                            <span class="badge bg-light text-dark">Duck</span>
+                            <span class="badge bg-light text-dark">Roll</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gestures -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <i class="bi bi-hand-index me-2"></i>Gestures
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark">Wave</span>
+                            <span class="badge bg-light text-dark">Point</span>
+                            <span class="badge bg-light text-dark">Thumbs Up</span>
+                            <span class="badge bg-light text-dark">Clap</span>
+                            <span class="badge bg-light text-dark">Shrug</span>
+                            <span class="badge bg-light text-dark">Nod</span>
+                            <span class="badge bg-light text-dark">Shake Head</span>
+                            <span class="badge bg-light text-dark">Bow</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Idle & Loop -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-secondary text-white">
+                        <i class="bi bi-arrow-repeat me-2"></i>Idle & Loop
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark">Breathing</span>
+                            <span class="badge bg-light text-dark">Idle Sway</span>
+                            <span class="badge bg-light text-dark">Looking Around</span>
+                            <span class="badge bg-light text-dark">Thinking</span>
+                            <span class="badge bg-light text-dark">Waiting</span>
+                            <span class="badge bg-light text-dark">Floating</span>
+                            <span class="badge bg-light text-dark">Bouncing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emotions -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <i class="bi bi-emoji-smile me-2"></i>Emotions
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark">Happy Jump</span>
+                            <span class="badge bg-light text-dark">Sad Slouch</span>
+                            <span class="badge bg-light text-dark">Angry Stomp</span>
+                            <span class="badge bg-light text-dark">Scared</span>
+                            <span class="badge bg-light text-dark">Surprised</span>
+                            <span class="badge bg-light text-dark">Excited</span>
+                            <span class="badge bg-light text-dark">Tired</span>
+                            <span class="badge bg-light text-dark">Laughing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Two Animation Methods -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Two Animation Methods</h2>
+            <p class="text-muted">Choose the style that works best for your project</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px;">
+                                <i class="bi bi-lightning-charge text-primary fs-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-bold mb-0">Transform-Based</h4>
+                                <span class="badge bg-success">Fast - 1 Credit</span>
+                            </div>
+                        </div>
+                        <p class="text-muted">
+                            Uses mathematical transformations (rotation, translation, scaling) to
+                            animate your character. Perfect preservation of your original artwork.
+                        </p>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Instant processing</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Perfect art preservation</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Clean, consistent motion</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Lower credit cost</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px;">
+                                <i class="bi bi-stars text-warning fs-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-bold mb-0">AI Video Generation</h4>
+                                <span class="badge bg-warning text-dark">Realistic - 5 Credits</span>
+                            </div>
+                        </div>
+                        <p class="text-muted">
+                            Uses Stable Video Diffusion AI to generate realistic motion. Creates
+                            more natural, fluid movement with subtle details.
+                        </p>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>More realistic motion</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Subtle motion details</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Natural movement flow</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Best for showcase pieces</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How to Use -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">How to Use Motion Presets</h2>
+            <p class="text-muted">Three simple steps</p>
+        </div>
+
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <div class="d-flex mb-4">
+                    <div class="flex-shrink-0">
+                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">1</div>
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="fw-bold mb-1">Upload Your Character</h5>
+                        <p class="text-muted mb-0">Upload any drawing with a character. Our AI detects the pose automatically.</p>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-4">
+                    <div class="flex-shrink-0">
+                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">2</div>
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="fw-bold mb-1">Choose a Motion Preset</h5>
+                        <p class="text-muted mb-0">Browse the library and select the motion that fits your needs - walk, wave, dance, etc.</p>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">3</div>
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="fw-bold mb-1">Generate & Export</h5>
+                        <p class="text-muted mb-0">Click generate and download your animation as GIF, MP4, or WebM.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 text-center">
+                <div class="bg-light rounded-4 p-4">
+                    <i class="bi bi-collection-play display-1 text-success mb-3 d-block"></i>
+                    <p class="text-muted mb-0">Select from 50+ presets</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Customization -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-lg-2">
+                <h2 class="fw-bold mb-4">Customization Options</h2>
+                <p class="text-muted">
+                    Each motion preset can be customized to fit your needs:
+                </p>
+
+                <ul class="list-unstyled">
+                    <li class="mb-3">
+                        <i class="bi bi-speedometer2 text-primary me-2"></i>
+                        <strong>Speed:</strong> Adjust animation speed from slow-mo to fast
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-arrow-repeat text-primary me-2"></i>
+                        <strong>Loop:</strong> Single play or seamless loop
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-arrows-angle-expand text-primary me-2"></i>
+                        <strong>Intensity:</strong> Subtle movement or exaggerated motion
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-skip-forward text-primary me-2"></i>
+                        <strong>Duration:</strong> Control animation length
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-lg-6 order-lg-1 mt-4 mt-lg-0 text-center">
+                <div class="bg-white rounded-4 shadow-sm p-4">
+                    <i class="bi bi-sliders display-1 text-primary mb-3 d-block"></i>
+                    <p class="text-muted mb-0">Fine-tune every animation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Presets -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Most Popular Presets</h2>
+            <p class="text-muted">What creators use most</p>
+        </div>
+
+        <div class="row g-3 justify-content-center">
+            <div class="col-auto">
+                <div class="card border-0 shadow-sm text-center" style="width: 150px;">
+                    <div class="card-body">
+                        <i class="bi bi-person-walking fs-1 text-primary mb-2 d-block"></i>
+                        <h6 class="fw-bold mb-1">Walk Cycle</h6>
+                        <small class="text-muted">#1 Used</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="card border-0 shadow-sm text-center" style="width: 150px;">
+                    <div class="card-body">
+                        <i class="bi bi-hand-thumbs-up fs-1 text-success mb-2 d-block"></i>
+                        <h6 class="fw-bold mb-1">Wave</h6>
+                        <small class="text-muted">#2 Used</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="card border-0 shadow-sm text-center" style="width: 150px;">
+                    <div class="card-body">
+                        <i class="bi bi-music-note fs-1 text-danger mb-2 d-block"></i>
+                        <h6 class="fw-bold mb-1">Dance</h6>
+                        <small class="text-muted">#3 Used</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="card border-0 shadow-sm text-center" style="width: 150px;">
+                    <div class="card-body">
+                        <i class="bi bi-arrow-up fs-1 text-warning mb-2 d-block"></i>
+                        <h6 class="fw-bold mb-1">Jump</h6>
+                        <small class="text-muted">#4 Used</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="card border-0 shadow-sm text-center" style="width: 150px;">
+                    <div class="card-body">
+                        <i class="bi bi-lungs fs-1 text-info mb-2 d-block"></i>
+                        <h6 class="fw-bold mb-1">Breathing</h6>
+                        <small class="text-muted">#5 Used</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5 bg-success text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Explore the Motion Library</h2>
+        <p class="lead mb-4 opacity-75">
+            Start free with 10 credits. Try any preset on your character.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'register' %}" class="btn btn-light btn-lg">Start Free Trial</a>
+            <a href="{% url 'pricing' %}" class="btn btn-outline-light btn-lg">View Pricing</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

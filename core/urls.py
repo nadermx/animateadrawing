@@ -24,4 +24,22 @@ urlpatterns = [
     path('examples/', views.ExamplesPage.as_view(), name='examples'),
     path('tutorials/', views.TutorialsPage.as_view(), name='tutorials'),
     path('faq/', views.FAQPage.as_view(), name='faq'),
+
+    # Use Case Landing Pages (SEO)
+    path('for/content-creators/', views.UseCase_ContentCreators.as_view(), name='usecase-content-creators'),
+    path('for/educators/', views.UseCase_Educators.as_view(), name='usecase-educators'),
+    path('for/game-developers/', views.UseCase_GameDev.as_view(), name='usecase-gamedev'),
+    path('for/artists/', views.UseCase_Artists.as_view(), name='usecase-artists'),
+
+    # Feature Pages (SEO)
+    path('features/ai-pose-detection/', views.Feature_PoseDetection.as_view(), name='feature-pose-detection'),
+    path('features/motion-presets/', views.Feature_MotionPresets.as_view(), name='feature-motion-presets'),
+    path('features/export-formats/', views.Feature_ExportFormats.as_view(), name='feature-export-formats'),
+
+    # API Documentation
+    path('api/docs/', views.APIDocsPage.as_view(), name='api-docs'),
+
+    # Sitemap
+    path('sitemap.xml', views.SitemapView.as_view(), name='sitemap'),
+    path('robots.txt', views.RobotsTxtView.as_view(), name='robots'),
 ]

@@ -612,3 +612,210 @@ class DeleteAccountPage(View):
                 'errors': errors
             }
         )
+
+
+# =============================================================================
+# USE CASE LANDING PAGES (SEO)
+# =============================================================================
+
+class UseCase_ContentCreators(View):
+    def get(self, request):
+        settings = GlobalVars.get_globals(request)
+        return render(
+            request,
+            'use-cases/content-creators.html',
+            {
+                'title': f"Animation for Content Creators | {config.PROJECT_NAME}",
+                'description': 'Create eye-catching animated content for YouTube, TikTok, Instagram and more. Turn your drawings into engaging animations.',
+                'page': 'usecase-content-creators',
+                'g': settings
+            }
+        )
+
+
+class UseCase_Educators(View):
+    def get(self, request):
+        settings = GlobalVars.get_globals(request)
+        return render(
+            request,
+            'use-cases/educators.html',
+            {
+                'title': f"Animation for Educators & Teachers | {config.PROJECT_NAME}",
+                'description': 'Create engaging educational animations for your classroom. Turn student artwork into animated stories.',
+                'page': 'usecase-educators',
+                'g': settings
+            }
+        )
+
+
+class UseCase_GameDev(View):
+    def get(self, request):
+        settings = GlobalVars.get_globals(request)
+        return render(
+            request,
+            'use-cases/game-developers.html',
+            {
+                'title': f"Character Animation for Game Developers | {config.PROJECT_NAME}",
+                'description': 'Create animated game characters from concept art. AI pose detection and motion presets for indie game development.',
+                'page': 'usecase-gamedev',
+                'g': settings
+            }
+        )
+
+
+class UseCase_Artists(View):
+    def get(self, request):
+        settings = GlobalVars.get_globals(request)
+        return render(
+            request,
+            'use-cases/artists.html',
+            {
+                'title': f"Animation for Artists & Illustrators | {config.PROJECT_NAME}",
+                'description': 'Bring your artwork to life without learning animation. Perfect for illustrators, concept artists, and visual artists.',
+                'page': 'usecase-artists',
+                'g': settings
+            }
+        )
+
+
+# =============================================================================
+# FEATURE PAGES (SEO)
+# =============================================================================
+
+class Feature_PoseDetection(View):
+    def get(self, request):
+        settings = GlobalVars.get_globals(request)
+        return render(
+            request,
+            'features/ai-pose-detection.html',
+            {
+                'title': f"AI Pose Detection for Drawings | {config.PROJECT_NAME}",
+                'description': 'Automatic pose detection for your characters using MediaPipe AI. Detect joints and create rigs from any drawing style.',
+                'page': 'feature-pose-detection',
+                'g': settings
+            }
+        )
+
+
+class Feature_MotionPresets(View):
+    def get(self, request):
+        settings = GlobalVars.get_globals(request)
+        from animator.models import MotionPreset
+        presets = MotionPreset.objects.filter(is_system=True).order_by('category', 'name')
+        return render(
+            request,
+            'features/motion-presets.html',
+            {
+                'title': f"Motion Presets Library | {config.PROJECT_NAME}",
+                'description': 'Browse our library of animation presets: walk, run, dance, wave, jump and more. Apply professional animations to your characters.',
+                'page': 'feature-motion-presets',
+                'g': settings,
+                'presets': presets
+            }
+        )
+
+
+class Feature_ExportFormats(View):
+    def get(self, request):
+        settings = GlobalVars.get_globals(request)
+        return render(
+            request,
+            'features/export-formats.html',
+            {
+                'title': f"Export Formats: MP4, GIF, WebM, PNG | {config.PROJECT_NAME}",
+                'description': 'Export your animations in multiple formats. MP4 for video, GIF for social media, WebM for web, PNG sequence for editing.',
+                'page': 'feature-export-formats',
+                'g': settings
+            }
+        )
+
+
+# =============================================================================
+# API DOCUMENTATION
+# =============================================================================
+
+class APIDocsPage(View):
+    def get(self, request):
+        settings = GlobalVars.get_globals(request)
+        return render(
+            request,
+            'api-docs.html',
+            {
+                'title': f"API Documentation | {config.PROJECT_NAME}",
+                'description': 'REST API documentation for Animate a Drawing. Integrate animation into your apps with our simple API.',
+                'page': 'api-docs',
+                'g': settings
+            }
+        )
+
+
+# =============================================================================
+# SITEMAP & ROBOTS
+# =============================================================================
+
+from django.http import HttpResponse
+
+class SitemapView(View):
+    def get(self, request):
+        domain = f"https://{config.PROJECT_DOMAIN}"
+        urls = [
+            ('', '1.0', 'weekly'),
+            ('/how-it-works/', '0.9', 'monthly'),
+            ('/examples/', '0.9', 'weekly'),
+            ('/pricing/', '0.9', 'weekly'),
+            ('/tutorials/', '0.8', 'monthly'),
+            ('/faq/', '0.8', 'monthly'),
+            ('/about/', '0.7', 'monthly'),
+            ('/contact/', '0.6', 'monthly'),
+            ('/for/content-creators/', '0.8', 'monthly'),
+            ('/for/educators/', '0.8', 'monthly'),
+            ('/for/game-developers/', '0.8', 'monthly'),
+            ('/for/artists/', '0.8', 'monthly'),
+            ('/features/ai-pose-detection/', '0.7', 'monthly'),
+            ('/features/motion-presets/', '0.7', 'monthly'),
+            ('/features/export-formats/', '0.7', 'monthly'),
+            ('/api/docs/', '0.6', 'monthly'),
+            ('/terms/', '0.3', 'yearly'),
+            ('/privacy/', '0.3', 'yearly'),
+        ]
+
+        xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+
+        for url, priority, changefreq in urls:
+            xml += '  <url>\n'
+            xml += f'    <loc>{domain}{url}</loc>\n'
+            xml += f'    <priority>{priority}</priority>\n'
+            xml += f'    <changefreq>{changefreq}</changefreq>\n'
+            xml += '  </url>\n'
+
+        xml += '</urlset>'
+
+        return HttpResponse(xml, content_type='application/xml')
+
+
+class RobotsTxtView(View):
+    def get(self, request):
+        content = f"""# robots.txt for {config.PROJECT_NAME}
+# https://{config.PROJECT_DOMAIN}
+
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /account/
+Disallow: /animator/
+Disallow: /checkout/
+Disallow: /api/
+
+# Allow static assets
+Allow: /static/
+
+# Sitemap location
+Sitemap: https://{config.PROJECT_DOMAIN}/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1
+"""
+        return HttpResponse(content, content_type='text/plain')

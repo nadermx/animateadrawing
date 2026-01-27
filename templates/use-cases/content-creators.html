@@ -1,0 +1,384 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Animation Tool for Content Creators | {{ g.project_name }}{% endblock %}
+
+{% block meta_description %}Create engaging animated content for YouTube, TikTok, Instagram and more. Turn your drawings into eye-catching animations in minutes with our AI-powered animation tool.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <span class="badge bg-primary mb-3">For Content Creators</span>
+                <h1 class="display-4 fw-bold text-white mb-4">Stand Out with Animated Content</h1>
+                <p class="lead text-white-50 mb-4">
+                    Transform your drawings, sketches, and artwork into captivating animations
+                    that grab attention on social media. No animation experience required.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Start Creating Free</a>
+                    <a href="{% url 'examples' %}" class="btn btn-outline-light btn-lg">See Examples</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                <div class="position-relative">
+                    <img src="{% static 'images/content-creator-hero.svg' %}" alt="Content Creator Animation" class="img-fluid" style="max-height: 400px;" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Platform Logos -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="row align-items-center justify-content-center text-center">
+            <div class="col-auto">
+                <span class="text-muted small">Perfect for</span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-danger fs-6">YouTube</span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-dark fs-6">TikTok</span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-gradient fs-6" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);">Instagram</span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-info fs-6">Twitter/X</span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-primary fs-6">Facebook</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Why Content Creators Love {{ g.project_name }}</h2>
+            <p class="text-muted">Create scroll-stopping content without the learning curve</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-lightning-charge fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Create in Minutes, Not Hours</h5>
+                        <p class="text-muted mb-0">
+                            Traditional animation takes weeks. With our AI, you can create
+                            engaging animations in under 5 minutes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-brush fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Keep Your Unique Style</h5>
+                        <p class="text-muted mb-0">
+                            Your art, your brand. Our tool preserves your drawing style
+                            perfectly while adding smooth, professional motion.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-warning bg-opacity-10 text-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-graph-up-arrow fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Boost Engagement</h5>
+                        <p class="text-muted mb-0">
+                            Animated content gets 2-3x more engagement than static images.
+                            Stand out in crowded feeds.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-info bg-opacity-10 text-info rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-download fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Export Anywhere</h5>
+                        <p class="text-muted mb-0">
+                            Download as GIF, MP4, or WebM. Perfect dimensions for
+                            any platform - Stories, Reels, Shorts, or feed posts.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-danger bg-opacity-10 text-danger rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-check-circle fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Commercial License</h5>
+                        <p class="text-muted mb-0">
+                            Use your animations commercially. Perfect for sponsored
+                            content, merchandise, and brand partnerships.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-secondary bg-opacity-10 text-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-cloud-arrow-up fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">No Software to Install</h5>
+                        <p class="text-muted mb-0">
+                            Everything runs in your browser. Create on any device -
+                            desktop, laptop, or tablet.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Use Cases -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Content Ideas for Creators</h2>
+            <p class="text-muted">Ways to use animated drawings in your content</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-play-btn text-danger me-2"></i>YouTube</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Animated thumbnails (for YouTube Shorts)</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Channel mascot animations</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Explainer video characters</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Reaction animations</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Intro/outro sequences</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-tiktok text-dark me-2"></i>TikTok & Reels</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Dancing character trends</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Art process reveals with animation</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Animated memes and reactions</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Character storytelling</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Original animated content series</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-instagram text-danger me-2"></i>Instagram</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Animated Stories</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Carousel posts with movement</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Profile highlight covers</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Behind-the-scenes art animations</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Interactive polls with animated characters</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-twitch text-primary me-2"></i>Streaming & Live</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Stream alerts and notifications</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Animated overlays</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Custom emotes (animated)</li>
+                            <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Starting soon screens</li>
+                            <li><i class="bi bi-check text-success me-2"></i>Channel point redemption animations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Workflow Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Your Workflow, Supercharged</h2>
+            <p class="text-muted">From idea to animated content in 4 simple steps</p>
+        </div>
+
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <div class="d-flex mb-4">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">1</div>
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="fw-bold mb-1">Draw Your Character</h5>
+                        <p class="text-muted mb-0">Sketch on paper, draw digitally, or use your existing artwork</p>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-4">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">2</div>
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="fw-bold mb-1">Upload to {{ g.project_name }}</h5>
+                        <p class="text-muted mb-0">Our AI automatically detects the pose and removes the background</p>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-4">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">3</div>
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="fw-bold mb-1">Choose a Motion</h5>
+                        <p class="text-muted mb-0">Pick from presets (walk, wave, dance) or describe the motion you want</p>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">4</div>
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="fw-bold mb-1">Export & Share</h5>
+                        <p class="text-muted mb-0">Download in your preferred format and post to any platform</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 text-center">
+                <div class="bg-light rounded-4 p-4">
+                    <img src="{% static 'images/workflow-demo.svg' %}" alt="Animation Workflow" class="img-fluid" style="max-height: 350px;" onerror="this.parentElement.innerHTML='<div class=\'text-muted py-5\'><i class=\'bi bi-film fs-1 d-block mb-3\'></i>Animation Demo</div>'">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Preview -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Ready to Animate Your Content?</h2>
+        <p class="lead mb-4 opacity-75">
+            Start free with 10 credits. No credit card required.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'register' %}" class="btn btn-light btn-lg">Start Free Trial</a>
+            <a href="{% url 'pricing' %}" class="btn btn-outline-light btn-lg">View Pricing</a>
+        </div>
+        <p class="mt-4 mb-0 small opacity-75">
+            Creator plan starting at $29/month with 200 credits
+        </p>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="creatorFaq">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                Can I use the animations commercially?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#creatorFaq">
+                            <div class="accordion-body">
+                                Yes! All paid plans include a commercial license. You can use your animations in
+                                monetized YouTube videos, sponsored content, merchandise, and more. The free tier
+                                is for personal use only.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                What formats can I export?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#creatorFaq">
+                            <div class="accordion-body">
+                                You can export as GIF (perfect for social media), MP4 (best quality/size ratio),
+                                or WebM (great for web). We support resolutions up to 4K on Pro and Business plans.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Do I need animation experience?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#creatorFaq">
+                            <div class="accordion-body">
+                                Not at all! Our AI handles all the technical animation work. You just upload your
+                                drawing, choose a motion preset, and we do the rest. It's designed to be as simple
+                                as posting to social media.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                How long does it take to create an animation?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#creatorFaq">
+                            <div class="accordion-body">
+                                Most animations are ready in under 2 minutes. Transform-based animations (using presets)
+                                are nearly instant. AI-generated motion takes a bit longer but produces more realistic
+                                results.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

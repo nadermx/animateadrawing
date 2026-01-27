@@ -1,121 +1,354 @@
 {% extends 'base.html' %}
 {% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">Simple, Transparent Pricing</h1>
+        <p class="lead mb-0">Choose the plan that fits your animation needs. No hidden fees.</p>
+    </div>
+</div>
+
 <div class="container py-5">
+    <!-- Billing Toggle -->
     <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold">{{ g.i18n.pricing|default:"Simple, Transparent Pricing" }}</h1>
-        <p class="lead text-muted">Choose the plan that fits your animation needs</p>
+        <div class="btn-group" role="group" aria-label="Billing period">
+            <input type="radio" class="btn-check" name="billing" id="billing-monthly" value="monthly" checked>
+            <label class="btn btn-outline-primary" for="billing-monthly">Monthly</label>
+            <input type="radio" class="btn-check" name="billing" id="billing-yearly" value="yearly">
+            <label class="btn btn-outline-primary" for="billing-yearly">Yearly <span class="badge bg-success ms-1">Save 20%</span></label>
+        </div>
     </div>
 
+    <!-- Pricing Cards -->
     <form class="pricing-form" action="{% url 'checkout' %}" method="get">
-        <div class="row g-4 justify-content-center mb-5">
+        <div class="row g-4 justify-content-center mb-5" id="monthly-plans">
             {% for plan in plans %}
-            <div class="col-md-4">
-                <div class="card pricing-card h-100 {% if plan.is_featured %}featured{% endif %}">
+            {% if not plan.is_api_plan and not plan.yearly_subscription %}
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 {% if plan.is_featured %}border-primary shadow-lg{% else %}border-0 shadow{% endif %}">
                     {% if plan.is_featured %}
-                    <div class="card-header bg-dark text-white text-center py-2">
+                    <div class="card-header bg-primary text-white text-center py-2">
                         <small class="fw-bold text-uppercase">Most Popular</small>
                     </div>
                     {% endif %}
-                    <div class="card-body text-center p-4">
-                        <h3 class="card-title">{{ plan.name }}</h3>
-                        <div class="display-5 fw-bold my-3">
-                            ${{ plan.price }}
-                            <small class="fs-6 text-muted fw-normal">
-                                {% if plan.is_subscription %}/month{% endif %}
-                            </small>
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-center">{{ plan.name }}</h3>
+                        <p class="text-muted text-center small">{{ plan.description }}</p>
+
+                        <div class="text-center my-4">
+                            <span class="display-4 fw-bold">${{ plan.price }}</span>
+                            {% if plan.is_subscription %}
+                            <span class="text-muted">/month</span>
+                            {% endif %}
                         </div>
 
-                        <p class="text-muted mb-4">
-                            {% if plan.is_subscription %}
-                            {{ plan.credits }} credits per month
-                            {% else %}
-                            {{ plan.credits }} credits (one-time)
-                            {% endif %}
-                        </p>
-
-                        <div class="form-check d-flex justify-content-center mb-4">
-                            <input class="form-check-input me-2" type="radio" name="plan"
-                                   id="{{ plan.code_name }}" value="{{ plan.code_name }}"
-                                   {% if current_plan == plan.code_name %}checked{% elif forloop.first and not current_plan %}checked{% endif %}>
-                            <label class="form-check-label" for="{{ plan.code_name }}">
-                                Select Plan
-                            </label>
+                        <div class="text-center mb-4">
+                            <span class="badge bg-light text-dark fs-6">
+                                {{ plan.credits }} credits{% if plan.is_subscription %}/month{% endif %}
+                            </span>
                         </div>
 
-                        <ul class="list-unstyled text-start mb-4">
-                            <li class="mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
+                        <ul class="list-unstyled mb-4">
+                            {% for feature in plan.features %}
+                            <li class="mb-2 d-flex align-items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-success me-2 mt-1 flex-shrink-0" viewBox="0 0 16 16">
                                     <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
                                 </svg>
-                                AI pose detection
+                                <span class="small">{{ feature }}</span>
                             </li>
-                            <li class="mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
-                                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                                </svg>
-                                Motion preset library
-                            </li>
-                            <li class="mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
-                                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                                </svg>
-                                MP4, GIF, WebM exports
-                            </li>
-                            {% if plan.is_subscription %}
-                            <li class="mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
-                                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                                </svg>
-                                Commercial use rights
-                            </li>
-                            <li class="mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
-                                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                                </svg>
-                                Priority rendering
-                            </li>
-                            {% endif %}
+                            {% endfor %}
                         </ul>
+
+                        <div class="d-grid">
+                            {% if plan.price == 0 %}
+                            <a href="{% url 'register' %}" class="btn btn-outline-primary">Get Started Free</a>
+                            {% else %}
+                            <button type="submit" name="plan" value="{{ plan.code_name }}" class="btn {% if plan.is_featured %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                                Choose {{ plan.name }}
+                            </button>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
+            {% endif %}
             {% endfor %}
         </div>
 
-        <div class="text-center mb-5">
-            <button type="submit" class="btn btn-primary btn-lg px-5">
-                {{ g.i18n.purchase|default:"Continue to Checkout" }}
-            </button>
-        </div>
-    </form>
+        <!-- Yearly Plans (Hidden by default) -->
+        <div class="row g-4 justify-content-center mb-5 d-none" id="yearly-plans">
+            {% for plan in plans %}
+            {% if not plan.is_api_plan and plan.yearly_subscription %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-center">{{ plan.name }}</h3>
+                        <p class="text-muted text-center small">{{ plan.description }}</p>
 
-    <div class="row justify-content-center mb-5">
-        <div class="col-md-10">
-            <div class="card bg-light border-0">
-                <div class="card-body p-4">
-                    <div class="row text-center">
-                        <div class="col-md-4 mb-3 mb-md-0">
-                            <h5>{{ g.i18n.risk_free|default:"Risk Free" }}</h5>
-                            <p class="text-muted mb-0">{{ g.i18n.money_back|default:"7-day money-back guarantee if you haven't used credits" }}</p>
+                        <div class="text-center my-4">
+                            <span class="display-4 fw-bold">${{ plan.price }}</span>
+                            <span class="text-muted">/year</span>
+                            {% if plan.label_price %}
+                            <div class="small">
+                                <span class="text-decoration-line-through text-muted">${{ plan.label_price }}</span>
+                                <span class="text-success fw-bold">Save 20%</span>
+                            </div>
+                            {% endif %}
                         </div>
-                        <div class="col-md-4 mb-3 mb-md-0">
-                            <h5>{{ g.i18n.flexible|default:"Flexible" }}</h5>
-                            <p class="text-muted mb-0">{{ g.i18n.change_plan_whenever|default:"Cancel or change your plan anytime" }}</p>
-                        </div>
-                        <div class="col-md-4">
-                            <h5>Secure Payment</h5>
-                            <p class="text-muted mb-0">Stripe, PayPal, and Square accepted</p>
+
+                        <ul class="list-unstyled mb-4">
+                            {% for feature in plan.features %}
+                            <li class="mb-2 d-flex align-items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-success me-2 mt-1 flex-shrink-0" viewBox="0 0 16 16">
+                                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                                <span class="small">{{ feature }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+
+                        <div class="d-grid">
+                            <button type="submit" name="plan" value="{{ plan.code_name }}" class="btn btn-outline-primary">
+                                Choose {{ plan.name }}
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </form>
+
+    <!-- Credit Usage Explainer -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10">
+            <div class="card bg-light border-0">
+                <div class="card-body p-4">
+                    <h4 class="text-center mb-4">How Credits Work</h4>
+                    <div class="row g-4">
+                        <div class="col-md-3 col-6 text-center">
+                            <div class="display-6 mb-2">1</div>
+                            <div class="fw-bold">Transform Animation</div>
+                            <small class="text-muted">Fast, preserves artwork</small>
+                        </div>
+                        <div class="col-md-3 col-6 text-center">
+                            <div class="display-6 mb-2">5</div>
+                            <div class="fw-bold">AI Video Animation</div>
+                            <small class="text-muted">Realistic motion</small>
+                        </div>
+                        <div class="col-md-3 col-6 text-center">
+                            <div class="display-6 mb-2">2</div>
+                            <div class="fw-bold">HD Export</div>
+                            <small class="text-muted">1080p MP4/GIF</small>
+                        </div>
+                        <div class="col-md-3 col-6 text-center">
+                            <div class="display-6 mb-2">5</div>
+                            <div class="fw-bold">4K Export</div>
+                            <small class="text-muted">Ultra HD quality</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trust Badges -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10">
+            <div class="row text-center g-4">
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-primary mb-2" viewBox="0 0 16 16">
+                            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM4.5 7.5a.5.5 0 0 1 0-1h5.793L8.146 4.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 7.5H4.5z"/>
+                        </svg>
+                        <h5>7-Day Money Back</h5>
+                        <p class="text-muted small mb-0">Full refund if unused within 7 days</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-primary mb-2" viewBox="0 0 16 16">
+                            <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
+                        </svg>
+                        <h5>Secure Payments</h5>
+                        <p class="text-muted small mb-0">Stripe, PayPal, Square accepted</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="text-primary mb-2" viewBox="0 0 16 16">
+                            <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0v-1zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0V7zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0V9z"/>
+                            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                        </svg>
+                        <h5>Cancel Anytime</h5>
+                        <p class="text-muted small mb-0">No contracts, no commitments</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Pricing Section -->
+    <div class="py-5 border-top">
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold">API Pricing</h2>
+            <p class="text-muted">Build animations into your app with our REST API</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            {% for plan in plans %}
+            {% if plan.is_api_plan %}
+            <div class="col-lg-3 col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4 text-center">
+                        <h4>{{ plan.credits|intcomma }} Credits</h4>
+                        <div class="display-5 fw-bold my-3">${{ plan.price }}</div>
+                        <p class="text-muted small mb-3">
+                            ${{ plan.price|divisibleby:plan.credits }}/credit
+                        </p>
+                        <ul class="list-unstyled small text-start mb-4">
+                            {% for feature in plan.features %}
+                            <li class="mb-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="text-success me-1" viewBox="0 0 16 16">
+                                    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                                {{ feature }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <a href="{% url 'checkout' %}?plan={{ plan.code_name }}" class="btn btn-outline-primary btn-sm w-100">
+                            Buy Credits
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="/api/docs/" class="btn btn-link">View API Documentation</a>
+        </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="py-5 border-top">
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold">Compare Plans</h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Feature</th>
+                        <th class="text-center">Free</th>
+                        <th class="text-center">Starter</th>
+                        <th class="text-center bg-primary bg-opacity-10">Creator</th>
+                        <th class="text-center">Pro</th>
+                        <th class="text-center">Business</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Monthly Credits</td>
+                        <td class="text-center">10</td>
+                        <td class="text-center">50</td>
+                        <td class="text-center bg-primary bg-opacity-10 fw-bold">200</td>
+                        <td class="text-center">1,000</td>
+                        <td class="text-center">5,000</td>
+                    </tr>
+                    <tr>
+                        <td>Monthly Exports</td>
+                        <td class="text-center">3</td>
+                        <td class="text-center">10</td>
+                        <td class="text-center bg-primary bg-opacity-10">Unlimited</td>
+                        <td class="text-center">Unlimited</td>
+                        <td class="text-center">Unlimited</td>
+                    </tr>
+                    <tr>
+                        <td>Max Resolution</td>
+                        <td class="text-center">720p</td>
+                        <td class="text-center">1080p</td>
+                        <td class="text-center bg-primary bg-opacity-10">1080p</td>
+                        <td class="text-center">4K</td>
+                        <td class="text-center">4K</td>
+                    </tr>
+                    <tr>
+                        <td>Transform Animations</td>
+                        <td class="text-center text-success">&#10003;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                        <td class="text-center bg-primary bg-opacity-10 text-success">&#10003;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                    </tr>
+                    <tr>
+                        <td>AI Video Animations</td>
+                        <td class="text-center text-muted">&#8212;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                        <td class="text-center bg-primary bg-opacity-10 text-success">&#10003;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                    </tr>
+                    <tr>
+                        <td>Priority Rendering</td>
+                        <td class="text-center text-muted">&#8212;</td>
+                        <td class="text-center text-muted">&#8212;</td>
+                        <td class="text-center bg-primary bg-opacity-10 text-success">&#10003;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                    </tr>
+                    <tr>
+                        <td>Commercial License</td>
+                        <td class="text-center text-muted">&#8212;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                        <td class="text-center bg-primary bg-opacity-10 text-success">&#10003;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                    </tr>
+                    <tr>
+                        <td>API Access</td>
+                        <td class="text-center text-muted">&#8212;</td>
+                        <td class="text-center text-muted">&#8212;</td>
+                        <td class="text-center bg-primary bg-opacity-10 text-muted">&#8212;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                        <td class="text-center text-success">&#10003;</td>
+                    </tr>
+                    <tr>
+                        <td>Team Members</td>
+                        <td class="text-center">1</td>
+                        <td class="text-center">1</td>
+                        <td class="text-center bg-primary bg-opacity-10">1</td>
+                        <td class="text-center">1</td>
+                        <td class="text-center">5</td>
+                    </tr>
+                    <tr>
+                        <td>Support</td>
+                        <td class="text-center">Community</td>
+                        <td class="text-center">Email</td>
+                        <td class="text-center bg-primary bg-opacity-10">Email</td>
+                        <td class="text-center">Priority</td>
+                        <td class="text-center">Dedicated</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="text-center"><a href="{% url 'register' %}" class="btn btn-outline-secondary btn-sm">Start Free</a></td>
+                        <td class="text-center"><a href="{% url 'checkout' %}?plan=starter" class="btn btn-outline-primary btn-sm">$9/mo</a></td>
+                        <td class="text-center bg-primary bg-opacity-10"><a href="{% url 'checkout' %}?plan=creator" class="btn btn-primary btn-sm">$29/mo</a></td>
+                        <td class="text-center"><a href="{% url 'checkout' %}?plan=pro" class="btn btn-outline-primary btn-sm">$79/mo</a></td>
+                        <td class="text-center"><a href="{% url 'checkout' %}?plan=business" class="btn btn-outline-primary btn-sm">$199/mo</a></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <!-- FAQ Section -->
-    <div class="faq-section py-5">
+    <div class="py-5 border-top">
         <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold">Pricing FAQ</h2>
+            <h2 class="display-6 fw-bold">Pricing FAQ</h2>
         </div>
 
         <div class="row justify-content-center">
@@ -129,7 +362,7 @@
                         </h3>
                         <div id="pfaq1" class="accordion-collapse collapse show" data-bs-parent="#pricingFaq">
                             <div class="accordion-body">
-                                We accept all major credit cards through Stripe, PayPal, and Square. This includes Visa, Mastercard, American Express, and Discover.
+                                We accept all major credit cards (Visa, Mastercard, American Express, Discover) through Stripe, as well as PayPal and Square. All payments are processed securely.
                             </div>
                         </div>
                     </div>
@@ -137,12 +370,12 @@
                     <div class="accordion-item">
                         <h3 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq2">
-                                Can I cancel anytime?
+                                How do credits work?
                             </button>
                         </h3>
                         <div id="pfaq2" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
                             <div class="accordion-body">
-                                Yes! You can cancel your subscription at any time from your account page. You'll continue to have access until the end of your billing period.
+                                Credits are used for different actions: <strong>1 credit</strong> for transform animations (fast, preserves artwork), <strong>5 credits</strong> for AI video animations (more realistic), <strong>2 credits</strong> for HD exports, and <strong>5 credits</strong> for 4K exports. Subscription credits refresh monthly.
                             </div>
                         </div>
                     </div>
@@ -150,12 +383,12 @@
                     <div class="accordion-item">
                         <h3 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq3">
-                                Is there a free trial?
+                                Can I cancel anytime?
                             </button>
                         </h3>
                         <div id="pfaq3" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
                             <div class="accordion-body">
-                                Free accounts include limited credits to try our service. You can create animations and export them to see how the platform works before upgrading.
+                                Yes! You can cancel your subscription at any time from your account settings. You'll continue to have access until the end of your billing period. No questions asked.
                             </div>
                         </div>
                     </div>
@@ -163,12 +396,12 @@
                     <div class="accordion-item">
                         <h3 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq4">
-                                What happens when I run out of credits?
+                                Do unused credits roll over?
                             </button>
                         </h3>
                         <div id="pfaq4" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
                             <div class="accordion-body">
-                                If you have a subscription, your credits refresh at the start of each billing cycle. You can also upgrade to a higher plan for more credits. One-time purchases can be made anytime.
+                                Subscription credits refresh monthly and don't roll over. However, one-time purchased credits (API packs) never expire and remain in your account.
                             </div>
                         </div>
                     </div>
@@ -176,12 +409,12 @@
                     <div class="accordion-item">
                         <h3 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq5">
-                                Do credits expire?
+                                Is there a refund policy?
                             </button>
                         </h3>
                         <div id="pfaq5" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
                             <div class="accordion-body">
-                                Subscription credits refresh monthly and don't roll over. One-time purchase credits remain available as long as your account is active.
+                                We offer a 7-day money-back guarantee. If you're not satisfied and haven't used your credits, contact us within 7 days of purchase for a full refund.
                             </div>
                         </div>
                     </div>
@@ -189,12 +422,12 @@
                     <div class="accordion-item">
                         <h3 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq6">
-                                Can I upgrade or downgrade plans?
+                                What's the difference between Transform and AI animations?
                             </button>
                         </h3>
                         <div id="pfaq6" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
                             <div class="accordion-body">
-                                Yes, you can change your plan anytime. Upgrades take effect immediately with prorated billing. Downgrades take effect at the next billing cycle.
+                                <strong>Transform animations</strong> apply motion (rotation, translation, scale) to your original artwork, preserving it perfectly. They're fast and cost only 1 credit. <strong>AI video animations</strong> use Stable Video Diffusion to generate more realistic, natural-looking motion but take longer to process and cost 5 credits.
                             </div>
                         </div>
                     </div>
@@ -202,12 +435,12 @@
                     <div class="accordion-item">
                         <h3 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq7">
-                                Is there a refund policy?
+                                Do you offer team or enterprise plans?
                             </button>
                         </h3>
                         <div id="pfaq7" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
                             <div class="accordion-body">
-                                We offer a 7-day money-back guarantee if you haven't used any credits. Contact support within 7 days of purchase for a full refund.
+                                Yes! Our Business plan includes 5 team seats. For larger teams or custom enterprise needs, <a href="{% url 'contact' %}">contact us</a> for volume pricing, custom integrations, and dedicated support.
                             </div>
                         </div>
                     </div>
@@ -215,64 +448,12 @@
                     <div class="accordion-item">
                         <h3 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq8">
-                                Do you offer team or enterprise plans?
+                                Are there student or educator discounts?
                             </button>
                         </h3>
                         <div id="pfaq8" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
                             <div class="accordion-body">
-                                Contact us for team and enterprise pricing with custom credit allocations, priority support, and volume discounts.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq9">
-                                How are credits calculated?
-                            </button>
-                        </h3>
-                        <div id="pfaq9" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
-                            <div class="accordion-body">
-                                AI pose detection uses 1 credit. Motion generation uses 1-3 credits depending on complexity. Exports use credits based on duration and resolution. Check your account for current credit costs.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq10">
-                                Can I buy more credits without upgrading?
-                            </button>
-                        </h3>
-                        <div id="pfaq10" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
-                            <div class="accordion-body">
-                                Yes! You can purchase one-time credit packs in addition to your subscription. These credits don't expire and are used after your monthly credits.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq11">
-                                Are there student or nonprofit discounts?
-                            </button>
-                        </h3>
-                        <div id="pfaq11" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
-                            <div class="accordion-body">
-                                Contact us with proof of student status or nonprofit registration for special pricing. We're happy to support education and charitable causes.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h3 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pfaq12">
-                                What's included in each plan?
-                            </button>
-                        </h3>
-                        <div id="pfaq12" class="accordion-collapse collapse" data-bs-parent="#pricingFaq">
-                            <div class="accordion-body">
-                                All plans include AI pose detection, motion presets, and video exports. Subscription plans add commercial use rights, priority rendering, and access to new features first.
+                                Yes! We offer 50% off for students and educators. <a href="{% url 'contact' %}">Contact us</a> with your .edu email or proof of enrollment for your discount code.
                             </div>
                         </div>
                     </div>
@@ -281,4 +462,44 @@
         </div>
     </div>
 </div>
+
+<!-- CTA Section -->
+<div class="section-dark py-5" style="background-color: #111827;">
+    <div class="container text-center text-white">
+        <h2 class="display-5 fw-bold mb-4">Ready to Bring Your Drawings to Life?</h2>
+        <p class="lead mb-4">Start with 10 free credits. No credit card required.</p>
+        <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-5">Get Started Free</a>
+    </div>
+</div>
+
+<style>
+.pricing-card.featured {
+    transform: scale(1.05);
+    z-index: 1;
+}
+@media (max-width: 768px) {
+    .pricing-card.featured {
+        transform: none;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const monthlyBtn = document.getElementById('billing-monthly');
+    const yearlyBtn = document.getElementById('billing-yearly');
+    const monthlyPlans = document.getElementById('monthly-plans');
+    const yearlyPlans = document.getElementById('yearly-plans');
+
+    monthlyBtn.addEventListener('change', function() {
+        monthlyPlans.classList.remove('d-none');
+        yearlyPlans.classList.add('d-none');
+    });
+
+    yearlyBtn.addEventListener('change', function() {
+        monthlyPlans.classList.add('d-none');
+        yearlyPlans.classList.remove('d-none');
+    });
+});
+</script>
 {% endblock %}

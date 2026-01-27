@@ -1,0 +1,385 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Animation Tool for Game Developers | {{ g.project_name }}{% endblock %}
+
+{% block meta_description %}Create game-ready character animations from concept art. Perfect for indie game developers, game jams, and prototyping. Export sprite sheets and animated assets.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <span class="badge bg-danger mb-3">For Game Developers</span>
+                <h1 class="display-4 fw-bold text-white mb-4">From Concept Art to Game-Ready Animation</h1>
+                <p class="lead text-white-50 mb-4">
+                    Transform your character sketches into animated sprites in minutes.
+                    Perfect for prototyping, game jams, and indie projects.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-danger btn-lg">Start Creating</a>
+                    <a href="{% url 'feature-motion-presets' %}" class="btn btn-outline-light btn-lg">View Motion Presets</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                <div class="bg-white bg-opacity-10 rounded-4 p-4">
+                    <i class="bi bi-controller display-1 text-white mb-3 d-block"></i>
+                    <p class="text-white-50 mb-0">Game-Ready Animation Assets</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Game Engines -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="row align-items-center justify-content-center text-center">
+            <div class="col-auto">
+                <span class="text-muted small">Export for</span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-dark fs-6">Unity</span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-secondary fs-6">Unreal Engine</span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-success fs-6">Godot</span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-info fs-6">GameMaker</span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-warning fs-6">Phaser</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Why Game Developers Use {{ g.project_name }}</h2>
+            <p class="text-muted">Speed up your animation workflow without sacrificing quality</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-danger bg-opacity-10 text-danger rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-lightning-charge fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Rapid Prototyping</h5>
+                        <p class="text-muted mb-0">
+                            Test game mechanics with animated characters in hours, not weeks.
+                            Iterate faster on gameplay before committing to final art.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-warning bg-opacity-10 text-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-trophy fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Game Jam Ready</h5>
+                        <p class="text-muted mb-0">
+                            Create polished animations under time pressure.
+                            Perfect for 48-72 hour game jams where every minute counts.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-brush fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Preserve Art Style</h5>
+                        <p class="text-muted mb-0">
+                            Your concept art becomes the final asset.
+                            No need to redraw or recreate in a different style.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-grid-3x3 fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Sprite Sheet Export</h5>
+                        <p class="text-muted mb-0">
+                            Export animations as sprite sheets ready for any game engine.
+                            PNG sequences with transparent backgrounds.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-info bg-opacity-10 text-info rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-person-walking fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Game-Ready Motions</h5>
+                        <p class="text-muted mb-0">
+                            Walk cycles, run, jump, attack, idle - all the standard
+                            game animations available as presets.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-secondary bg-opacity-10 text-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                            <i class="bi bi-code-slash fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">API Access</h5>
+                        <p class="text-muted mb-0">
+                            Integrate animation generation into your pipeline.
+                            Batch process multiple characters programmatically.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Motion Presets for Games -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Game Animation Presets</h2>
+            <p class="text-muted">Common game animations ready to use</p>
+        </div>
+
+        <div class="row g-3 justify-content-center">
+            <div class="col-auto">
+                <span class="badge bg-dark fs-6 p-3">
+                    <i class="bi bi-person-walking me-2"></i>Walk Cycle
+                </span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-dark fs-6 p-3">
+                    <i class="bi bi-person-arms-up me-2"></i>Run Cycle
+                </span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-dark fs-6 p-3">
+                    <i class="bi bi-arrow-up-circle me-2"></i>Jump
+                </span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-dark fs-6 p-3">
+                    <i class="bi bi-arrow-down-circle me-2"></i>Fall
+                </span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-dark fs-6 p-3">
+                    <i class="bi bi-bullseye me-2"></i>Attack
+                </span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-dark fs-6 p-3">
+                    <i class="bi bi-shield me-2"></i>Block
+                </span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-dark fs-6 p-3">
+                    <i class="bi bi-hourglass-split me-2"></i>Idle
+                </span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-dark fs-6 p-3">
+                    <i class="bi bi-heart-pulse me-2"></i>Hit/Hurt
+                </span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-dark fs-6 p-3">
+                    <i class="bi bi-emoji-dizzy me-2"></i>Death
+                </span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-dark fs-6 p-3">
+                    <i class="bi bi-trophy me-2"></i>Victory
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Workflow -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Game Dev Workflow</h2>
+            <p class="text-muted">From sketch to sprite sheet in minutes</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-3 text-center">
+                <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                    <span class="h4 text-danger mb-0">1</span>
+                </div>
+                <h5 class="fw-bold">Sketch Character</h5>
+                <p class="text-muted small">Draw your character concept art in any style</p>
+            </div>
+
+            <div class="col-md-3 text-center">
+                <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                    <span class="h4 text-danger mb-0">2</span>
+                </div>
+                <h5 class="fw-bold">Upload & Detect</h5>
+                <p class="text-muted small">AI automatically detects pose and removes background</p>
+            </div>
+
+            <div class="col-md-3 text-center">
+                <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                    <span class="h4 text-danger mb-0">3</span>
+                </div>
+                <h5 class="fw-bold">Apply Motion</h5>
+                <p class="text-muted small">Select walk, run, attack, or custom animation</p>
+            </div>
+
+            <div class="col-md-3 text-center">
+                <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                    <span class="h4 text-danger mb-0">4</span>
+                </div>
+                <h5 class="fw-bold">Export Sprites</h5>
+                <p class="text-muted small">Download sprite sheet or PNG sequence</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Use Cases -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Perfect For</h2>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-person-fill text-primary me-2"></i>Solo Indie Developers</h5>
+                        <p class="text-muted mb-0">
+                            Don't have an animator on your team? Create professional-looking
+                            character animations yourself without learning complex animation software.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-alarm text-warning me-2"></i>Game Jam Participants</h5>
+                        <p class="text-muted mb-0">
+                            When you have 48 hours to build a game, spend your time on gameplay,
+                            not frame-by-frame animation. Get polished results fast.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-lightbulb text-success me-2"></i>Prototype Testers</h5>
+                        <p class="text-muted mb-0">
+                            Test gameplay ideas with animated characters before committing to
+                            final art production. Validate concepts quickly and cheaply.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-phone text-info me-2"></i>Mobile Game Studios</h5>
+                        <p class="text-muted mb-0">
+                            Create consistent character animations for your mobile games.
+                            Export optimized sprites for different screen sizes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- API Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <span class="badge bg-secondary mb-3">Developer API</span>
+                <h2 class="fw-bold">Integrate Into Your Pipeline</h2>
+                <p class="text-muted">
+                    Use our API to automate animation generation. Perfect for batch processing
+                    multiple characters or integrating into your asset pipeline.
+                </p>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>RESTful API with JSON responses</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Batch character processing</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Webhook notifications</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Multiple export format options</li>
+                </ul>
+                <a href="{% url 'api-docs' %}" class="btn btn-outline-primary">View API Documentation</a>
+            </div>
+            <div class="col-lg-6 mt-4 mt-lg-0">
+                <div class="bg-dark text-light rounded-3 p-4">
+<pre class="mb-0"><code class="text-light">// Example API call
+const response = await fetch(
+  'https://animateadrawing.com/api/animate/',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer YOUR_API_KEY',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      image_url: 'https://...',
+      motion_preset: 'walk_cycle',
+      export_format: 'sprite_sheet'
+    })
+  }
+);</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5 bg-danger text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Ready to Speed Up Your Game Dev?</h2>
+        <p class="lead mb-4 opacity-75">
+            Start with 10 free credits. Create your first game animation today.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'register' %}" class="btn btn-light btn-lg">Start Free Trial</a>
+            <a href="{% url 'pricing' %}" class="btn btn-outline-light btn-lg">View API Pricing</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,534 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}API Documentation | {{ g.project_name }}{% endblock %}
+
+{% block meta_description %}Integrate animation generation into your applications with our REST API. Automate character animation, batch processing, and more.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <span class="badge bg-dark mb-3">Developer API</span>
+                <h1 class="display-4 fw-bold text-white mb-4">Animation API</h1>
+                <p class="lead text-white-50 mb-4">
+                    Integrate AI-powered character animation into your applications.
+                    RESTful API with simple JSON responses.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-light btn-lg">Get API Key</a>
+                    <a href="#quickstart" class="btn btn-outline-light btn-lg">Quick Start</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                <div class="bg-dark rounded-4 p-4 text-start">
+<pre class="text-light mb-0"><code>curl -X POST \
+  https://animateadrawing.com/api/v1/animate/ \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "image=@character.png" \
+  -F "motion_preset=walk"</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Stats -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-3">
+                <h4 class="fw-bold text-primary mb-1">REST</h4>
+                <p class="text-muted mb-0 small">Simple JSON API</p>
+            </div>
+            <div class="col-md-3">
+                <h4 class="fw-bold text-success mb-1">99.9%</h4>
+                <p class="text-muted mb-0 small">Uptime SLA</p>
+            </div>
+            <div class="col-md-3">
+                <h4 class="fw-bold text-warning mb-1">&lt;60s</h4>
+                <p class="text-muted mb-0 small">Avg. Response Time</p>
+            </div>
+            <div class="col-md-3">
+                <h4 class="fw-bold text-danger mb-1">Webhooks</h4>
+                <p class="text-muted mb-0 small">Async Notifications</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Start -->
+<section id="quickstart" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Quick Start Guide</h2>
+            <p class="text-muted">Get your first animation in 5 minutes</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-dark text-white">
+                        <i class="bi bi-1-circle me-2"></i>Get Your API Key
+                    </div>
+                    <div class="card-body">
+                        <ol class="mb-0">
+                            <li class="mb-2">Create an account or log in</li>
+                            <li class="mb-2">Go to Account Settings → API</li>
+                            <li class="mb-2">Generate a new API key</li>
+                            <li>Store it securely (it won't be shown again)</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-dark text-white">
+                        <i class="bi bi-2-circle me-2"></i>Make Your First Request
+                    </div>
+                    <div class="card-body">
+                        <p class="small text-muted mb-2">Using cURL:</p>
+                        <div class="bg-light rounded p-3">
+<pre class="mb-0 small"><code>curl -X POST \
+  https://animateadrawing.com/api/v1/animate/ \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "image=@character.png" \
+  -F "motion_preset=wave"</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Endpoints -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">API Endpoints</h2>
+            <p class="text-muted">Available endpoints for animation generation</p>
+        </div>
+
+        <!-- Animate Endpoint -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white d-flex align-items-center">
+                <span class="badge bg-success me-2">POST</span>
+                <code class="text-dark">/api/v1/animate/</code>
+                <span class="ms-auto badge bg-primary">Main Endpoint</span>
+            </div>
+            <div class="card-body">
+                <p>Create an animation from an uploaded image.</p>
+
+                <h6 class="fw-bold mt-4">Request Parameters</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>image</code></td>
+                                <td>file</td>
+                                <td><span class="badge bg-danger">Required</span></td>
+                                <td>Character image (PNG, JPG, WebP)</td>
+                            </tr>
+                            <tr>
+                                <td><code>motion_preset</code></td>
+                                <td>string</td>
+                                <td><span class="badge bg-danger">Required</span></td>
+                                <td>Motion preset name (e.g., "walk", "wave", "dance")</td>
+                            </tr>
+                            <tr>
+                                <td><code>animation_method</code></td>
+                                <td>string</td>
+                                <td><span class="badge bg-secondary">Optional</span></td>
+                                <td>"transform" (default) or "ai_video"</td>
+                            </tr>
+                            <tr>
+                                <td><code>export_format</code></td>
+                                <td>string</td>
+                                <td><span class="badge bg-secondary">Optional</span></td>
+                                <td>"gif" (default), "mp4", "webm", "png_sequence"</td>
+                            </tr>
+                            <tr>
+                                <td><code>resolution</code></td>
+                                <td>string</td>
+                                <td><span class="badge bg-secondary">Optional</span></td>
+                                <td>"720p" (default), "1080p", "4k"</td>
+                            </tr>
+                            <tr>
+                                <td><code>webhook_url</code></td>
+                                <td>string</td>
+                                <td><span class="badge bg-secondary">Optional</span></td>
+                                <td>URL to receive completion notification</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h6 class="fw-bold mt-4">Response</h6>
+                <div class="bg-dark text-light rounded p-3">
+<pre class="mb-0"><code>{
+  "success": true,
+  "job_id": "abc123",
+  "status": "processing",
+  "credits_used": 1,
+  "estimated_time": 30
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Endpoint -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white d-flex align-items-center">
+                <span class="badge bg-primary me-2">GET</span>
+                <code class="text-dark">/api/v1/jobs/{job_id}/</code>
+            </div>
+            <div class="card-body">
+                <p>Check the status of an animation job.</p>
+
+                <h6 class="fw-bold mt-4">Response (Processing)</h6>
+                <div class="bg-dark text-light rounded p-3 mb-3">
+<pre class="mb-0"><code>{
+  "job_id": "abc123",
+  "status": "processing",
+  "progress": 45,
+  "message": "Generating animation..."
+}</code></pre>
+                </div>
+
+                <h6 class="fw-bold">Response (Complete)</h6>
+                <div class="bg-dark text-light rounded p-3">
+<pre class="mb-0"><code>{
+  "job_id": "abc123",
+  "status": "complete",
+  "download_url": "https://animateadrawing.com/exports/abc123.gif",
+  "expires_at": "2024-01-15T12:00:00Z"
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Presets Endpoint -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white d-flex align-items-center">
+                <span class="badge bg-primary me-2">GET</span>
+                <code class="text-dark">/api/v1/presets/</code>
+            </div>
+            <div class="card-body">
+                <p>List all available motion presets.</p>
+
+                <h6 class="fw-bold mt-4">Response</h6>
+                <div class="bg-dark text-light rounded p-3">
+<pre class="mb-0"><code>{
+  "presets": [
+    {
+      "name": "walk",
+      "display_name": "Walk Cycle",
+      "category": "locomotion",
+      "animation_method": "transform",
+      "credit_cost": 1
+    },
+    {
+      "name": "dance",
+      "display_name": "Simple Dance",
+      "category": "dance",
+      "animation_method": "transform",
+      "credit_cost": 1
+    }
+    // ...
+  ]
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Credits Endpoint -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white d-flex align-items-center">
+                <span class="badge bg-primary me-2">GET</span>
+                <code class="text-dark">/api/v1/credits/</code>
+            </div>
+            <div class="card-body">
+                <p>Check your current credit balance.</p>
+
+                <h6 class="fw-bold mt-4">Response</h6>
+                <div class="bg-dark text-light rounded p-3">
+<pre class="mb-0"><code>{
+  "credits_remaining": 450,
+  "credits_used_this_month": 50,
+  "plan": "api-500"
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Code Examples -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Code Examples</h2>
+            <p class="text-muted">Sample code in popular languages</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Python -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-primary text-white">
+                        <i class="bi bi-filetype-py me-2"></i>Python
+                    </div>
+                    <div class="card-body">
+                        <div class="bg-dark text-light rounded p-3">
+<pre class="mb-0 small"><code>import requests
+
+API_KEY = "your_api_key"
+BASE_URL = "https://animateadrawing.com/api/v1"
+
+# Create animation
+with open("character.png", "rb") as f:
+    response = requests.post(
+        f"{BASE_URL}/animate/",
+        headers={"Authorization": f"Bearer {API_KEY}"},
+        files={"image": f},
+        data={
+            "motion_preset": "walk",
+            "export_format": "gif"
+        }
+    )
+
+job = response.json()
+print(f"Job ID: {job['job_id']}")</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JavaScript -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-warning text-dark">
+                        <i class="bi bi-filetype-js me-2"></i>JavaScript (Node.js)
+                    </div>
+                    <div class="card-body">
+                        <div class="bg-dark text-light rounded p-3">
+<pre class="mb-0 small"><code>const FormData = require('form-data');
+const fs = require('fs');
+const fetch = require('node-fetch');
+
+const API_KEY = 'your_api_key';
+
+const form = new FormData();
+form.append('image', fs.createReadStream('character.png'));
+form.append('motion_preset', 'wave');
+
+const response = await fetch(
+  'https://animateadrawing.com/api/v1/animate/',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${API_KEY}`
+    },
+    body: form
+  }
+);
+
+const job = await response.json();
+console.log(`Job ID: ${job.job_id}`);</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Webhooks -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-4">Webhook Notifications</h2>
+                <p class="text-muted">
+                    Instead of polling for job status, provide a webhook URL to receive
+                    notifications when your animation is complete.
+                </p>
+
+                <h6 class="fw-bold mt-4">Webhook Payload</h6>
+                <div class="bg-dark text-light rounded p-3">
+<pre class="mb-0"><code>{
+  "event": "job.complete",
+  "job_id": "abc123",
+  "status": "complete",
+  "download_url": "https://...",
+  "timestamp": "2024-01-15T12:00:00Z"
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mt-4 mt-lg-0">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3">Webhook Events</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <code class="bg-light px-2 py-1 rounded">job.complete</code>
+                                <span class="text-muted ms-2">Animation finished successfully</span>
+                            </li>
+                            <li class="mb-2">
+                                <code class="bg-light px-2 py-1 rounded">job.failed</code>
+                                <span class="text-muted ms-2">Animation failed</span>
+                            </li>
+                            <li>
+                                <code class="bg-light px-2 py-1 rounded">credits.low</code>
+                                <span class="text-muted ms-2">Credits below threshold</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Rate Limits -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Rate Limits</h2>
+            <p class="text-muted">API usage limits by plan</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Plan</th>
+                                <th class="text-center">Requests/min</th>
+                                <th class="text-center">Concurrent Jobs</th>
+                                <th class="text-center">Max File Size</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>API - 500 Credits</td>
+                                <td class="text-center">30</td>
+                                <td class="text-center">5</td>
+                                <td class="text-center">10 MB</td>
+                            </tr>
+                            <tr>
+                                <td>API - 2,000 Credits</td>
+                                <td class="text-center">60</td>
+                                <td class="text-center">10</td>
+                                <td class="text-center">20 MB</td>
+                            </tr>
+                            <tr>
+                                <td>API - 10,000 Credits</td>
+                                <td class="text-center">120</td>
+                                <td class="text-center">25</td>
+                                <td class="text-center">50 MB</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Error Codes -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Error Codes</h2>
+            <p class="text-muted">Common error responses and how to handle them</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Status</th>
+                                <th>Description</th>
+                                <th>Solution</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>400</code></td>
+                                <td>Bad Request</td>
+                                <td>Invalid parameters</td>
+                                <td>Check required fields and formats</td>
+                            </tr>
+                            <tr>
+                                <td><code>401</code></td>
+                                <td>Unauthorized</td>
+                                <td>Invalid or missing API key</td>
+                                <td>Verify your API key is correct</td>
+                            </tr>
+                            <tr>
+                                <td><code>402</code></td>
+                                <td>Payment Required</td>
+                                <td>Insufficient credits</td>
+                                <td>Purchase more API credits</td>
+                            </tr>
+                            <tr>
+                                <td><code>404</code></td>
+                                <td>Not Found</td>
+                                <td>Job or preset not found</td>
+                                <td>Verify the ID exists</td>
+                            </tr>
+                            <tr>
+                                <td><code>429</code></td>
+                                <td>Too Many Requests</td>
+                                <td>Rate limit exceeded</td>
+                                <td>Slow down requests or upgrade plan</td>
+                            </tr>
+                            <tr>
+                                <td><code>500</code></td>
+                                <td>Server Error</td>
+                                <td>Internal error</td>
+                                <td>Retry after a moment or contact support</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5 bg-dark text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Ready to Integrate?</h2>
+        <p class="lead mb-4 opacity-75">
+            Get your API key and start building with animation.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'register' %}" class="btn btn-light btn-lg">Get API Key</a>
+            <a href="{% url 'pricing' %}" class="btn btn-outline-light btn-lg">View API Pricing</a>
+        </div>
+        <p class="mt-4 mb-0 small opacity-75">
+            API plans start at $20 for 500 credits ($0.04/credit)
+        </p>
+    </div>
+</section>
+{% endblock %}

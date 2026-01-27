@@ -1,0 +1,425 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Export Formats - GIF, MP4, WebM, Sprite Sheets | {{ g.project_name }}{% endblock %}
+
+{% block meta_description %}Export your animations in multiple formats - GIF for social media, MP4 for video editing, WebM for web, and PNG sequences for game development.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <span class="badge bg-warning text-dark mb-3">Feature</span>
+                <h1 class="display-4 fw-bold text-white mb-4">Flexible Export Formats</h1>
+                <p class="lead text-white-50 mb-4">
+                    Export your animations in the perfect format for any use case -
+                    social media, video editing, web, or game development.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-warning btn-lg">Start Exporting</a>
+                    <a href="{% url 'pricing' %}" class="btn btn-outline-light btn-lg">View Plans</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                <div class="bg-white bg-opacity-10 rounded-4 p-4">
+                    <i class="bi bi-file-earmark-play display-1 text-white mb-3 d-block"></i>
+                    <p class="text-white-50 mb-0">GIF | MP4 | WebM | PNG Sequence</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Format Cards -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Available Export Formats</h2>
+            <p class="text-muted">Choose the right format for your needs</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- GIF -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <span class="h4 text-danger mb-0 fw-bold">GIF</span>
+                        </div>
+                        <h5 class="fw-bold">Animated GIF</h5>
+                        <p class="text-muted small">
+                            Perfect for social media, messaging apps, and anywhere you need
+                            a simple, looping animation.
+                        </p>
+                        <ul class="list-unstyled text-start small">
+                            <li><i class="bi bi-check text-success"></i> Auto-loops</li>
+                            <li><i class="bi bi-check text-success"></i> Universal support</li>
+                            <li><i class="bi bi-check text-success"></i> Easy to share</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 text-center pb-4">
+                        <span class="badge bg-danger">Most Popular</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MP4 -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <span class="h4 text-primary mb-0 fw-bold">MP4</span>
+                        </div>
+                        <h5 class="fw-bold">MP4 Video</h5>
+                        <p class="text-muted small">
+                            Best quality-to-size ratio. Ideal for video editing,
+                            presentations, and high-quality playback.
+                        </p>
+                        <ul class="list-unstyled text-start small">
+                            <li><i class="bi bi-check text-success"></i> Smallest file size</li>
+                            <li><i class="bi bi-check text-success"></i> Best quality</li>
+                            <li><i class="bi bi-check text-success"></i> H.264 codec</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 text-center pb-4">
+                        <span class="badge bg-primary">Best Quality</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WebM -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <span class="h4 text-success mb-0 fw-bold">WebM</span>
+                        </div>
+                        <h5 class="fw-bold">WebM Video</h5>
+                        <p class="text-muted small">
+                            Open format optimized for web. Supports transparency
+                            and efficient compression.
+                        </p>
+                        <ul class="list-unstyled text-start small">
+                            <li><i class="bi bi-check text-success"></i> Alpha transparency</li>
+                            <li><i class="bi bi-check text-success"></i> Web optimized</li>
+                            <li><i class="bi bi-check text-success"></i> VP9 codec</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 text-center pb-4">
+                        <span class="badge bg-success">Web Best</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PNG Sequence -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <span class="h4 text-warning mb-0 fw-bold">PNG</span>
+                        </div>
+                        <h5 class="fw-bold">PNG Sequence</h5>
+                        <p class="text-muted small">
+                            Individual frames for game engines, sprite sheets,
+                            and professional editing workflows.
+                        </p>
+                        <ul class="list-unstyled text-start small">
+                            <li><i class="bi bi-check text-success"></i> Lossless quality</li>
+                            <li><i class="bi bi-check text-success"></i> Transparency</li>
+                            <li><i class="bi bi-check text-success"></i> Frame control</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 text-center pb-4">
+                        <span class="badge bg-warning text-dark">Game Dev</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Resolution Options -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Resolution Options</h2>
+            <p class="text-muted">Export at the resolution you need</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center">
+                    <div class="card-body p-4">
+                        <h3 class="fw-bold text-muted mb-1">720p</h3>
+                        <p class="small text-muted mb-2">1280 x 720</p>
+                        <span class="badge bg-secondary">Free Plan</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center border-primary">
+                    <div class="card-body p-4">
+                        <h3 class="fw-bold text-primary mb-1">1080p</h3>
+                        <p class="small text-muted mb-2">1920 x 1080</p>
+                        <span class="badge bg-primary">Starter+</span>
+                        <p class="small text-muted mt-2 mb-0">Full HD</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center border-warning">
+                    <div class="card-body p-4">
+                        <h3 class="fw-bold text-warning mb-1">4K</h3>
+                        <p class="small text-muted mb-2">3840 x 2160</p>
+                        <span class="badge bg-warning text-dark">Pro+</span>
+                        <p class="small text-muted mt-2 mb-0">Ultra HD</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <p class="text-muted">
+                <i class="bi bi-info-circle me-1"></i>
+                Custom resolutions available via API
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Format Comparison -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Format Comparison</h2>
+            <p class="text-muted">Choose the right format for your use case</p>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Feature</th>
+                        <th class="text-center">GIF</th>
+                        <th class="text-center">MP4</th>
+                        <th class="text-center">WebM</th>
+                        <th class="text-center">PNG Seq</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>File Size</td>
+                        <td class="text-center"><span class="badge bg-warning text-dark">Large</span></td>
+                        <td class="text-center"><span class="badge bg-success">Small</span></td>
+                        <td class="text-center"><span class="badge bg-success">Small</span></td>
+                        <td class="text-center"><span class="badge bg-danger">Largest</span></td>
+                    </tr>
+                    <tr>
+                        <td>Quality</td>
+                        <td class="text-center"><span class="badge bg-warning text-dark">Good</span></td>
+                        <td class="text-center"><span class="badge bg-success">Best</span></td>
+                        <td class="text-center"><span class="badge bg-success">Best</span></td>
+                        <td class="text-center"><span class="badge bg-success">Lossless</span></td>
+                    </tr>
+                    <tr>
+                        <td>Transparency</td>
+                        <td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td>
+                        <td class="text-center"><i class="bi bi-x-circle text-muted"></i></td>
+                        <td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td>
+                        <td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Auto-loop</td>
+                        <td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td>
+                        <td class="text-center"><i class="bi bi-x-circle text-muted"></i></td>
+                        <td class="text-center"><i class="bi bi-x-circle text-muted"></i></td>
+                        <td class="text-center">N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Browser Support</td>
+                        <td class="text-center"><i class="bi bi-check-circle-fill text-success"></i> All</td>
+                        <td class="text-center"><i class="bi bi-check-circle-fill text-success"></i> All</td>
+                        <td class="text-center"><i class="bi bi-check-circle text-warning"></i> Most</td>
+                        <td class="text-center">N/A</td>
+                    </tr>
+                    <tr>
+                        <td>Best For</td>
+                        <td class="text-center"><small>Social Media</small></td>
+                        <td class="text-center"><small>Video Editing</small></td>
+                        <td class="text-center"><small>Web Projects</small></td>
+                        <td class="text-center"><small>Game Dev</small></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- Use Cases -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Best Format by Use Case</h2>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-instagram text-danger me-2"></i>Social Media</h5>
+                        <p class="text-muted mb-3">Instagram, Twitter, TikTok, Facebook</p>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <span class="badge bg-danger">GIF</span>
+                            <span class="badge bg-primary">MP4</span>
+                        </div>
+                        <p class="small text-muted mt-2 mb-0">
+                            GIF for posts, MP4 for Stories/Reels
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-camera-video text-primary me-2"></i>Video Editing</h5>
+                        <p class="text-muted mb-3">Premiere, Final Cut, DaVinci Resolve</p>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <span class="badge bg-primary">MP4</span>
+                            <span class="badge bg-warning text-dark">PNG Seq</span>
+                        </div>
+                        <p class="small text-muted mt-2 mb-0">
+                            MP4 for quick edits, PNG for compositing
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-globe text-success me-2"></i>Websites</h5>
+                        <p class="text-muted mb-3">Blogs, portfolios, landing pages</p>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <span class="badge bg-success">WebM</span>
+                            <span class="badge bg-danger">GIF</span>
+                        </div>
+                        <p class="small text-muted mt-2 mb-0">
+                            WebM for modern browsers, GIF for compatibility
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-controller text-warning me-2"></i>Game Development</h5>
+                        <p class="text-muted mb-3">Unity, Unreal, Godot, GameMaker</p>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <span class="badge bg-warning text-dark">PNG Seq</span>
+                        </div>
+                        <p class="small text-muted mt-2 mb-0">
+                            Import as sprite sheet or individual frames
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-chat-dots text-info me-2"></i>Messaging</h5>
+                        <p class="text-muted mb-3">Discord, Slack, iMessage, WhatsApp</p>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <span class="badge bg-danger">GIF</span>
+                        </div>
+                        <p class="small text-muted mt-2 mb-0">
+                            GIFs work everywhere and auto-play
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold"><i class="bi bi-easel text-secondary me-2"></i>Presentations</h5>
+                        <p class="text-muted mb-3">PowerPoint, Google Slides, Keynote</p>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <span class="badge bg-danger">GIF</span>
+                            <span class="badge bg-primary">MP4</span>
+                        </div>
+                        <p class="small text-muted mt-2 mb-0">
+                            GIF for simple loops, MP4 for longer animations
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Credit Costs -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Export Credit Costs</h2>
+            <p class="text-muted">Transparent pricing based on resolution</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Resolution</th>
+                                    <th class="text-center">Credit Cost</th>
+                                    <th class="text-end">Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>720p (HD)</td>
+                                    <td class="text-center"><span class="badge bg-success">Free</span></td>
+                                    <td class="text-end text-muted small">Included with animation</td>
+                                </tr>
+                                <tr>
+                                    <td>1080p (Full HD)</td>
+                                    <td class="text-center"><span class="badge bg-primary">2 credits</span></td>
+                                    <td class="text-end text-muted small">Starter plan and above</td>
+                                </tr>
+                                <tr>
+                                    <td>4K (Ultra HD)</td>
+                                    <td class="text-center"><span class="badge bg-warning text-dark">5 credits</span></td>
+                                    <td class="text-end text-muted small">Pro plan and above</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5 bg-warning">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Ready to Export?</h2>
+        <p class="lead mb-4 opacity-75">
+            Start free with 10 credits. Export your first animation today.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'register' %}" class="btn btn-dark btn-lg">Start Free Trial</a>
+            <a href="{% url 'pricing' %}" class="btn btn-outline-dark btn-lg">View Pricing</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
