@@ -36,62 +36,85 @@ def ensure_dirs():
 # ============================================================================
 
 def draw_stick_figure(draw, cx, cy, scale=1.0, rotation=0, arm_angle=0, leg_angle=0, color=LINE_COLOR):
-    """Draw a properly proportioned stick figure"""
-    # Apply rotation
+    """Draw a properly proportioned stick figure with natural walking motion
+
+    Proportions based on ~180px total height:
+    - Head: ~20px diameter
+    - Torso: ~40px (neck to hip)
+    - Legs: ~75px each
+    """
+    # Apply rotation around center point
     cos_r = math.cos(math.radians(rotation))
     sin_r = math.sin(math.radians(rotation))
 
     def rotate(x, y):
         dx, dy = x - cx, y - cy
-        nx = cx + (dx * cos_r - dy * sin_r) * scale
-        ny = cy + (dx * sin_r + dy * cos_r) * scale
+        nx = cx + (dx * cos_r - dy * sin_r)
+        ny = cy + (dx * sin_r + dy * cos_r)
         return nx, ny
 
-    # Body parts positions
-    head_y = cy - 50 * scale
-    neck_y = cy - 35 * scale
-    shoulder_y = cy - 30 * scale
-    hip_y = cy + 15 * scale
+    # Figure proportions (relative to cy as hip center)
+    # Total height ~170 pixels, centered on cy
+    head_center_y = cy - 70 * scale  # Head center
+    neck_y = cy - 55 * scale
+    shoulder_y = cy - 50 * scale
+    hip_y = cy - 5 * scale  # Hip joint
+    foot_y = cy + 70 * scale  # Ground level
 
-    # Head
-    hr = 15 * scale
-    hx, hy = rotate(cx, head_y)
-    draw.ellipse([hx - hr, hy - hr, hx + hr, hy + hr], fill=color)
+    line_width = max(3, int(4 * scale))
+    head_r = 15 * scale
 
-    # Neck to hip (body)
-    p1 = rotate(cx, neck_y)
-    p2 = rotate(cx, hip_y)
-    draw.line([p1, p2], fill=color, width=max(3, int(4 * scale)))
+    # HEAD
+    hx, hy = rotate(cx, head_center_y)
+    draw.ellipse([hx - head_r, hy - head_r, hx + head_r, hy + head_r], fill=color)
 
-    # Arms
+    # TORSO (neck to hip)
+    neck_pt = rotate(cx, neck_y)
+    hip_pt = rotate(cx, hip_y)
+    draw.line([neck_pt, hip_pt], fill=color, width=line_width)
+
+    # ARMS - hang from shoulders, swing forward/back
     arm_len = 35 * scale
-    shoulder = rotate(cx, shoulder_y)
+    shoulder_l = rotate(cx - 2 * scale, shoulder_y)
+    shoulder_r = rotate(cx + 2 * scale, shoulder_y)
 
-    # Left arm
-    la = math.radians(-60 + arm_angle)
-    left_hand = (shoulder[0] - arm_len * math.cos(la), shoulder[1] + arm_len * math.sin(la))
-    draw.line([shoulder, left_hand], fill=color, width=max(3, int(4 * scale)))
+    # Left arm: swings forward when arm_angle > 0
+    la_rad = math.radians(arm_angle * 0.8)  # Dampen arm swing
+    left_hand = (
+        shoulder_l[0] + math.sin(la_rad) * arm_len,
+        shoulder_l[1] + math.cos(la_rad) * arm_len
+    )
+    draw.line([shoulder_l, left_hand], fill=color, width=line_width)
 
-    # Right arm
-    ra = math.radians(60 - arm_angle)
-    right_hand = (shoulder[0] + arm_len * math.cos(ra), shoulder[1] + arm_len * math.sin(ra))
-    draw.line([shoulder, right_hand], fill=color, width=max(3, int(4 * scale)))
+    # Right arm: swings opposite
+    ra_rad = math.radians(-arm_angle * 0.8)
+    right_hand = (
+        shoulder_r[0] + math.sin(ra_rad) * arm_len,
+        shoulder_r[1] + math.cos(ra_rad) * arm_len
+    )
+    draw.line([shoulder_r, right_hand], fill=color, width=line_width)
 
-    # Legs - properly separated
-    leg_len = 45 * scale
-    hip = rotate(cx, hip_y)
+    # LEGS - start from hip, swing forward/back
+    leg_len = 70 * scale
+    hip_width = 10 * scale  # Distance between leg attachment points
 
-    # Left leg
-    left_hip = (hip[0] - 10 * scale, hip[1])
-    lf_x = left_hip[0] + math.sin(math.radians(leg_angle)) * leg_len * 0.6
-    lf_y = left_hip[1] + leg_len
-    draw.line([left_hip, (lf_x, lf_y)], fill=color, width=max(3, int(4 * scale)))
+    # Left hip and leg
+    left_hip = rotate(cx - hip_width/2, hip_y)
+    ll_rad = math.radians(leg_angle)
+    left_foot = (
+        left_hip[0] + math.sin(ll_rad) * leg_len,
+        left_hip[1] + math.cos(ll_rad) * leg_len
+    )
+    draw.line([left_hip, left_foot], fill=color, width=line_width)
 
-    # Right leg
-    right_hip = (hip[0] + 10 * scale, hip[1])
-    rf_x = right_hip[0] + math.sin(math.radians(-leg_angle)) * leg_len * 0.6
-    rf_y = right_hip[1] + leg_len
-    draw.line([right_hip, (rf_x, rf_y)], fill=color, width=max(3, int(4 * scale)))
+    # Right hip and leg (swings opposite)
+    right_hip = rotate(cx + hip_width/2, hip_y)
+    rl_rad = math.radians(-leg_angle)
+    right_foot = (
+        right_hip[0] + math.sin(rl_rad) * leg_len,
+        right_hip[1] + math.cos(rl_rad) * leg_len
+    )
+    draw.line([right_hip, right_foot], fill=color, width=line_width)
 
 
 def create_stick_figure_png(action='neutral'):
@@ -99,55 +122,82 @@ def create_stick_figure_png(action='neutral'):
     img = Image.new('RGBA', (200, 250), (255, 255, 255, 0))
     draw = ImageDraw.Draw(img)
 
-    # Add white background with rounded corners effect
+    # Add white background
     draw.rectangle([10, 10, 190, 240], fill=(255, 255, 255, 255))
 
     if action == 'walk':
-        draw_stick_figure(draw, 100, 120, scale=1.2, leg_angle=20, arm_angle=-15)
+        # Mid-stride pose - one leg forward, opposite arm forward
+        draw_stick_figure(draw, 100, 130, scale=1.0, leg_angle=18, arm_angle=-20)
     elif action == 'wave':
-        draw_stick_figure(draw, 100, 120, scale=1.2, arm_angle=40)
+        # Standing with arm up (we'll draw wave arm separately)
+        draw_stick_figure(draw, 100, 130, scale=1.0)
+        # Add raised waving arm
+        shoulder = (102, 130 - 50)
+        arm_len = 35
+        hand_x = shoulder[0] + arm_len * math.sin(math.radians(-45))
+        hand_y = shoulder[1] - arm_len * math.cos(math.radians(-45))
+        draw.line([shoulder, (hand_x, hand_y)], fill=LINE_COLOR, width=4)
     elif action == 'dance':
-        draw_stick_figure(draw, 100, 120, scale=1.2, rotation=5, arm_angle=30, leg_angle=15)
+        # Dynamic dance pose
+        draw_stick_figure(draw, 100, 130, scale=1.0, rotation=8, arm_angle=35, leg_angle=15)
     else:
-        draw_stick_figure(draw, 100, 120, scale=1.2)
+        draw_stick_figure(draw, 100, 130, scale=1.0)
 
     return img
 
 
 def create_stick_walk_gif():
-    """Create walking animation GIF"""
+    """Create walking animation GIF - natural stride"""
     frames = []
-    num_frames = 20
+    num_frames = 24
 
     for i in range(num_frames):
         img = Image.new('RGB', (200, 250), BG_COLOR)
         draw = ImageDraw.Draw(img)
 
         t = i / num_frames * 2 * math.pi
-        leg_swing = math.sin(t) * 30
-        arm_swing = -math.sin(t) * 25
+
+        # Walking motion - moderate leg swing to avoid crossing
+        leg_swing = math.sin(t) * 20  # Leg stride angle (degrees)
+        arm_swing = -math.sin(t) * 25  # Arms swing opposite to legs
+
+        # Subtle bounce on each step (highest when legs pass)
         bounce = abs(math.sin(t)) * 4
 
-        draw_stick_figure(draw, 100, 120 - bounce, scale=1.2, arm_angle=arm_swing, leg_angle=leg_swing)
+        draw_stick_figure(draw, 100, 130 - bounce, scale=1.0, arm_angle=arm_swing, leg_angle=leg_swing)
         frames.append(img)
 
     return frames
 
 
 def create_stick_wave_gif():
-    """Create waving animation GIF"""
+    """Create waving animation GIF - one arm waves while standing"""
     frames = []
-    num_frames = 20
+    num_frames = 24
 
     for i in range(num_frames):
         img = Image.new('RGB', (200, 250), BG_COLOR)
         draw = ImageDraw.Draw(img)
 
         t = i / num_frames * 3 * math.pi
-        wave = math.sin(t) * 35
 
-        # Draw body first
-        draw_stick_figure(draw, 100, 120, scale=1.2, arm_angle=wave)
+        # Draw base figure standing still
+        draw_stick_figure(draw, 100, 130, scale=1.0)
+
+        # Waving arm - raised up and waving side to side
+        shoulder_y = 130 - 50  # Match figure's shoulder
+        shoulder = (102, shoulder_y)
+        arm_len = 35
+
+        # Arm goes up at angle, waves back and forth
+        base_angle = -60  # Raised up
+        wave = math.sin(t) * 30  # Side to side wave
+
+        hand_x = shoulder[0] + arm_len * math.sin(math.radians(base_angle + wave))
+        hand_y = shoulder[1] - arm_len * math.cos(math.radians(base_angle + wave))
+
+        # Draw the waving arm (overwrites the default right arm)
+        draw.line([shoulder, (hand_x, hand_y)], fill=LINE_COLOR, width=4)
 
         frames.append(img)
 
@@ -155,7 +205,7 @@ def create_stick_wave_gif():
 
 
 def create_stick_dance_gif():
-    """Create dancing animation GIF"""
+    """Create dancing animation GIF - energetic with body movement"""
     frames = []
     num_frames = 30
 
@@ -164,12 +214,17 @@ def create_stick_dance_gif():
         draw = ImageDraw.Draw(img)
 
         t = i / num_frames * 4 * math.pi
-        rotation = math.sin(t) * 12
-        arm_swing = math.sin(t * 1.5) * 40
-        leg_swing = math.sin(t) * 20
-        bounce = abs(math.sin(t * 2)) * 6
 
-        draw_stick_figure(draw, 100, 120 - bounce, scale=1.2,
+        # Dancing motion - side to side sway with bounce
+        sway_x = math.sin(t) * 10
+        bounce = abs(math.sin(t * 2)) * 8
+        rotation = math.sin(t) * 10
+
+        # Arms and legs move energetically
+        arm_swing = math.sin(t * 1.5) * 40
+        leg_swing = math.sin(t * 2) * 18
+
+        draw_stick_figure(draw, 100 + sway_x, 130 - bounce, scale=1.0,
                          rotation=rotation, arm_angle=arm_swing, leg_angle=leg_swing)
         frames.append(img)
 
