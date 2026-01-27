@@ -13,7 +13,11 @@ def upload_drawing_path(instance, filename):
 def upload_background_path(instance, filename):
     """Generate path for uploaded backgrounds"""
     ext = filename.split('.')[-1]
-    return f'backgrounds/{instance.user.id}/{uuid.uuid4()}.{ext}'
+    if instance.user:
+        return f'backgrounds/{instance.user.id}/{uuid.uuid4()}.{ext}'
+    else:
+        # System backgrounds go in a shared folder
+        return f'backgrounds/system/{uuid.uuid4()}.{ext}'
 
 
 def upload_audio_path(instance, filename):
