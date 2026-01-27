@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 {% block content %}
 <!-- Hero Section -->
 <div class="hero-section py-5">
@@ -205,9 +206,7 @@
                     <div class="card-body p-4 text-center">
                         <h4>{{ plan.credits|intcomma }} Credits</h4>
                         <div class="display-5 fw-bold my-3">${{ plan.price }}</div>
-                        <p class="text-muted small mb-3">
-                            ${{ plan.price|divisibleby:plan.credits }}/credit
-                        </p>
+                        <p class="text-muted small mb-3">One-time purchase</p>
                         <ul class="list-unstyled small text-start mb-4">
                             {% for feature in plan.features %}
                             <li class="mb-1">
