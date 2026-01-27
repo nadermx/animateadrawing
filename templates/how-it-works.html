@@ -1,5 +1,70 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}How It Works - Animate a Drawing | 4 Simple Steps{% endblock %}
+{% block meta_description %}Learn how to animate your drawings in 4 simple steps: Upload, Detect, Animate, Export. Our AI handles the complex parts so you can focus on creativity.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="How It Works - 4 Simple Steps to Animate Your Drawings">
+<meta property="og:description" content="Upload your drawing, AI detects the pose, choose a motion preset, and export as GIF or video. It's that simple.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
+
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Animate a Drawing",
+    "description": "Learn how to transform your drawings into animations using AI-powered tools",
+    "totalTime": "PT5M",
+    "tool": [
+        {
+            "@type": "HowToTool",
+            "name": "Web browser"
+        },
+        {
+            "@type": "HowToTool",
+            "name": "Drawing or illustration image"
+        }
+    ],
+    "step": [
+        {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "Upload Your Drawing",
+            "text": "Start by uploading any drawing, sketch, or character illustration. Our AI automatically removes the background to isolate your character. Supported formats include PNG, JPG, GIF, and WebP up to 10MB.",
+            "url": "https://animateadrawing.com/how-it-works/#step1"
+        },
+        {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "AI Pose Detection",
+            "text": "Our AI analyzes your drawing and automatically detects body landmarks to create a skeleton rig. This includes head, neck, torso, shoulders, elbows, wrists, hips, knees, and ankles.",
+            "url": "https://animateadrawing.com/how-it-works/#step2"
+        },
+        {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "Choose Your Animation",
+            "text": "Select from our library of motion presets like walk, run, wave, dance, jump, or idle. You can also describe custom motions in plain text and let AI generate them.",
+            "url": "https://animateadrawing.com/how-it-works/#step3"
+        },
+        {
+            "@type": "HowToStep",
+            "position": 4,
+            "name": "Export and Share",
+            "text": "Preview your animation and export it as GIF, MP4, WebM, or PNG sequence. Supports resolutions up to 4K and frame rates of 24, 30, or 60 FPS.",
+            "url": "https://animateadrawing.com/how-it-works/#step4"
+        }
+    ]
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
 <div class="hero-section py-5">

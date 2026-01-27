@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Generate Background with AI | Animate a Drawing{% endblock %}
+{% block meta_description %}Generate custom background images using AI. Describe your scene and let our AI create it.{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'animator:dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'animator:background_library' %}">Backgrounds</a></li>
+            <li class="breadcrumb-item active">Generate</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="bi bi-magic me-2"></i>AI Background Generator</h4>
+                </div>
+                <div class="card-body">
+                    <form id="generate-form">
+                        {% csrf_token %}
+
+                        <!-- Prompt -->
+                        <div class="mb-4">
+                            <label for="prompt" class="form-label">Describe Your Background</label>
+                            <textarea class="form-control" id="prompt" name="prompt" rows="4"
+                                      placeholder="e.g., A magical forest at sunset with glowing mushrooms and fairy lights, anime style, detailed, vibrant colors"></textarea>
+                            <div class="form-text">Be specific about style, lighting, and details you want.</div>
+                        </div>
+
+                        <!-- Style Presets -->
+                        <div class="mb-4">
+                            <label class="form-label">Quick Style Presets</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-preset="cartoon, colorful, simple shapes">
+                                    Cartoon
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-preset="anime style, detailed, vibrant">
+                                    Anime
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-preset="watercolor painting, soft, artistic">
+                                    Watercolor
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-preset="pixel art, retro, 16-bit">
+                                    Pixel Art
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-preset="realistic, photographic, detailed">
+                                    Realistic
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-preset="minimalist, clean, modern">
+                                    Minimalist
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Options -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label for="aspect-ratio" class="form-label">Aspect Ratio</label>
+                                <select class="form-select" id="aspect-ratio">
+                                    <option value="16:9">16:9 (Widescreen)</option>
+                                    <option value="1:1">1:1 (Square)</option>
+                                    <option value="9:16">9:16 (Vertical)</option>
+                                    <option value="4:3">4:3 (Standard)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="style-strength" class="form-label">Style Strength</label>
+                                <select class="form-select" id="style-strength">
+                                    <option value="low">Subtle</option>
+                                    <option value="medium" selected>Balanced</option>
+                                    <option value="high">Strong</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Generate Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg" id="generate-btn">
+                                <i class="bi bi-magic me-2"></i> Generate Background
+                            </button>
+                        </div>
+                        <p class="text-center text-muted small mt-2">Uses 10 credits per generation</p>
+                    </form>
+
+                    <!-- Result Area -->
+                    <div id="result-area" class="mt-4 d-none">
+                        <hr>
+                        <h5>Generated Background</h5>
+                        <div id="result-preview" class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Generating...</span>
+                            </div>
+                            <p class="text-muted mt-2">Generating your background...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Tips for Better Results</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        <li><strong>Be specific:</strong> "A cozy coffee shop interior with warm lighting" works better than just "coffee shop"</li>
+                        <li><strong>Include style:</strong> Add terms like "anime style", "cartoon", "watercolor", "pixel art"</li>
+                        <li><strong>Mention lighting:</strong> "sunset", "golden hour", "neon lights", "soft diffused light"</li>
+                        <li><strong>Add mood:</strong> "peaceful", "mysterious", "energetic", "cozy"</li>
+                        <li><strong>Avoid characters:</strong> For best results, focus on environments without people</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('generate-form');
+    const promptInput = document.getElementById('prompt');
+    const generateBtn = document.getElementById('generate-btn');
+    const resultArea = document.getElementById('result-area');
+    const resultPreview = document.getElementById('result-preview');
+
+    // Style presets
+    document.querySelectorAll('[data-preset]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const preset = this.dataset.preset;
+            if (promptInput.value) {
+                promptInput.value += ', ' + preset;
+            } else {
+                promptInput.value = preset;
+            }
+        });
+    });
+
+    // Form submit
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const prompt = promptInput.value.trim();
+        if (!prompt) {
+            alert('Please describe the background you want to generate.');
+            return;
+        }
+
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generating...';
+        resultArea.classList.remove('d-none');
+        resultPreview.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Generating...</span></div><p class="text-muted mt-2">Generating your background... This may take up to a minute.</p>';
+
+        fetch('{% url "animator:background_generate" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: new URLSearchParams({ prompt: prompt })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'queued') {
+                resultPreview.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle me-2"></i>Background generation queued! Check your <a href="{% url \'animator:background_library\' %}">background library</a> in a few moments.</div>';
+            } else if (data.error) {
+                resultPreview.innerHTML = '<div class="alert alert-danger"><i class="bi bi-exclamation-circle me-2"></i>' + data.error + '</div>';
+            }
+            generateBtn.disabled = false;
+            generateBtn.innerHTML = '<i class="bi bi-magic me-2"></i> Generate Background';
+        })
+        .catch(error => {
+            resultPreview.innerHTML = '<div class="alert alert-danger">An error occurred. Please try again.</div>';
+            generateBtn.disabled = false;
+            generateBtn.innerHTML = '<i class="bi bi-magic me-2"></i> Generate Background';
+        });
+    });
+});
+</script>
+{% endblock %}

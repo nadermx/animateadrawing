@@ -1,4 +1,40 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tutorials & Guides | Animate a Drawing Help{% endblock %}
+{% block meta_description %}Learn how to animate your drawings with our tutorials. From beginner guides to advanced techniques like AI motion generation and lip sync.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="Tutorials & Guides - Learn to Animate">
+<meta property="og:description" content="Step-by-step guides for creating animations. Learn best practices, troubleshooting, and advanced techniques.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
+
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Tutorials & Guides",
+    "description": "Learning resources for Animate a Drawing animation platform",
+    "url": "https://animateadrawing.com/tutorials/",
+    "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Your First Animation"},
+            {"@type": "ListItem", "position": 2, "name": "Creating a Full Project"},
+            {"@type": "ListItem", "position": 3, "name": "Preparing Your Drawing"},
+            {"@type": "ListItem", "position": 4, "name": "AI Motion Generation"},
+            {"@type": "ListItem", "position": 5, "name": "Voice & Lip Sync"}
+        ]
+    }
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
 <div class="hero-section py-5">

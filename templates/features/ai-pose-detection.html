@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}AI Pose Detection | {{ g.project_name }}{% endblock %}
+{% block title %}AI Pose Detection | Animate a Drawing{% endblock %}
 
 {% block meta_description %}Our AI automatically detects character poses in your drawings. MediaPipe-powered pose detection identifies 33 body landmarks for accurate animation.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="AI Pose Detection - Automatic Character Rigging">
+<meta property="og:description" content="Upload any drawing and our AI automatically detects poses and creates a skeleton rig. No manual rigging required.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->

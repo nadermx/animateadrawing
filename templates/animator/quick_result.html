@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Animation Result | Animate a Drawing{% endblock %}
+{% block meta_description %}View and download your animated drawing. Share your creation on social media.{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Result Card -->
+            <div class="card">
+                <div class="card-header text-center py-3">
+                    <h4 class="mb-0">
+                        {% if export.status == 'completed' %}
+                        <i class="bi bi-check-circle text-success me-2"></i>Your Animation is Ready!
+                        {% elif export.status == 'processing' %}
+                        <i class="bi bi-hourglass-split text-warning me-2"></i>Processing...
+                        {% elif export.status == 'failed' %}
+                        <i class="bi bi-exclamation-circle text-danger me-2"></i>Export Failed
+                        {% else %}
+                        <i class="bi bi-clock text-info me-2"></i>Queued
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body text-center p-4">
+                    {% if export.status == 'completed' and export.output_file %}
+                    <!-- Animation Preview -->
+                    {% if export.format == 'gif' %}
+                    <img src="{{ export.output_file.url }}" alt="Animated Result" class="img-fluid rounded mb-4" style="max-height: 400px;">
+                    {% else %}
+                    <video controls class="img-fluid rounded mb-4" style="max-height: 400px;">
+                        <source src="{{ export.output_file.url }}" type="video/{{ export.format }}">
+                        Your browser does not support the video tag.
+                    </video>
+                    {% endif %}
+
+                    <!-- Download Button -->
+                    <div class="d-grid gap-2 mb-4">
+                        <a href="{% url 'animator:export_download' export_id=export.id %}" class="btn btn-success btn-lg">
+                            <i class="bi bi-download me-2"></i>Download {{ export.format|upper }}
+                        </a>
+                    </div>
+
+                    <!-- Share Buttons -->
+                    <p class="text-muted mb-2">Share your creation:</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="https://twitter.com/intent/tweet?text=Check%20out%20my%20animated%20drawing!&url={{ request.build_absolute_uri|urlencode }}"
+                           target="_blank" class="btn btn-outline-primary">
+                            <i class="bi bi-twitter me-1"></i> Twitter
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}"
+                           target="_blank" class="btn btn-outline-primary">
+                            <i class="bi bi-facebook me-1"></i> Facebook
+                        </a>
+                        <button type="button" class="btn btn-outline-secondary" onclick="copyLink()">
+                            <i class="bi bi-link-45deg me-1"></i> Copy Link
+                        </button>
+                    </div>
+
+                    {% elif export.status == 'processing' %}
+                    <!-- Progress -->
+                    <div class="py-5">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Processing...</span>
+                        </div>
+                        <p class="text-muted mb-3">Your animation is being processed...</p>
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                 role="progressbar" style="width: {{ export.progress }}%">
+                                {{ export.progress }}%
+                            </div>
+                        </div>
+                        <p class="small text-muted mt-3">This page will refresh automatically.</p>
+                    </div>
+
+                    {% elif export.status == 'failed' %}
+                    <!-- Error -->
+                    <div class="py-5">
+                        <i class="bi bi-exclamation-triangle text-danger" style="font-size: 4rem;"></i>
+                        <p class="text-danger mt-3">{{ export.error_message|default:"An error occurred while processing your animation." }}</p>
+                        <a href="{% url 'animator:quick_animate' %}" class="btn btn-primary">
+                            <i class="bi bi-arrow-left me-1"></i> Try Again
+                        </a>
+                    </div>
+
+                    {% else %}
+                    <!-- Queued -->
+                    <div class="py-5">
+                        <div class="spinner-grow text-info mb-3" role="status">
+                            <span class="visually-hidden">Waiting...</span>
+                        </div>
+                        <p class="text-muted">Your animation is queued for processing...</p>
+                        <p class="small text-muted">This page will refresh automatically.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">What's Next?</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'animator:quick_animate' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-plus-circle me-2 text-primary"></i>
+                        Create Another Quick Animation
+                    </a>
+                    <a href="{% url 'animator:project_create' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-folder-plus me-2 text-success"></i>
+                        Start a Full Project (Multiple Scenes, Characters)
+                    </a>
+                    <a href="{% url 'animator:dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-house me-2 text-secondary"></i>
+                        Go to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if export.status == 'processing' or export.status == 'queued' %}
+<script>
+// Auto-refresh every 3 seconds while processing
+setTimeout(function() {
+    location.reload();
+}, 3000);
+</script>
+{% endif %}
+<script>
+function copyLink() {
+    navigator.clipboard.writeText(window.location.href).then(function() {
+        alert('Link copied to clipboard!');
+    });
+}
+</script>
+{% endblock %}

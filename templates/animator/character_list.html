@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Characters - {{ project.name }} | Animate a Drawing{% endblock %}
+{% block meta_description %}Manage characters in your animation project. View, edit, and add new character drawings.{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'animator:dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'animator:project_detail' project_id=project.id %}">{{ project.name }}</a></li>
+            <li class="breadcrumb-item active">Characters</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1>Characters</h1>
+            <p class="text-muted mb-0">{{ characters.count }} character{{ characters.count|pluralize }} in this project</p>
+        </div>
+        <a href="{% url 'animator:character_upload' project_id=project.id %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Add Character
+        </a>
+    </div>
+
+    <!-- Character Grid -->
+    {% if characters %}
+    <div class="row g-4">
+        {% for character in characters %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100">
+                <div class="position-relative">
+                    <img src="{% if character.processed_image %}{{ character.processed_image.url }}{% else %}{{ character.original_image.url }}{% endif %}"
+                         class="card-img-top" alt="{{ character.name }}"
+                         style="height: 200px; object-fit: contain; background: #f8f9fa;">
+                    {% if character.is_rig_confirmed %}
+                    <span class="position-absolute top-0 end-0 m-2 badge bg-success">Rigged</span>
+                    {% else %}
+                    <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark">Needs Rig</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ character.name }}</h5>
+                    <p class="card-text small text-muted">
+                        {{ character.get_character_type_display }}
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="btn-group w-100">
+                        <a href="{% url 'animator:character_rig_editor' character_id=character.id %}"
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-diagram-3 me-1"></i> Edit Rig
+                        </a>
+                        <a href="{% url 'animator:character_detail' character_id=character.id %}"
+                           class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-eye me-1"></i> View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-5">
+        <div class="mb-4">
+            <i class="bi bi-person-bounding-box text-muted" style="font-size: 4rem;"></i>
+        </div>
+        <h3>No characters yet</h3>
+        <p class="text-muted mb-4">Upload your first character drawing to get started.</p>
+        <a href="{% url 'animator:character_upload' project_id=project.id %}" class="btn btn-primary btn-lg">
+            <i class="bi bi-upload me-2"></i> Upload Character
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

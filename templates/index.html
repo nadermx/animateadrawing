@@ -1,4 +1,49 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Animate a Drawing - AI-Powered Animation Tool | Bring Your Art to Life{% endblock %}
+{% block meta_description %}Transform your drawings into animations with AI. Upload any sketch or illustration and watch it move. Create GIFs, MP4s, and more in seconds.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="Animate a Drawing - AI-Powered Animation Tool">
+<meta property="og:description" content="Transform your drawings into animations with AI. Upload any sketch or illustration and watch it move.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+{% endblock %}
+
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Animate a Drawing",
+    "url": "https://animateadrawing.com",
+    "description": "AI-powered animation tool that brings your drawings to life. Upload any drawing and watch it move with natural, fluid animations.",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+        "@type": "AggregateOffer",
+        "lowPrice": "0",
+        "highPrice": "199",
+        "priceCurrency": "USD",
+        "offerCount": "5"
+    },
+    "featureList": [
+        "AI Pose Detection",
+        "Motion Presets",
+        "AI Motion Generation",
+        "Export to GIF, MP4, WebM",
+        "Up to 4K Resolution",
+        "Background Removal"
+    ],
+    "screenshot": "{% static 'images/og-default.png' %}"
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->

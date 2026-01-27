@@ -4,13 +4,38 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ title }}</title>
-    <meta name="description" content="{{ description|safe }}">
+
+    <!-- Title -->
+    <title>{% block title %}{{ title|default:"Animate a Drawing - AI-Powered Animation" }}{% endblock %}</title>
+
+    <!-- Meta Description -->
+    <meta name="description" content="{% block meta_description %}{{ description|default:"Bring your drawings to life with AI-powered animation. Upload any drawing and watch it move."|safe }}{% endblock %}">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical %}{{ request.build_absolute_uri }}{% endblock %}">
 
     <!-- Open Graph -->
+    {% block og_tags %}
     <meta property="og:type" content="website">
-    <meta property="og:title" content="{{ title }}">
-    <meta property="og:description" content="{{ description|safe }}">
+    <meta property="og:site_name" content="Animate a Drawing">
+    <meta property="og:title" content="{{ title|default:"Animate a Drawing - AI-Powered Animation" }}">
+    <meta property="og:description" content="{{ description|default:"Bring your drawings to life with AI-powered animation. Upload any drawing and watch it move." }}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% static 'images/og-default.png' %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    {% endblock %}
+
+    <!-- Twitter Card -->
+    {% block twitter_tags %}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ title|default:"Animate a Drawing - AI-Powered Animation" }}">
+    <meta name="twitter:description" content="{{ description|default:"Bring your drawings to life with AI-powered animation. Upload any drawing and watch it move." }}">
+    <meta name="twitter:image" content="{% static 'images/og-default.png' %}">
+    {% endblock %}
+
+    <!-- JSON-LD Structured Data -->
+    {% block json_ld %}{% endblock %}
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">

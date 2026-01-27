@@ -1,5 +1,75 @@
 {% extends 'base.html' %}
 {% load humanize %}
+{% load static %}
+
+{% block title %}Pricing - Animate a Drawing | Plans Starting Free{% endblock %}
+{% block meta_description %}Simple, transparent pricing for Animate a Drawing. Start free with 10 credits, upgrade for more animations. Plans from $9/month with monthly credits and commercial rights.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="Pricing - Simple Plans for Every Creator">
+<meta property="og:description" content="Start free with 10 credits. Upgrade for more animations, higher resolution exports, and commercial rights. Cancel anytime.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
+
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Animate a Drawing",
+    "description": "AI-powered animation tool for bringing drawings to life",
+    "brand": {
+        "@type": "Brand",
+        "name": "Animate a Drawing"
+    },
+    "offers": [
+        {
+            "@type": "Offer",
+            "name": "Free Plan",
+            "price": "0",
+            "priceCurrency": "USD",
+            "description": "10 credits per month, basic features"
+        },
+        {
+            "@type": "Offer",
+            "name": "Starter Plan",
+            "price": "9",
+            "priceCurrency": "USD",
+            "priceValidUntil": "2026-12-31",
+            "description": "50 credits per month, 1080p exports, commercial license"
+        },
+        {
+            "@type": "Offer",
+            "name": "Creator Plan",
+            "price": "29",
+            "priceCurrency": "USD",
+            "priceValidUntil": "2026-12-31",
+            "description": "200 credits per month, unlimited exports, priority rendering"
+        },
+        {
+            "@type": "Offer",
+            "name": "Pro Plan",
+            "price": "79",
+            "priceCurrency": "USD",
+            "priceValidUntil": "2026-12-31",
+            "description": "1000 credits per month, 4K exports, API access"
+        },
+        {
+            "@type": "Offer",
+            "name": "Business Plan",
+            "price": "199",
+            "priceCurrency": "USD",
+            "priceValidUntil": "2026-12-31",
+            "description": "5000 credits per month, 5 team members, dedicated support"
+        }
+    ]
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
 <div class="hero-section py-5">

@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Project - {{ project.name }} | Animate a Drawing{% endblock %}
+{% block meta_description %}Edit your animation project settings including resolution, frame rate, and more.{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'animator:dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'animator:project_detail' project_id=project.id %}">{{ project.name }}</a></li>
+            <li class="breadcrumb-item active">Settings</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Project Settings</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Project Name -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Project Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ project.name }}" required>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3">{{ project.description }}</textarea>
+                        </div>
+
+                        <!-- Resolution -->
+                        <div class="mb-3">
+                            <label class="form-label">Resolution</label>
+                            <div class="row g-2">
+                                <div class="col">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="width" name="width" value="{{ project.width }}" min="100" max="4096">
+                                        <span class="input-group-text">W</span>
+                                    </div>
+                                </div>
+                                <div class="col-auto d-flex align-items-center">
+                                    <i class="bi bi-x"></i>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="height" name="height" value="{{ project.height }}" min="100" max="4096">
+                                        <span class="input-group-text">H</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-text">
+                                Common presets:
+                                <a href="#" onclick="setResolution(1920, 1080); return false;">1080p</a> |
+                                <a href="#" onclick="setResolution(1280, 720); return false;">720p</a> |
+                                <a href="#" onclick="setResolution(1080, 1080); return false;">Square</a> |
+                                <a href="#" onclick="setResolution(1080, 1920); return false;">Vertical</a>
+                            </div>
+                        </div>
+
+                        <!-- Frame Rate -->
+                        <div class="mb-4">
+                            <label for="fps" class="form-label">Frame Rate (FPS)</label>
+                            <select class="form-select" id="fps" name="fps">
+                                <option value="24" {% if project.fps == 24 %}selected{% endif %}>24 FPS (Film)</option>
+                                <option value="30" {% if project.fps == 30 %}selected{% endif %}>30 FPS (Standard)</option>
+                                <option value="60" {% if project.fps == 60 %}selected{% endif %}>60 FPS (Smooth)</option>
+                            </select>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg me-1"></i> Save Changes
+                            </button>
+                            <a href="{% url 'animator:project_detail' project_id=project.id %}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="card mt-4 border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Danger Zone</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Once you delete a project, there is no going back. Please be certain.</p>
+                    <form method="post" action="{% url 'animator:project_delete' project_id=project.id %}"
+                          onsubmit="return confirm('Are you sure you want to delete this project? This action cannot be undone.');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class="bi bi-trash me-1"></i> Delete Project
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function setResolution(width, height) {
+    document.getElementById('width').value = width;
+    document.getElementById('height').value = height;
+}
+</script>
+{% endblock %}

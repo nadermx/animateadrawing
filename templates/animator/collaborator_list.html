@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Collaborators - {{ project.name }} | Animate a Drawing{% endblock %}
+{% block meta_description %}Manage collaborators on your animation project. Invite team members to work together.{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'animator:dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'animator:project_detail' project_id=project.id %}">{{ project.name }}</a></li>
+            <li class="breadcrumb-item active">Collaborators</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Collaborators</h1>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inviteModal">
+                    <i class="bi bi-person-plus me-1"></i> Invite
+                </button>
+            </div>
+
+            <!-- Owner -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Owner</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                 style="width: 40px; height: 40px;">
+                                {{ project.user.email|first|upper }}
+                            </div>
+                            <div>
+                                <strong>{{ project.user.email }}</strong>
+                                <small class="d-block text-muted">Project Owner</small>
+                            </div>
+                        </div>
+                        <span class="badge bg-primary">Owner</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collaborators -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Team Members</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for collab in collaborators %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                 style="width: 40px; height: 40px;">
+                                {{ collab.user.email|first|upper }}
+                            </div>
+                            <div>
+                                <strong>{{ collab.user.email }}</strong>
+                                <small class="d-block text-muted">{{ collab.get_permission_display }}</small>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-{{ collab.permission }}">{{ collab.get_permission_display }}</span>
+                            {% if project.user == request.user %}
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-remove="{{ collab.id }}">
+                                <i class="bi bi-x"></i>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="list-group-item text-center text-muted py-4">
+                        No collaborators yet. Invite someone to work together!
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Pending Invites -->
+            {% if invites %}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Pending Invitations</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for invite in invites %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ invite.invited_email }}</strong>
+                            <small class="d-block text-muted">
+                                Invited {{ invite.created_at|timesince }} ago
+                                | {{ invite.get_permission_display }} access
+                            </small>
+                        </div>
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Invite Modal -->
+<div class="modal fade" id="inviteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Invite Collaborator</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'animator:collaborator_invite' project_id=project.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" required
+                               placeholder="colleague@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="permission" class="form-label">Permission Level</label>
+                        <select class="form-select" id="permission" name="permission">
+                            <option value="view">View Only - Can see project but not edit</option>
+                            <option value="edit" selected>Edit - Can modify content</option>
+                            <option value="full">Full Access - Can edit and manage collaborators</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-envelope me-1"></i> Send Invitation
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

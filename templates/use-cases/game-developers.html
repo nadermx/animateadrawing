@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Animation Tool for Game Developers | {{ g.project_name }}{% endblock %}
+{% block title %}Animation Tool for Game Developers | Animate a Drawing{% endblock %}
 
 {% block meta_description %}Create game-ready character animations from concept art. Perfect for indie game developers, game jams, and prototyping. Export sprite sheets and animated assets.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="Animation for Game Developers - Concept Art to Game-Ready">
+<meta property="og:description" content="Create game-ready animations from concept art. Export sprite sheets for Unity, Godot, and more. Perfect for indie devs and game jams.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->

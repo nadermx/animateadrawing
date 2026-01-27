@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Animation Tool for Content Creators | {{ g.project_name }}{% endblock %}
+{% block title %}Animation Tool for Content Creators | Animate a Drawing{% endblock %}
 
 {% block meta_description %}Create engaging animated content for YouTube, TikTok, Instagram and more. Turn your drawings into eye-catching animations in minutes with our AI-powered animation tool.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="Animation for Content Creators - Stand Out on Social Media">
+<meta property="og:description" content="Transform your drawings into captivating animations for YouTube, TikTok, and Instagram. No animation experience required.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->

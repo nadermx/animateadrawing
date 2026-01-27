@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Scenes - {{ project.name }} | Animate a Drawing{% endblock %}
+{% block meta_description %}Manage scenes in your animation project. Add, edit, and organize your animation scenes.{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'animator:dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'animator:project_detail' project_id=project.id %}">{{ project.name }}</a></li>
+            <li class="breadcrumb-item active">Scenes</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1>Scenes</h1>
+            <p class="text-muted mb-0">{{ scenes.count }} scene{{ scenes.count|pluralize }} in this project</p>
+        </div>
+        <form method="post" action="{% url 'animator:scene_create' project_id=project.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i> Add Scene
+            </button>
+        </form>
+    </div>
+
+    {% if scenes %}
+    <!-- Scene List -->
+    <div class="list-group">
+        {% for scene in scenes %}
+        <div class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <span class="badge bg-secondary me-3" style="width: 40px;">{{ scene.order|add:1 }}</span>
+                    <div>
+                        <h5 class="mb-1">{{ scene.name }}</h5>
+                        <p class="mb-0 small text-muted">
+                            {{ scene.duration }}s duration |
+                            {{ scene.scene_characters.count }} character{{ scene.scene_characters.count|pluralize }}
+                        </p>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <a href="{% url 'animator:scene_editor' scene_id=scene.id %}" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-pencil me-1"></i> Edit
+                    </a>
+                    <form action="{% url 'animator:scene_delete' scene_id=scene.id %}" method="post" class="d-inline"
+                          onsubmit="return confirm('Delete this scene?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Timeline Link -->
+    <div class="text-center mt-4">
+        <a href="{% url 'animator:timeline_editor' project_id=project.id %}" class="btn btn-success btn-lg">
+            <i class="bi bi-film me-2"></i> Open Timeline Editor
+        </a>
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-5">
+        <div class="mb-4">
+            <i class="bi bi-collection-play text-muted" style="font-size: 4rem;"></i>
+        </div>
+        <h3>No scenes yet</h3>
+        <p class="text-muted mb-4">Add your first scene to start building your animation.</p>
+        <form method="post" action="{% url 'animator:scene_create' project_id=project.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-plus-lg me-2"></i> Add First Scene
+            </button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

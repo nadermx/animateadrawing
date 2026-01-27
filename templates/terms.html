@@ -1,4 +1,18 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Terms of Service | Animate a Drawing{% endblock %}
+{% block meta_description %}Read the terms of service for Animate a Drawing. Learn about content ownership, commercial use rights, and our service policies.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="Terms of Service - Animate a Drawing">
+<meta property="og:description" content="Terms and conditions for using Animate a Drawing animation platform.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container py-4">
     <h1 class="text-center mb-4">Terms of Service</h1>

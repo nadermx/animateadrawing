@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Export - {{ project.name }} | Animate a Drawing{% endblock %}
+{% block meta_description %}Export your animation project as MP4, WebM, GIF, or PNG sequence.{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'animator:dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'animator:project_detail' project_id=project.id %}">{{ project.name }}</a></li>
+            <li class="breadcrumb-item active">Export</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Export Animation</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Format -->
+                        <div class="mb-3">
+                            <label class="form-label">Output Format</label>
+                            <div class="row g-2">
+                                {% for value, label in format_choices %}
+                                <div class="col-6">
+                                    <div class="form-check card p-3">
+                                        <input class="form-check-input" type="radio" name="format" id="format-{{ value }}" value="{{ value }}"
+                                               {% if value == 'mp4' %}checked{% endif %}>
+                                        <label class="form-check-label w-100" for="format-{{ value }}">
+                                            <strong>{{ value|upper }}</strong>
+                                            <small class="d-block text-muted">{{ label }}</small>
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Quality -->
+                        <div class="mb-3">
+                            <label for="quality" class="form-label">Quality</label>
+                            <select class="form-select" id="quality" name="quality">
+                                {% for value, label in quality_choices %}
+                                <option value="{{ value }}" {% if value == 'high' %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">Higher quality means larger file size and longer render time.</div>
+                        </div>
+
+                        <!-- Options -->
+                        <div class="mb-4">
+                            <label class="form-label">Options</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="include_audio" name="include_audio" checked>
+                                <label class="form-check-label" for="include_audio">
+                                    Include audio tracks
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="transparent_background" name="transparent_background">
+                                <label class="form-check-label" for="transparent_background">
+                                    Transparent background (WebM only)
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Project Info -->
+                        <div class="alert alert-light mb-4">
+                            <h6>Export Details</h6>
+                            <ul class="mb-0 small">
+                                <li>Resolution: {{ project.width }}x{{ project.height }}</li>
+                                <li>Duration: {{ project.duration_seconds|floatformat:1 }} seconds</li>
+                                <li>Frame Rate: {{ project.fps }} FPS</li>
+                                <li>Scenes: {{ project.scenes.count }}</li>
+                            </ul>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-download me-2"></i> Start Export
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Previous Exports -->
+            {% if project.exports.exists %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Previous Exports</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for export in project.exports.all|slice:":5" %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-secondary me-2">{{ export.format|upper }}</span>
+                            <span class="badge bg-{% if export.status == 'completed' %}success{% elif export.status == 'failed' %}danger{% else %}warning{% endif %}">
+                                {{ export.get_status_display }}
+                            </span>
+                            <small class="text-muted ms-2">{{ export.created_at|date:"M d, H:i" }}</small>
+                        </div>
+                        {% if export.status == 'completed' %}
+                        <a href="{% url 'animator:export_download' export_id=export.id %}" class="btn btn-sm btn-outline-primary">
+                            Download
+                        </a>
+                        {% elif export.status == 'processing' %}
+                        <a href="{% url 'animator:export_status' export_id=export.id %}" class="btn btn-sm btn-outline-warning">
+                            View Status
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Export Formats - GIF, MP4, WebM, Sprite Sheets | {{ g.project_name }}{% endblock %}
+{% block title %}Export Formats - GIF, MP4, WebM, Sprite Sheets | Animate a Drawing{% endblock %}
 
 {% block meta_description %}Export your animations in multiple formats - GIF for social media, MP4 for video editing, WebM for web, and PNG sequences for game development.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="Flexible Export Formats - GIF, MP4, WebM, PNG">
+<meta property="og:description" content="Export animations in the format you need. GIF for social media, MP4 for video, WebM for web, or PNG sequences for games.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->

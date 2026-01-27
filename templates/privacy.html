@@ -1,4 +1,18 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Privacy Policy | Animate a Drawing{% endblock %}
+{% block meta_description %}Learn how Animate a Drawing collects, uses, and protects your information. We value your privacy and never use your artwork to train AI without consent.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="Privacy Policy - Animate a Drawing">
+<meta property="og:description" content="Your privacy matters. Learn how we handle your data and protect your artwork.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container py-4">
     <h1 class="text-center mb-4">Privacy Policy</h1>

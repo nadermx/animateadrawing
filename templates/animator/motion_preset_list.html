@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Motion Presets | Animate a Drawing{% endblock %}
+{% block meta_description %}Browse our library of pre-made animations: walk, run, dance, wave, jump, and more. Apply to your characters instantly.{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1>Motion Presets</h1>
+            <p class="text-muted mb-0">Pre-made animations ready to apply to your characters</p>
+        </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="mb-4">
+        <div class="btn-group flex-wrap" role="group">
+            <a href="{% url 'animator:motion_preset_list' %}" class="btn btn-{% if not request.GET.category %}primary{% else %}outline-secondary{% endif %}">
+                All
+            </a>
+            {% for value, label in categories %}
+            <a href="?category={{ value }}" class="btn btn-{% if request.GET.category == value %}primary{% else %}outline-secondary{% endif %}">
+                {{ label }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Presets Grid -->
+    {% if presets %}
+    <div class="row g-4">
+        {% for preset in presets %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <!-- Preview -->
+                    <div class="preset-preview bg-light rounded mb-3 d-flex align-items-center justify-content-center"
+                         style="height: 150px; cursor: pointer;" data-preset-id="{{ preset.id }}">
+                        {% if preset.preview_gif %}
+                        <img src="{{ preset.preview_gif.url }}" alt="{{ preset.name }}" class="img-fluid" style="max-height: 140px;">
+                        {% else %}
+                        <div class="text-center text-muted">
+                            <i class="bi bi-play-circle" style="font-size: 3rem;"></i>
+                            <p class="small mb-0 mt-2">Click to preview</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <h5 class="card-title">{{ preset.name }}</h5>
+                    <p class="card-text small text-muted">
+                        {{ preset.get_category_display }} |
+                        {{ preset.duration_seconds }}s
+                        {% if preset.animation_method == 'ai_video' %}
+                        <span class="badge bg-info">AI</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    {% if preset.is_system %}
+                    <span class="badge bg-secondary">System</span>
+                    {% else %}
+                    <span class="badge bg-primary">Custom</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-5">
+        <div class="mb-4">
+            <i class="bi bi-collection-play text-muted" style="font-size: 4rem;"></i>
+        </div>
+        <h3>No presets found</h3>
+        <p class="text-muted">{% if request.GET.category %}Try selecting a different category.{% else %}Motion presets will appear here.{% endif %}</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Preview Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="previewModalTitle">Motion Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div id="preview-content" class="d-flex align-items-center justify-content-center" style="min-height: 300px;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
+    const previewContent = document.getElementById('preview-content');
+    const previewTitle = document.getElementById('previewModalTitle');
+
+    document.querySelectorAll('.preset-preview').forEach(el => {
+        el.addEventListener('click', function() {
+            const presetId = this.dataset.presetId;
+            const name = this.closest('.card').querySelector('.card-title').textContent;
+
+            previewTitle.textContent = name + ' Preview';
+            previewContent.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+            previewModal.show();
+
+            // Load preview
+            fetch(`/animator/motion-presets/${presetId}/preview/`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    throw new Error('No preview available');
+                })
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    previewContent.innerHTML = `<img src="${url}" alt="Preview" class="img-fluid rounded" style="max-height: 400px;">`;
+                })
+                .catch(() => {
+                    previewContent.innerHTML = '<p class="text-muted">Preview not available for this motion preset.</p>';
+                });
+        });
+    });
+});
+</script>
+{% endblock %}

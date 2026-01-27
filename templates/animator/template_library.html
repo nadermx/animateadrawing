@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Character Templates | Animate a Drawing{% endblock %}
+{% block meta_description %}Browse our library of pre-rigged character templates. Get started quickly with ready-to-animate characters.{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="mb-4">
+        <h1>Character Templates</h1>
+        <p class="text-muted">Pre-rigged characters ready to animate. Click to use in your project.</p>
+    </div>
+
+    {% if templates %}
+    <div class="row g-4">
+        {% for template in templates %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100{% if template.is_premium and not user.is_plan_active %} opacity-75{% endif %}">
+                <div class="position-relative">
+                    <img src="{{ template.preview_image.url }}" class="card-img-top" alt="{{ template.name }}"
+                         style="height: 200px; object-fit: contain; background: #f8f9fa;">
+                    {% if template.is_premium %}
+                    <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark">
+                        <i class="bi bi-star-fill me-1"></i>Premium
+                    </span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ template.name }}</h5>
+                    <p class="card-text small text-muted">
+                        {{ template.get_character_type_display }}
+                        {% if template.description %}
+                        <br>{{ template.description|truncatewords:15 }}
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    {% if template.is_premium and not user.is_plan_active %}
+                    <a href="/pricing/" class="btn btn-outline-warning w-100">
+                        <i class="bi bi-lock me-1"></i> Upgrade to Access
+                    </a>
+                    {% else %}
+                    <button type="button" class="btn btn-primary w-100" data-template-id="{{ template.id }}">
+                        <i class="bi bi-plus-circle me-1"></i> Use Template
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-5">
+        <div class="mb-4">
+            <i class="bi bi-person-lines-fill text-muted" style="font-size: 4rem;"></i>
+        </div>
+        <h3>No templates available</h3>
+        <p class="text-muted mb-4">Character templates will appear here soon.</p>
+        <a href="{% url 'animator:dashboard' %}" class="btn btn-primary">
+            Go to Dashboard
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Info Section -->
+    <div class="row mt-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5><i class="bi bi-info-circle me-2"></i>About Character Templates</h5>
+                    <p class="mb-2">Templates are pre-rigged characters that skip the pose detection step. They're perfect for:</p>
+                    <ul class="mb-0">
+                        <li>Quick prototyping and testing animations</li>
+                        <li>Learning how rigs work</li>
+                        <li>Starting with a proven character structure</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Use Template Modal -->
+<div class="modal fade" id="useTemplateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Use Template</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Select a project to add this template to:</p>
+                <div class="list-group" id="project-list">
+                    <!-- Projects will be loaded here -->
+                </div>
+                <hr>
+                <a href="{% url 'animator:project_create' %}" class="btn btn-outline-primary w-100">
+                    <i class="bi bi-plus me-1"></i> Create New Project
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = new bootstrap.Modal(document.getElementById('useTemplateModal'));
+
+    document.querySelectorAll('[data-template-id]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // In a full implementation, this would load projects and allow selection
+            modal.show();
+        });
+    });
+});
+</script>
+{% endblock %}

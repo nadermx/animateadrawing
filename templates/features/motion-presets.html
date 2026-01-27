@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Motion Presets Library | {{ g.project_name }}{% endblock %}
+{% block title %}Motion Presets Library | Animate a Drawing{% endblock %}
 
 {% block meta_description %}Choose from dozens of pre-made animation presets - walk cycles, dance moves, waving, jumping, and more. One click to animate your character.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="Motion Preset Library - Walk, Run, Dance, Wave & More">
+<meta property="og:description" content="Browse pre-made animation presets. One click to make your character walk, run, dance, wave, or perform custom motions.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->

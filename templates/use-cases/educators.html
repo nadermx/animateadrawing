@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Animation Tool for Educators & Teachers | {{ g.project_name }}{% endblock %}
+{% block title %}Animation Tool for Educators & Teachers | Animate a Drawing{% endblock %}
 
 {% block meta_description %}Bring lessons to life with animated drawings. Perfect for teachers, tutors, and educational content creators. Engage students with visual animations.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="Animation for Educators - Bring Lessons to Life">
+<meta property="og:description" content="Engage students with animated visuals. Perfect for teachers, tutors, and educational content. 50% discount available.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->

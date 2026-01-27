@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Export Status - {{ export.project.name }} | Animate a Drawing{% endblock %}
+{% block meta_description %}Check the status of your animation export.{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'animator:dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'animator:project_detail' project_id=export.project.id %}">{{ export.project.name }}</a></li>
+            <li class="breadcrumb-item active">Export Status</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        {% if export.status == 'completed' %}
+                        <i class="bi bi-check-circle text-success me-2"></i>Export Complete
+                        {% elif export.status == 'processing' %}
+                        <i class="bi bi-gear text-warning me-2"></i>Rendering Animation
+                        {% elif export.status == 'failed' %}
+                        <i class="bi bi-exclamation-circle text-danger me-2"></i>Export Failed
+                        {% else %}
+                        <i class="bi bi-clock text-info me-2"></i>Queued for Export
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Export Details -->
+                    <div class="row mb-4">
+                        <div class="col-sm-6">
+                            <dl class="mb-0">
+                                <dt>Format</dt>
+                                <dd><span class="badge bg-secondary">{{ export.format|upper }}</span></dd>
+                                <dt>Quality</dt>
+                                <dd>{{ export.get_quality_display }}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-sm-6">
+                            <dl class="mb-0">
+                                <dt>Started</dt>
+                                <dd>{{ export.created_at|date:"M d, Y H:i" }}</dd>
+                                {% if export.completed_at %}
+                                <dt>Completed</dt>
+                                <dd>{{ export.completed_at|date:"M d, Y H:i" }}</dd>
+                                {% endif %}
+                            </dl>
+                        </div>
+                    </div>
+
+                    {% if export.status == 'processing' or export.status == 'queued' %}
+                    <!-- Progress Bar -->
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Progress</span>
+                            <span>{{ export.progress }}%</span>
+                        </div>
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                 role="progressbar" style="width: {{ export.progress }}%"
+                                 id="progress-bar">
+                            </div>
+                        </div>
+                        <p class="small text-muted mt-2" id="status-text">
+                            {% if export.status == 'queued' %}
+                            Waiting in queue...
+                            {% else %}
+                            Rendering frames...
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% endif %}
+
+                    {% if export.status == 'completed' and export.output_file %}
+                    <!-- Download -->
+                    <div class="d-grid">
+                        <a href="{% url 'animator:export_download' export_id=export.id %}" class="btn btn-success btn-lg">
+                            <i class="bi bi-download me-2"></i>Download {{ export.format|upper }}
+                        </a>
+                    </div>
+                    {% elif export.status == 'failed' %}
+                    <!-- Error Message -->
+                    <div class="alert alert-danger">
+                        <strong>Error:</strong> {{ export.error_message|default:"An unexpected error occurred during export." }}
+                    </div>
+                    <a href="{% url 'animator:export_project' project_id=export.project.id %}" class="btn btn-primary">
+                        <i class="bi bi-arrow-repeat me-1"></i> Try Again
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Back to Project -->
+            <div class="text-center mt-4">
+                <a href="{% url 'animator:project_detail' project_id=export.project.id %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Project
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if export.status == 'processing' or export.status == 'queued' %}
+<script>
+// Poll for status updates
+const exportId = "{{ export.id }}";
+const progressBar = document.getElementById('progress-bar');
+const statusText = document.getElementById('status-text');
+
+function checkStatus() {
+    fetch(`/animator/api/export/${exportId}/status/`)
+        .then(response => response.json())
+        .then(data => {
+            progressBar.style.width = data.progress + '%';
+
+            if (data.status === 'completed') {
+                location.reload();
+            } else if (data.status === 'failed') {
+                location.reload();
+            } else {
+                if (data.status === 'processing') {
+                    statusText.textContent = 'Rendering frames... ' + data.progress + '%';
+                }
+                setTimeout(checkStatus, 2000);
+            }
+        })
+        .catch(() => {
+            setTimeout(checkStatus, 5000);
+        });
+}
+
+setTimeout(checkStatus, 2000);
+</script>
+{% endif %}
+{% endblock %}

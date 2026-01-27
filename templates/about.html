@@ -1,4 +1,38 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - Animate a Drawing | Our Mission & Story{% endblock %}
+{% block meta_description %}Learn about Animate a Drawing's mission to make animation accessible to everyone. Discover the AI technology behind our platform and our commitment to simplicity.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="About Animate a Drawing - Making Animation Accessible">
+<meta property="og:description" content="Our mission is to make animation accessible to everyone using AI technology. Learn about the team and technology behind Animate a Drawing.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
+
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Animate a Drawing",
+    "url": "https://animateadrawing.com",
+    "description": "AI-powered animation platform that makes creating animations accessible to everyone",
+    "foundingDate": "2024",
+    "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://animateadrawing.com/contact/",
+        "email": "support@animateadrawing.com"
+    },
+    "sameAs": []
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
 <div class="hero-section py-5">

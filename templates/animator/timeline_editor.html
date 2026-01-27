@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Timeline Editor - {{ project.name }} | Animate a Drawing{% endblock %}
+{% block meta_description %}Edit your animation timeline. Arrange scenes, add audio, and create complex animations.{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-2" style="height: calc(100vh - 56px);">
+    <!-- Top Toolbar -->
+    <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+        <div class="d-flex align-items-center">
+            <a href="{% url 'animator:project_detail' project_id=project.id %}" class="btn btn-sm btn-outline-secondary me-3">
+                <i class="bi bi-arrow-left me-1"></i> Back
+            </a>
+            <h5 class="mb-0">{{ project.name }} - Timeline</h5>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-undo" disabled>
+                <i class="bi bi-arrow-counterclockwise"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-redo" disabled>
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary ms-2" id="btn-play">
+                <i class="bi bi-play-fill"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-pause">
+                <i class="bi bi-pause-fill"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-stop">
+                <i class="bi bi-stop-fill"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-primary ms-2" id="btn-save">
+                <i class="bi bi-check-lg me-1"></i> Save
+            </button>
+            <a href="{% url 'animator:export_project' project_id=project.id %}" class="btn btn-sm btn-success">
+                <i class="bi bi-download me-1"></i> Export
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-2" style="height: calc(100% - 50px);">
+        <!-- Preview Panel -->
+        <div class="col-lg-8">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center justify-content-center p-2">
+                    <div class="preview-container position-relative bg-dark rounded"
+                         style="width: 100%; max-height: 100%; aspect-ratio: {{ project.width }}/{{ project.height }};">
+                        <canvas id="preview-canvas" class="w-100 h-100"></canvas>
+                        <div class="position-absolute bottom-0 start-0 end-0 p-2 bg-dark bg-opacity-75">
+                            <div class="d-flex align-items-center">
+                                <span class="text-white small me-2" id="current-time">0:00</span>
+                                <input type="range" class="form-range flex-grow-1 mx-2" id="scrubber" min="0" max="100" value="0">
+                                <span class="text-white small" id="total-time">{{ project.duration_seconds|floatformat:0 }}:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Properties Panel -->
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-header py-2">
+                    <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#tab-scenes">Scenes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#tab-audio">Audio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#tab-settings">Settings</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body p-0 overflow-auto">
+                    <div class="tab-content">
+                        <!-- Scenes Tab -->
+                        <div class="tab-pane fade show active" id="tab-scenes">
+                            <div class="list-group list-group-flush">
+                                {% for scene in scenes %}
+                                <a href="{% url 'animator:scene_editor' scene_id=scene.id %}"
+                                   class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ scene.name }}</strong>
+                                        <small class="text-muted d-block">{{ scene.duration }}s</small>
+                                    </div>
+                                    <span class="badge bg-secondary">{{ scene.scene_characters.count }}</span>
+                                </a>
+                                {% empty %}
+                                <div class="list-group-item text-center text-muted">
+                                    No scenes yet
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="p-3">
+                                <form method="post" action="{% url 'animator:scene_create' project_id=project.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-primary w-100">
+                                        <i class="bi bi-plus me-1"></i> Add Scene
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Audio Tab -->
+                        <div class="tab-pane fade" id="tab-audio">
+                            <div class="list-group list-group-flush">
+                                {% for audio in audio_tracks %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-music-note me-2"></i>
+                                        {{ audio.name }}
+                                    </div>
+                                    <small class="text-muted">{{ audio.duration }}s</small>
+                                </div>
+                                {% empty %}
+                                <div class="list-group-item text-center text-muted">
+                                    No audio tracks
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="p-3">
+                                <button type="button" class="btn btn-outline-primary w-100 mb-2" data-bs-toggle="modal" data-bs-target="#voiceModal">
+                                    <i class="bi bi-mic me-1"></i> Add Voice (TTS)
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary w-100">
+                                    <i class="bi bi-upload me-1"></i> Upload Audio
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Settings Tab -->
+                        <div class="tab-pane fade" id="tab-settings">
+                            <div class="p-3">
+                                <div class="mb-3">
+                                    <label class="form-label">Resolution</label>
+                                    <p class="form-control-plaintext">{{ project.width }}x{{ project.height }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Frame Rate</label>
+                                    <p class="form-control-plaintext">{{ project.fps }} FPS</p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Total Duration</label>
+                                    <p class="form-control-plaintext">{{ project.duration_seconds|floatformat:1 }} seconds</p>
+                                </div>
+                                <a href="{% url 'animator:project_edit' project_id=project.id %}" class="btn btn-outline-secondary w-100">
+                                    <i class="bi bi-gear me-1"></i> Project Settings
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Voice Synthesis Modal -->
+<div class="modal fade" id="voiceModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Voice (Text-to-Speech)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Text to speak</label>
+                    <textarea class="form-control" id="voice-text" rows="4" placeholder="Enter the text you want to convert to speech..."></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Voice</label>
+                    <select class="form-select" id="voice-select">
+                        <option value="default">Default</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="generate-voice">Generate Voice</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('preview-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas size
+    canvas.width = {{ project.width }};
+    canvas.height = {{ project.height }};
+
+    // Initial render
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#fff';
+    ctx.font = '24px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Timeline Preview', canvas.width/2, canvas.height/2);
+
+    // Playback controls
+    let isPlaying = false;
+    document.getElementById('btn-play').addEventListener('click', () => { isPlaying = true; });
+    document.getElementById('btn-pause').addEventListener('click', () => { isPlaying = false; });
+    document.getElementById('btn-stop').addEventListener('click', () => {
+        isPlaying = false;
+        document.getElementById('scrubber').value = 0;
+        document.getElementById('current-time').textContent = '0:00';
+    });
+});
+</script>
+{% endblock %}

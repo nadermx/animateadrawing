@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ character.name }} - {{ project.name }} | Animate a Drawing{% endblock %}
+{% block meta_description %}View and manage character "{{ character.name }}" in your animation project.{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'animator:dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'animator:project_detail' project_id=project.id %}">{{ project.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'animator:character_list' project_id=project.id %}">Characters</a></li>
+            <li class="breadcrumb-item active">{{ character.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Character Preview -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-body text-center p-4">
+                    <img src="{% if character.processed_image %}{{ character.processed_image.url }}{% else %}{{ character.original_image.url }}{% endif %}"
+                         alt="{{ character.name }}" class="img-fluid rounded"
+                         style="max-height: 400px; background: #f8f9fa;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Character Info -->
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">{{ character.name }}</h4>
+                    {% if character.is_rig_confirmed %}
+                    <span class="badge bg-success">Rigged</span>
+                    {% else %}
+                    <span class="badge bg-warning text-dark">Needs Rig</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Type</dt>
+                        <dd class="col-sm-8">{{ character.get_character_type_display }}</dd>
+
+                        <dt class="col-sm-4">Created</dt>
+                        <dd class="col-sm-8">{{ character.created_at|date:"M d, Y" }}</dd>
+
+                        <dt class="col-sm-4">Last Updated</dt>
+                        <dd class="col-sm-8">{{ character.updated_at|date:"M d, Y H:i" }}</dd>
+
+                        <dt class="col-sm-4">Rig Status</dt>
+                        <dd class="col-sm-8">
+                            {% if character.is_rig_confirmed %}
+                            <span class="text-success">Confirmed and ready to animate</span>
+                            {% else %}
+                            <span class="text-warning">Rig needs confirmation</span>
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Actions</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'animator:character_rig_editor' character_id=character.id %}"
+                       class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="bi bi-diagram-3 me-3 text-primary"></i>
+                        <div>
+                            <strong>Edit Rig</strong>
+                            <p class="mb-0 small text-muted">Adjust character skeleton and joints</p>
+                        </div>
+                    </a>
+                    <a href="{% url 'animator:timeline_editor' project_id=project.id %}"
+                       class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="bi bi-play-circle me-3 text-success"></i>
+                        <div>
+                            <strong>Animate</strong>
+                            <p class="mb-0 small text-muted">Use this character in the timeline editor</p>
+                        </div>
+                    </a>
+                    <form action="{% url 'animator:character_delete' character_id=character.id %}" method="post"
+                          onsubmit="return confirm('Are you sure you want to delete this character?');">
+                        {% csrf_token %}
+                        <button type="submit" class="list-group-item list-group-item-action d-flex align-items-center text-danger">
+                            <i class="bi bi-trash me-3"></i>
+                            <div>
+                                <strong>Delete Character</strong>
+                                <p class="mb-0 small text-muted">Remove this character from the project</p>
+                            </div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

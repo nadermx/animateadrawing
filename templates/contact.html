@@ -1,4 +1,18 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us | Animate a Drawing Support{% endblock %}
+{% block meta_description %}Get help with Animate a Drawing. Contact our support team for questions about animations, billing, or technical issues. Response within 24-48 hours.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Animate a Drawing">
+<meta property="og:title" content="Contact Us - Animate a Drawing Support">
+<meta property="og:description" content="Get help with your animations. Our support team is here to assist you with any questions.">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
+
 {% block content %}
     <div class="container py-4">
         <div class="row justify-content-center">
