@@ -78,17 +78,17 @@ def draw_stick_figure(draw, center_x, center_y, scale=1.0, rotation=0, arm_angle
     # Legs
     leg_len = 40 * scale
 
-    # Left leg
-    left_leg_angle = math.radians(90 - 20 + leg_angle)
-    left_foot_x = hip_x - leg_len * math.cos(left_leg_angle)
-    left_foot_y = hip_y_rot + leg_len * math.sin(left_leg_angle)
-    draw.line([hip_x, hip_y_rot, left_foot_x, left_foot_y], fill=FIGURE_COLOR, width=3)
+    # Left leg - starts slightly left of hip, swings with leg_angle
+    left_hip_x = hip_x - 8 * scale
+    left_foot_x = left_hip_x + math.sin(math.radians(leg_angle)) * leg_len * 0.5
+    left_foot_y = hip_y_rot + leg_len
+    draw.line([left_hip_x, hip_y_rot, left_foot_x, left_foot_y], fill=FIGURE_COLOR, width=3)
 
-    # Right leg
-    right_leg_angle = math.radians(90 + 20 - leg_angle)
-    right_foot_x = hip_x + leg_len * math.cos(right_leg_angle)
-    right_foot_y = hip_y_rot + leg_len * math.sin(right_leg_angle)
-    draw.line([hip_x, hip_y_rot, right_foot_x, right_foot_y], fill=FIGURE_COLOR, width=3)
+    # Right leg - starts slightly right of hip, swings opposite to left
+    right_hip_x = hip_x + 8 * scale
+    right_foot_x = right_hip_x + math.sin(math.radians(-leg_angle)) * leg_len * 0.5
+    right_foot_y = hip_y_rot + leg_len
+    draw.line([right_hip_x, hip_y_rot, right_foot_x, right_foot_y], fill=FIGURE_COLOR, width=3)
 
 
 def generate_walk_frames(num_frames):
