@@ -112,13 +112,16 @@ class Character(models.Model):
 class Background(models.Model):
     """Reusable backgrounds for scenes"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='backgrounds')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='backgrounds', null=True, blank=True)
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to=upload_background_path)
 
     # For AI-generated backgrounds
     prompt = models.TextField(blank=True)
     is_ai_generated = models.BooleanField(default=False)
+
+    # System backgrounds are shown to all users
+    is_system = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
 

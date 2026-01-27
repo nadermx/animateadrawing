@@ -1,11 +1,130 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Background Library | Animate a Drawing{% endblock %}
-{% block meta_description %}Browse and manage your background images. Upload custom backgrounds or generate with AI.{% endblock %}
+{% block title %}Background Library - Scene Backgrounds | Animate a Drawing{% endblock %}
+{% block meta_description %}Browse beautiful scene backgrounds for your animations. Upload custom images or generate unique backgrounds with AI. Perfect for storytelling and creating immersive scenes.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:title" content="Background Library - Scene Backgrounds | Animate a Drawing">
+<meta property="og:description" content="Browse beautiful scene backgrounds for your animations. Upload custom images or generate unique backgrounds with AI.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
+
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Background Library",
+    "description": "Browse scene backgrounds for character animations",
+    "url": "{{ request.build_absolute_uri }}",
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Animate a Drawing",
+        "url": "https://animateadrawing.com"
+    }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="container py-4">
+    <!-- Hero Section for Non-Logged-In Users -->
+    {% if not user.is_authenticated %}
+    <div class="bg-gradient rounded-3 p-4 p-md-5 mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="row align-items-center text-white">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">Beautiful Scene Backgrounds</h1>
+                <p class="lead mb-4">
+                    Set the stage for your animated characters. Upload custom backgrounds or let AI generate
+                    unique scenes - forests, cities, abstract art, and more.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-light btn-lg">
+                        <i class="bi bi-rocket-takeoff me-2"></i>Start Creating Free
+                    </a>
+                    <a href="{% url 'animator:background_generate' %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-magic me-1"></i> Try AI Generator
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 d-none d-lg-block text-center">
+                <i class="bi bi-image-fill" style="font-size: 8rem; opacity: 0.8;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sample Backgrounds for Non-Logged-In Users -->
+    {% if sample_backgrounds %}
+    <h2 class="mb-4">Sample Backgrounds</h2>
+    <p class="text-muted mb-4">Preview our collection. Sign up to upload your own or generate unique backgrounds with AI.</p>
+    <div class="row g-4 mb-5">
+        {% for bg in sample_backgrounds %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100">
+                <img src="{{ bg.image.url }}" class="card-img-top" alt="{{ bg.name }}"
+                     style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h6 class="card-title">{{ bg.name }}</h6>
+                    {% if bg.is_ai_generated %}
+                    <span class="badge bg-info">AI Generated</span>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-sm btn-outline-primary w-100">
+                        Sign up to use
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Features Section for Non-Logged-In Users -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 bg-light">
+                <div class="card-body text-center p-4">
+                    <i class="bi bi-upload text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">Upload Custom</h4>
+                    <p class="text-muted">Use your own photos, artwork, or designs as backgrounds for your animations.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 bg-light">
+                <div class="card-body text-center p-4">
+                    <i class="bi bi-magic text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">AI Generation</h4>
+                    <p class="text-muted">Describe any scene and our AI creates a unique background in seconds.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 bg-light">
+                <div class="card-body text-center p-4">
+                    <i class="bi bi-collection text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">Your Library</h4>
+                    <p class="text-muted">Build a personal collection of backgrounds to reuse across all your projects.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="bg-primary text-white rounded-3 p-4 p-md-5 text-center">
+        <h2 class="mb-3">Start Building Your Background Library</h2>
+        <p class="lead mb-4">Sign up free and get 5 AI background generations included.</p>
+        <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-light btn-lg">
+            <i class="bi bi-rocket-takeoff me-2"></i>Get Started Free
+        </a>
+    </div>
+
+    {% else %}
+    <!-- Logged-In User View -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1>Background Library</h1>
@@ -22,6 +141,7 @@
     </div>
 
     {% if backgrounds %}
+    <h5 class="mb-3">Your Backgrounds</h5>
     <div class="row g-4">
         {% for bg in backgrounds %}
         <div class="col-md-4 col-lg-3">
@@ -47,7 +167,7 @@
         {% endfor %}
     </div>
     {% else %}
-    <!-- Empty State -->
+    <!-- Empty State for Logged-In Users -->
     <div class="text-center py-5">
         <div class="mb-4">
             <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>
@@ -64,9 +184,38 @@
         </div>
     </div>
     {% endif %}
+
+    <!-- Sample/System Backgrounds for Logged-In Users -->
+    {% if sample_backgrounds %}
+    <hr class="my-5">
+    <h5 class="mb-3">Sample Backgrounds</h5>
+    <div class="row g-4">
+        {% for bg in sample_backgrounds %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100">
+                <img src="{{ bg.image.url }}" class="card-img-top" alt="{{ bg.name }}"
+                     style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h6 class="card-title">{{ bg.name }}</h6>
+                    {% if bg.is_ai_generated %}
+                    <span class="badge bg-info">AI Generated</span>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-transparent">
+                    <button type="button" class="btn btn-sm btn-outline-primary w-100" data-bg-id="{{ bg.id }}">
+                        Use in Scene
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endif %}
 </div>
 
-<!-- Upload Modal -->
+{% if user.is_authenticated %}
+<!-- Upload Modal (Only for Logged-In Users) -->
 <div class="modal fade" id="uploadModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -95,4 +244,5 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}

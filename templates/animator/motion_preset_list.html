@@ -1,17 +1,68 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Motion Presets | Animate a Drawing{% endblock %}
-{% block meta_description %}Browse our library of pre-made animations: walk, run, dance, wave, jump, and more. Apply to your characters instantly.{% endblock %}
+{% block title %}Motion Presets - Animation Library | Animate a Drawing{% endblock %}
+{% block meta_description %}Browse our extensive library of 50+ pre-made animations: walk cycles, run animations, dance moves, gestures, emotions, and more. Apply them to your characters instantly.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:title" content="Motion Presets - Animation Library | Animate a Drawing">
+<meta property="og:description" content="Browse 50+ pre-made animations: walk, run, dance, wave, jump, and more. Apply them to your characters instantly.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
+
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Motion Presets Library",
+    "description": "Browse our library of pre-made animations for character animation",
+    "url": "{{ request.build_absolute_uri }}",
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Animate a Drawing",
+        "url": "https://animateadrawing.com"
+    }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="container py-4">
+    <!-- Hero Section for Non-Logged-In Users -->
+    {% if not user.is_authenticated %}
+    <div class="bg-primary text-white rounded-3 p-4 p-md-5 mb-4">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">50+ Ready-to-Use Motion Presets</h1>
+                <p class="lead mb-4">
+                    Walk cycles, run animations, dance moves, gestures, emotions, and more.
+                    Apply professional animations to your drawings with a single click.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-light btn-lg">
+                        <i class="bi bi-rocket-takeoff me-2"></i>Start Animating Free
+                    </a>
+                    <a href="/how-it-works/?lang={{ g.lang.iso }}" class="btn btn-outline-light btn-lg">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 d-none d-lg-block text-center">
+                <i class="bi bi-collection-play" style="font-size: 8rem; opacity: 0.8;"></i>
+            </div>
+        </div>
+    </div>
+    {% else %}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1>Motion Presets</h1>
             <p class="text-muted mb-0">Pre-made animations ready to apply to your characters</p>
         </div>
     </div>
+    {% endif %}
 
     <!-- Category Filter -->
     <div class="mb-4">
@@ -62,6 +113,9 @@
                     {% else %}
                     <span class="badge bg-primary">Custom</span>
                     {% endif %}
+                    {% if not user.is_authenticated %}
+                    <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-sm btn-outline-primary float-end">Use This</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -75,6 +129,43 @@
         </div>
         <h3>No presets found</h3>
         <p class="text-muted">{% if request.GET.category %}Try selecting a different category.{% else %}Motion presets will appear here.{% endif %}</p>
+    </div>
+    {% endif %}
+
+    <!-- CTA Section for Non-Logged-In Users -->
+    {% if not user.is_authenticated %}
+    <div class="bg-light rounded-3 p-4 p-md-5 mt-5 text-center">
+        <h2 class="mb-3">Ready to Bring Your Drawings to Life?</h2>
+        <p class="lead text-muted mb-4">
+            Upload your drawing, choose a motion preset, and watch your character dance, walk, or wave in seconds.
+        </p>
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="p-3">
+                    <i class="bi bi-cloud-upload text-primary" style="font-size: 2.5rem;"></i>
+                    <h5 class="mt-2">1. Upload Drawing</h5>
+                    <p class="small text-muted">Upload any drawing or sketch</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="p-3">
+                    <i class="bi bi-person-bounding-box text-primary" style="font-size: 2.5rem;"></i>
+                    <h5 class="mt-2">2. AI Detects Pose</h5>
+                    <p class="small text-muted">Our AI finds arms, legs, body</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="p-3">
+                    <i class="bi bi-play-circle text-primary" style="font-size: 2.5rem;"></i>
+                    <h5 class="mt-2">3. Apply Motion</h5>
+                    <p class="small text-muted">Pick a preset and animate</p>
+                </div>
+            </div>
+        </div>
+        <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-primary btn-lg">
+            <i class="bi bi-rocket-takeoff me-2"></i>Get Started Free
+        </a>
+        <p class="small text-muted mt-3">No credit card required. 5 free animations included.</p>
     </div>
     {% endif %}
 </div>
@@ -93,6 +184,12 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
+                {% if not user.is_authenticated %}
+                <div class="mt-3 pt-3 border-top">
+                    <p class="mb-2">Want to use this motion on your drawing?</p>
+                    <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-primary">Sign Up Free</a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

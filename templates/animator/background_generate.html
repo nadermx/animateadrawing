@@ -1,12 +1,69 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Generate Background with AI | Animate a Drawing{% endblock %}
-{% block meta_description %}Generate custom background images using AI. Describe your scene and let our AI create it.{% endblock %}
+{% block title %}AI Background Generator - Create Custom Scenes | Animate a Drawing{% endblock %}
+{% block meta_description %}Generate stunning custom background images using AI. Describe any scene - forests, cities, fantasy worlds - and our AI creates it in seconds. Perfect for animation backgrounds.{% endblock %}
+
+{% block og_tags %}
+<meta property="og:title" content="AI Background Generator | Animate a Drawing">
+<meta property="og:description" content="Generate stunning custom backgrounds using AI. Describe any scene and watch it come to life in seconds.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
+
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "AI Background Generator",
+    "description": "Generate custom background images using AI for animations",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "5 free generations included"
+    },
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Animate a Drawing",
+        "url": "https://animateadrawing.com"
+    }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="container py-4">
-    <!-- Breadcrumb -->
+    {% if not user.is_authenticated %}
+    <!-- Hero Section for Non-Logged-In Users -->
+    <div class="bg-dark text-white rounded-3 p-4 p-md-5 mb-4" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-3">AI Background Generator</h1>
+                <p class="lead mb-4">
+                    Describe any scene you can imagine and watch our AI bring it to life.
+                    Magical forests, futuristic cities, cozy interiors, abstract art - all in seconds.
+                </p>
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                    <span class="badge bg-primary fs-6"><i class="bi bi-lightning me-1"></i>Instant Generation</span>
+                    <span class="badge bg-primary fs-6"><i class="bi bi-palette me-1"></i>Multiple Styles</span>
+                    <span class="badge bg-primary fs-6"><i class="bi bi-aspect-ratio me-1"></i>Custom Sizes</span>
+                </div>
+                <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-light btn-lg">
+                    <i class="bi bi-rocket-takeoff me-2"></i>Try It Free - 5 Generations Included
+                </a>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block text-center">
+                <i class="bi bi-magic" style="font-size: 10rem; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Breadcrumb for logged-in users -->
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'animator:dashboard' %}">Dashboard</a></li>
@@ -14,6 +71,7 @@
             <li class="breadcrumb-item active">Generate</li>
         </ol>
     </nav>
+    {% endif %}
 
     <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -37,22 +95,22 @@
                         <div class="mb-4">
                             <label class="form-label">Quick Style Presets</label>
                             <div class="d-flex flex-wrap gap-2">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" data-preset="cartoon, colorful, simple shapes">
+                                <button type="button" class="btn btn-sm btn-outline-secondary style-preset" data-preset="cartoon, colorful, simple shapes">
                                     Cartoon
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" data-preset="anime style, detailed, vibrant">
+                                <button type="button" class="btn btn-sm btn-outline-secondary style-preset" data-preset="anime style, detailed, vibrant">
                                     Anime
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" data-preset="watercolor painting, soft, artistic">
+                                <button type="button" class="btn btn-sm btn-outline-secondary style-preset" data-preset="watercolor painting, soft, artistic">
                                     Watercolor
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" data-preset="pixel art, retro, 16-bit">
+                                <button type="button" class="btn btn-sm btn-outline-secondary style-preset" data-preset="pixel art, retro, 16-bit">
                                     Pixel Art
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" data-preset="realistic, photographic, detailed">
+                                <button type="button" class="btn btn-sm btn-outline-secondary style-preset" data-preset="realistic, photographic, detailed">
                                     Realistic
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" data-preset="minimalist, clean, modern">
+                                <button type="button" class="btn btn-sm btn-outline-secondary style-preset" data-preset="minimalist, clean, modern">
                                     Minimalist
                                 </button>
                             </div>
@@ -81,14 +139,22 @@
 
                         <!-- Generate Button -->
                         <div class="d-grid">
+                            {% if user.is_authenticated %}
                             <button type="submit" class="btn btn-primary btn-lg" id="generate-btn">
                                 <i class="bi bi-magic me-2"></i> Generate Background
                             </button>
+                            <p class="text-center text-muted small mt-2">Uses 10 credits per generation</p>
+                            {% else %}
+                            <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-primary btn-lg">
+                                <i class="bi bi-rocket-takeoff me-2"></i> Sign Up to Generate
+                            </a>
+                            <p class="text-center text-muted small mt-2">Create a free account to start generating backgrounds</p>
+                            {% endif %}
                         </div>
-                        <p class="text-center text-muted small mt-2">Uses 10 credits per generation</p>
                     </form>
 
-                    <!-- Result Area -->
+                    {% if user.is_authenticated %}
+                    <!-- Result Area (only for logged-in users) -->
                     <div id="result-area" class="mt-4 d-none">
                         <hr>
                         <h5>Generated Background</h5>
@@ -99,6 +165,7 @@
                             <p class="text-muted mt-2">Generating your background...</p>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -117,6 +184,42 @@
                     </ul>
                 </div>
             </div>
+
+            {% if not user.is_authenticated %}
+            <!-- Example Gallery for Non-Logged-In Users -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Example Backgrounds Created with AI</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-4">
+                            <div class="bg-light rounded p-4 text-center">
+                                <i class="bi bi-tree text-success" style="font-size: 2rem;"></i>
+                                <p class="small mb-0 mt-2">Enchanted Forest</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="bg-light rounded p-4 text-center">
+                                <i class="bi bi-building text-primary" style="font-size: 2rem;"></i>
+                                <p class="small mb-0 mt-2">Futuristic City</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="bg-light rounded p-4 text-center">
+                                <i class="bi bi-stars text-warning" style="font-size: 2rem;"></i>
+                                <p class="small mb-0 mt-2">Space Scene</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-outline-primary">
+                            Sign Up to Create Your Own
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -125,14 +228,10 @@
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('generate-form');
     const promptInput = document.getElementById('prompt');
-    const generateBtn = document.getElementById('generate-btn');
-    const resultArea = document.getElementById('result-area');
-    const resultPreview = document.getElementById('result-preview');
 
     // Style presets
-    document.querySelectorAll('[data-preset]').forEach(btn => {
+    document.querySelectorAll('.style-preset').forEach(btn => {
         btn.addEventListener('click', function() {
             const preset = this.dataset.preset;
             if (promptInput.value) {
@@ -142,6 +241,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    {% if user.is_authenticated %}
+    const form = document.getElementById('generate-form');
+    const generateBtn = document.getElementById('generate-btn');
+    const resultArea = document.getElementById('result-area');
+    const resultPreview = document.getElementById('result-preview');
 
     // Form submit
     form.addEventListener('submit', function(e) {
@@ -182,6 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
             generateBtn.innerHTML = '<i class="bi bi-magic me-2"></i> Generate Background';
         });
     });
+    {% endif %}
 });
 </script>
 {% endblock %}

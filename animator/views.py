@@ -457,14 +457,17 @@ def export_download(request, export_id):
 
 
 # Motion Presets
-@login_required
 def motion_preset_list(request):
-    """Browse motion presets"""
+    """Browse motion presets - public page"""
     g = GlobalVars.get_globals(request)
 
-    presets = MotionPreset.objects.filter(
-        Q(is_system=True) | Q(user=request.user)
-    ).order_by('category', 'name')
+    # Show system presets to everyone, user presets only to logged-in users
+    if request.user.is_authenticated:
+        presets = MotionPreset.objects.filter(
+            Q(is_system=True) | Q(user=request.user)
+        ).order_by('category', 'name')
+    else:
+        presets = MotionPreset.objects.filter(is_system=True).order_by('category', 'name')
 
     category = request.GET.get('category')
     if category:
@@ -474,6 +477,7 @@ def motion_preset_list(request):
         'g': g,
         'presets': presets,
         'categories': MotionPreset.CATEGORY_CHOICES,
+        'page': 'motion-presets',
     }
     return render(request, 'animator/motion_preset_list.html', context)
 
@@ -494,16 +498,23 @@ def motion_preset_preview(request, preset_id):
 
 
 # Backgrounds
-@login_required
 def background_library(request):
-    """Browse and manage backgrounds"""
+    """Browse and manage backgrounds - public page"""
     g = GlobalVars.get_globals(request)
 
-    backgrounds = Background.objects.filter(user=request.user).order_by('-created_at')
+    # Show user's backgrounds if logged in, sample backgrounds for everyone
+    user_backgrounds = []
+    if request.user.is_authenticated:
+        user_backgrounds = Background.objects.filter(user=request.user).order_by('-created_at')
+
+    # Show sample/system backgrounds to everyone
+    sample_backgrounds = Background.objects.filter(is_system=True).order_by('-created_at')
 
     context = {
         'g': g,
-        'backgrounds': backgrounds,
+        'backgrounds': user_backgrounds,
+        'sample_backgrounds': sample_backgrounds,
+        'page': 'backgrounds',
     }
     return render(request, 'animator/background_library.html', context)
 
@@ -522,12 +533,14 @@ def background_upload(request):
     return redirect('animator:background_library')
 
 
-@login_required
 def background_generate(request):
-    """Generate background with AI"""
+    """Generate background with AI - public page with login required to generate"""
     g = GlobalVars.get_globals(request)
 
     if request.method == 'POST':
+        # Require login to actually generate
+        if not request.user.is_authenticated:
+            return JsonResponse({'error': 'Login required', 'redirect': '/login/'}, status=401)
         prompt = request.POST.get('prompt')
         if prompt:
             # Queue AI generation
@@ -537,25 +550,27 @@ def background_generate(request):
 
     context = {
         'g': g,
+        'page': 'background-generate',
     }
     return render(request, 'animator/background_generate.html', context)
 
 
 # Templates
-@login_required
 def template_library(request):
-    """Browse character templates"""
+    """Browse character templates - public page"""
     g = GlobalVars.get_globals(request)
 
+    # Show all templates, mark premium ones
     templates = CharacterTemplate.objects.all()
 
-    # Filter for free users
-    if not request.user.is_plan_active:
-        templates = templates.filter(is_premium=False)
+    # Determine which templates are accessible
+    can_use_premium = request.user.is_authenticated and request.user.is_plan_active
 
     context = {
         'g': g,
         'templates': templates,
+        'can_use_premium': can_use_premium,
+        'page': 'templates',
     }
     return render(request, 'animator/template_library.html', context)
 

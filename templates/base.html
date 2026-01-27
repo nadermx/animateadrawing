@@ -102,6 +102,21 @@
                     <li class="nav-item">
                         <a class="nav-link{% if page == 'how-it-works' %} active{% endif %}" href="/how-it-works/?lang={{ g.lang.iso }}">How It Works</a>
                     </li>
+                    <!-- Features Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle{% if page == 'motion-presets' or page == 'backgrounds' or page == 'background-generate' or page == 'templates' %} active{% endif %}" href="#" id="featuresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Features
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="featuresDropdown">
+                            <li><a class="dropdown-item" href="{% url 'animator:motion_preset_list' %}"><i class="bi bi-collection-play me-2"></i>Motion Presets</a></li>
+                            <li><a class="dropdown-item" href="{% url 'animator:background_library' %}"><i class="bi bi-image me-2"></i>Backgrounds</a></li>
+                            <li><a class="dropdown-item" href="{% url 'animator:background_generate' %}"><i class="bi bi-magic me-2"></i>AI Background Generator</a></li>
+                            <li><a class="dropdown-item" href="{% url 'animator:template_library' %}"><i class="bi bi-person-lines-fill me-2"></i>Character Templates</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/features/ai-pose-detection/?lang={{ g.lang.iso }}"><i class="bi bi-person-bounding-box me-2"></i>AI Pose Detection</a></li>
+                            <li><a class="dropdown-item" href="/features/export-formats/?lang={{ g.lang.iso }}"><i class="bi bi-file-earmark-play me-2"></i>Export Formats</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link{% if page == 'examples' %} active{% endif %}" href="/examples/?lang={{ g.lang.iso }}">Examples</a>
                     </li>

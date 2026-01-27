@@ -24,8 +24,8 @@ class CharacterAdmin(admin.ModelAdmin):
 
 @admin.register(Background)
 class BackgroundAdmin(admin.ModelAdmin):
-    list_display = ['name', 'user', 'is_ai_generated', 'created_at']
-    list_filter = ['is_ai_generated', 'created_at']
+    list_display = ['name', 'user', 'is_system', 'is_ai_generated', 'created_at']
+    list_filter = ['is_system', 'is_ai_generated', 'created_at']
     search_fields = ['name', 'user__email']
 
 

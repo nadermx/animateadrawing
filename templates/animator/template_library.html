@@ -1,24 +1,82 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Character Templates | Animate a Drawing{% endblock %}
-{% block meta_description %}Browse our library of pre-rigged character templates. Get started quickly with ready-to-animate characters.{% endblock %}
+{% block title %}Character Templates - Pre-Rigged Characters | Animate a Drawing{% endblock %}
+{% block meta_description %}Browse our library of pre-rigged character templates. Stick figures, animals, robots, and more - ready to animate instantly. Skip the rigging and start animating!{% endblock %}
+
+{% block og_tags %}
+<meta property="og:title" content="Character Templates - Pre-Rigged Characters | Animate a Drawing">
+<meta property="og:description" content="Pre-rigged character templates ready to animate. Stick figures, animals, robots, and more - skip the setup and start creating!">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{% static 'images/og-default.png' %}">
+{% endblock %}
+
+{% block json_ld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Character Templates Library",
+    "description": "Pre-rigged character templates for instant animation",
+    "url": "{{ request.build_absolute_uri }}",
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Animate a Drawing",
+        "url": "https://animateadrawing.com"
+    }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="container py-4">
+    {% if not user.is_authenticated %}
+    <!-- Hero Section for Non-Logged-In Users -->
+    <div class="bg-success text-white rounded-3 p-4 p-md-5 mb-4" style="background: linear-gradient(135deg, #2d6a4f 0%, #40916c 100%);">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">Pre-Rigged Character Templates</h1>
+                <p class="lead mb-4">
+                    Skip the rigging step entirely. Our templates come with joints and bones already set up,
+                    so you can jump straight to animating. Perfect for beginners and quick projects.
+                </p>
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                    <span class="badge bg-light text-dark fs-6"><i class="bi bi-person me-1"></i>Stick Figures</span>
+                    <span class="badge bg-light text-dark fs-6"><i class="bi bi-robot me-1"></i>Robots</span>
+                    <span class="badge bg-light text-dark fs-6"><i class="bi bi-bug me-1"></i>Animals</span>
+                    <span class="badge bg-light text-dark fs-6"><i class="bi bi-emoji-smile me-1"></i>Mascots</span>
+                </div>
+                <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-light btn-lg">
+                    <i class="bi bi-rocket-takeoff me-2"></i>Start Animating Free
+                </a>
+            </div>
+            <div class="col-lg-4 d-none d-lg-block text-center">
+                <i class="bi bi-person-lines-fill" style="font-size: 8rem; opacity: 0.5;"></i>
+            </div>
+        </div>
+    </div>
+    {% else %}
     <div class="mb-4">
         <h1>Character Templates</h1>
         <p class="text-muted">Pre-rigged characters ready to animate. Click to use in your project.</p>
     </div>
+    {% endif %}
 
     {% if templates %}
     <div class="row g-4">
         {% for template in templates %}
         <div class="col-md-4 col-lg-3">
-            <div class="card h-100{% if template.is_premium and not user.is_plan_active %} opacity-75{% endif %}">
+            <div class="card h-100{% if template.is_premium and not can_use_premium %} opacity-75{% endif %}">
                 <div class="position-relative">
+                    {% if template.preview_image %}
                     <img src="{{ template.preview_image.url }}" class="card-img-top" alt="{{ template.name }}"
                          style="height: 200px; object-fit: contain; background: #f8f9fa;">
+                    {% else %}
+                    <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 200px; background: #f8f9fa;">
+                        <i class="bi bi-person-lines-fill text-muted" style="font-size: 4rem;"></i>
+                    </div>
+                    {% endif %}
                     {% if template.is_premium %}
                     <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark">
                         <i class="bi bi-star-fill me-1"></i>Premium
@@ -35,8 +93,12 @@
                     </p>
                 </div>
                 <div class="card-footer bg-transparent">
-                    {% if template.is_premium and not user.is_plan_active %}
-                    <a href="/pricing/" class="btn btn-outline-warning w-100">
+                    {% if not user.is_authenticated %}
+                    <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-person-plus me-1"></i> Sign Up to Use
+                    </a>
+                    {% elif template.is_premium and not can_use_premium %}
+                    <a href="/pricing/?lang={{ g.lang.iso }}" class="btn btn-outline-warning w-100">
                         <i class="bi bi-lock me-1"></i> Upgrade to Access
                     </a>
                     {% else %}
@@ -55,11 +117,17 @@
         <div class="mb-4">
             <i class="bi bi-person-lines-fill text-muted" style="font-size: 4rem;"></i>
         </div>
-        <h3>No templates available</h3>
-        <p class="text-muted mb-4">Character templates will appear here soon.</p>
+        <h3>No templates available yet</h3>
+        <p class="text-muted mb-4">Character templates are coming soon! In the meantime, upload your own drawings.</p>
+        {% if user.is_authenticated %}
         <a href="{% url 'animator:dashboard' %}" class="btn btn-primary">
             Go to Dashboard
         </a>
+        {% else %}
+        <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-primary">
+            Sign Up to Get Started
+        </a>
+        {% endif %}
     </div>
     {% endif %}
 
@@ -74,13 +142,59 @@
                         <li>Quick prototyping and testing animations</li>
                         <li>Learning how rigs work</li>
                         <li>Starting with a proven character structure</li>
+                        <li>Creating consistent animations with the same character</li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+
+    {% if not user.is_authenticated %}
+    <!-- CTA Section -->
+    <div class="bg-light rounded-3 p-4 p-md-5 mt-5 text-center">
+        <h2 class="mb-3">Ready to Bring Characters to Life?</h2>
+        <p class="lead text-muted mb-4">
+            Sign up for free and get access to character templates, motion presets, and AI tools.
+        </p>
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="p-3">
+                    <i class="bi bi-person-lines-fill text-success" style="font-size: 2.5rem;"></i>
+                    <h5 class="mt-2">Templates</h5>
+                    <p class="small text-muted">Pre-rigged characters</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="p-3">
+                    <i class="bi bi-collection-play text-primary" style="font-size: 2.5rem;"></i>
+                    <h5 class="mt-2">Motion Presets</h5>
+                    <p class="small text-muted">50+ animations</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="p-3">
+                    <i class="bi bi-magic text-info" style="font-size: 2.5rem;"></i>
+                    <h5 class="mt-2">AI Tools</h5>
+                    <p class="small text-muted">Pose detection & more</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="p-3">
+                    <i class="bi bi-download text-warning" style="font-size: 2.5rem;"></i>
+                    <h5 class="mt-2">Export</h5>
+                    <p class="small text-muted">MP4, WebM, GIF</p>
+                </div>
+            </div>
+        </div>
+        <a href="/signup/?lang={{ g.lang.iso }}" class="btn btn-primary btn-lg">
+            <i class="bi bi-rocket-takeoff me-2"></i>Get Started Free
+        </a>
+        <p class="small text-muted mt-3">No credit card required. 5 free animations included.</p>
+    </div>
+    {% endif %}
 </div>
 
+{% if user.is_authenticated %}
 <!-- Use Template Modal -->
 <div class="modal fade" id="useTemplateModal" tabindex="-1">
     <div class="modal-dialog">
@@ -102,9 +216,11 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block scripts %}
+{% if user.is_authenticated %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const modal = new bootstrap.Modal(document.getElementById('useTemplateModal'));
@@ -117,4 +233,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+{% endif %}
 {% endblock %}
