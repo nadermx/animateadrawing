@@ -69,8 +69,8 @@
         <div class="col-md-4 col-lg-3">
             <div class="card h-100{% if template.is_premium and not can_use_premium %} opacity-75{% endif %}">
                 <div class="position-relative">
-                    {% if template.preview_image %}
-                    <img src="{{ template.preview_image.url }}" class="card-img-top" alt="{{ template.name }}"
+                    {% if template.image %}
+                    <img src="{{ template.image.url }}" class="card-img-top" alt="{{ template.name }}"
                          style="height: 200px; object-fit: contain; background: #f8f9fa;">
                     {% else %}
                     <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 200px; background: #f8f9fa;">
