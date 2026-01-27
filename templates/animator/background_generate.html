@@ -229,6 +229,8 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const promptInput = document.getElementById('prompt');
+    const BACKGROUND_LIBRARY_URL = "{% url 'animator:background_library' %}";
+    const BACKGROUND_GENERATE_URL = "{% url 'animator:background_generate' %}";
 
     // Style presets
     document.querySelectorAll('.style-preset').forEach(btn => {
@@ -263,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
         resultArea.classList.remove('d-none');
         resultPreview.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Generating...</span></div><p class="text-muted mt-2">Generating your background... This may take up to a minute.</p>';
 
-        fetch('{% url "animator:background_generate" %}', {
+        fetch(BACKGROUND_GENERATE_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -274,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'queued') {
-                resultPreview.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle me-2"></i>Background generation queued! Check your <a href="{% url \'animator:background_library\' %}">background library</a> in a few moments.</div>';
+                resultPreview.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle me-2"></i>Background generation queued! Check your <a href="' + BACKGROUND_LIBRARY_URL + '">background library</a> in a few moments.</div>';
             } else if (data.error) {
                 resultPreview.innerHTML = '<div class="alert alert-danger"><i class="bi bi-exclamation-circle me-2"></i>' + data.error + '</div>';
             }
