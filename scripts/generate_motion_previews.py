@@ -29,98 +29,114 @@ SECONDARY_COLOR = (37, 99, 235)  # Darker blue
 
 
 def draw_stick_figure(draw, center_x, center_y, scale=1.0, rotation=0, arm_angle=0, leg_angle=0):
-    """Draw a simple stick figure with optional transformations"""
-    # Apply rotation matrix
+    """Draw a properly proportioned stick figure with natural motion"""
+    # Apply rotation around center point
     cos_r = math.cos(math.radians(rotation))
     sin_r = math.sin(math.radians(rotation))
 
-    def rotate_point(x, y):
-        # Rotate around center
+    def rotate(x, y):
         dx, dy = x - center_x, y - center_y
-        new_x = center_x + (dx * cos_r - dy * sin_r) * scale
-        new_y = center_y + (dx * sin_r + dy * cos_r) * scale
-        return new_x, new_y
+        nx = center_x + (dx * cos_r - dy * sin_r)
+        ny = center_y + (dx * sin_r + dy * cos_r)
+        return nx, ny
 
-    # Body proportions (relative to center)
-    head_y = center_y - 45 * scale
-    shoulder_y = center_y - 25 * scale
-    hip_y = center_y + 10 * scale
-    foot_y = center_y + 50 * scale
+    # Better proportions for 200x200 canvas
+    head_center_y = center_y - 55 * scale
+    neck_y = center_y - 42 * scale
+    shoulder_y = center_y - 38 * scale
+    hip_y = center_y - 5 * scale
 
-    # Head
-    head_x, head_y_rot = rotate_point(center_x, head_y)
-    head_radius = int(12 * scale)
-    draw.ellipse([head_x - head_radius, head_y_rot - head_radius,
-                  head_x + head_radius, head_y_rot + head_radius],
-                 fill=FIGURE_COLOR)
+    line_width = 3
+    head_r = 12 * scale
 
-    # Body (neck to hip)
-    neck_x, neck_y = rotate_point(center_x, head_y + head_radius)
-    hip_x, hip_y_rot = rotate_point(center_x, hip_y)
-    draw.line([neck_x, neck_y, hip_x, hip_y_rot], fill=FIGURE_COLOR, width=3)
+    # HEAD
+    hx, hy = rotate(center_x, head_center_y)
+    draw.ellipse([hx - head_r, hy - head_r, hx + head_r, hy + head_r], fill=FIGURE_COLOR)
 
-    # Arms
-    shoulder_x, shoulder_y_rot = rotate_point(center_x, shoulder_y)
-    arm_len = 30 * scale
+    # TORSO (neck to hip)
+    neck_pt = rotate(center_x, neck_y)
+    hip_pt = rotate(center_x, hip_y)
+    draw.line([neck_pt, hip_pt], fill=FIGURE_COLOR, width=line_width)
 
-    # Left arm
-    left_arm_angle = math.radians(-45 + arm_angle)
-    left_hand_x = shoulder_x - arm_len * math.cos(left_arm_angle)
-    left_hand_y = shoulder_y_rot + arm_len * math.sin(left_arm_angle)
-    draw.line([shoulder_x, shoulder_y_rot, left_hand_x, left_hand_y], fill=FIGURE_COLOR, width=3)
+    # ARMS - hang from shoulders, swing forward/back
+    arm_len = 28 * scale
+    shoulder_l = rotate(center_x - 2 * scale, shoulder_y)
+    shoulder_r = rotate(center_x + 2 * scale, shoulder_y)
 
-    # Right arm
-    right_arm_angle = math.radians(45 - arm_angle)
-    right_hand_x = shoulder_x + arm_len * math.cos(right_arm_angle)
-    right_hand_y = shoulder_y_rot + arm_len * math.sin(right_arm_angle)
-    draw.line([shoulder_x, shoulder_y_rot, right_hand_x, right_hand_y], fill=FIGURE_COLOR, width=3)
+    # Left arm swings with arm_angle
+    la_rad = math.radians(arm_angle * 0.8)
+    left_hand = (
+        shoulder_l[0] + math.sin(la_rad) * arm_len,
+        shoulder_l[1] + math.cos(la_rad) * arm_len
+    )
+    draw.line([shoulder_l, left_hand], fill=FIGURE_COLOR, width=line_width)
 
-    # Legs
-    leg_len = 40 * scale
+    # Right arm swings opposite
+    ra_rad = math.radians(-arm_angle * 0.8)
+    right_hand = (
+        shoulder_r[0] + math.sin(ra_rad) * arm_len,
+        shoulder_r[1] + math.cos(ra_rad) * arm_len
+    )
+    draw.line([shoulder_r, right_hand], fill=FIGURE_COLOR, width=line_width)
 
-    # Left leg - starts slightly left of hip, swings with leg_angle
-    left_hip_x = hip_x - 8 * scale
-    left_foot_x = left_hip_x + math.sin(math.radians(leg_angle)) * leg_len * 0.5
-    left_foot_y = hip_y_rot + leg_len
-    draw.line([left_hip_x, hip_y_rot, left_foot_x, left_foot_y], fill=FIGURE_COLOR, width=3)
+    # LEGS - properly proportioned
+    leg_len = 55 * scale
+    hip_width = 8 * scale
 
-    # Right leg - starts slightly right of hip, swings opposite to left
-    right_hip_x = hip_x + 8 * scale
-    right_foot_x = right_hip_x + math.sin(math.radians(-leg_angle)) * leg_len * 0.5
-    right_foot_y = hip_y_rot + leg_len
-    draw.line([right_hip_x, hip_y_rot, right_foot_x, right_foot_y], fill=FIGURE_COLOR, width=3)
+    # Left leg
+    left_hip = rotate(center_x - hip_width/2, hip_y)
+    ll_rad = math.radians(leg_angle)
+    left_foot = (
+        left_hip[0] + math.sin(ll_rad) * leg_len,
+        left_hip[1] + math.cos(ll_rad) * leg_len
+    )
+    draw.line([left_hip, left_foot], fill=FIGURE_COLOR, width=line_width)
+
+    # Right leg (swings opposite)
+    right_hip = rotate(center_x + hip_width/2, hip_y)
+    rl_rad = math.radians(-leg_angle)
+    right_foot = (
+        right_hip[0] + math.sin(rl_rad) * leg_len,
+        right_hip[1] + math.cos(rl_rad) * leg_len
+    )
+    draw.line([right_hip, right_foot], fill=FIGURE_COLOR, width=line_width)
 
 
 def generate_walk_frames(num_frames):
-    """Generate walking animation frames"""
+    """Generate walking animation frames with natural motion"""
     frames = []
     for i in range(num_frames):
         img = Image.new('RGB', (WIDTH, HEIGHT), BG_COLOR)
         draw = ImageDraw.Draw(img)
 
         t = i / num_frames * 2 * math.pi
-        leg_swing = math.sin(t) * 25
-        arm_swing = -math.sin(t) * 20
-        bounce = abs(math.sin(t)) * 3
+
+        # Natural walking motion
+        leg_swing = math.sin(t) * 20
+        arm_swing = -math.sin(t - 0.2) * 18  # Slight delay for follow-through
+        bounce = abs(math.sin(t * 2)) * 4
+        lean = math.sin(t) * 2  # Subtle body lean
 
         draw_stick_figure(draw, WIDTH//2, HEIGHT//2 - bounce,
-                          arm_angle=arm_swing, leg_angle=leg_swing)
+                          rotation=lean, arm_angle=arm_swing, leg_angle=leg_swing)
         frames.append(img)
     return frames
 
 
 def generate_run_frames(num_frames):
-    """Generate running animation frames"""
+    """Generate running animation frames - faster, more dynamic"""
     frames = []
     for i in range(num_frames):
         img = Image.new('RGB', (WIDTH, HEIGHT), BG_COLOR)
         draw = ImageDraw.Draw(img)
 
         t = i / num_frames * 2 * math.pi
-        leg_swing = math.sin(t) * 35
-        arm_swing = -math.sin(t) * 30
-        bounce = abs(math.sin(t)) * 8
-        lean = 5  # Forward lean
+
+        # Running is faster with larger movements
+        leg_swing = math.sin(t) * 30
+        arm_swing = -math.sin(t) * 35
+        bounce = abs(math.sin(t * 2)) * 10  # Higher bounce
+        lean = 8 + math.sin(t) * 3  # Forward lean with slight variation
 
         draw_stick_figure(draw, WIDTH//2, HEIGHT//2 - bounce,
                           rotation=lean, arm_angle=arm_swing, leg_angle=leg_swing)
@@ -155,51 +171,56 @@ def generate_jump_frames(num_frames):
 
 
 def generate_dance_frames(num_frames):
-    """Generate dancing animation frames"""
+    """Generate dancing animation frames - rhythmic and expressive"""
     frames = []
     for i in range(num_frames):
         img = Image.new('RGB', (WIDTH, HEIGHT), BG_COLOR)
         draw = ImageDraw.Draw(img)
 
-        t = i / num_frames * 4 * math.pi  # Faster movement
+        t = i / num_frames * 4 * math.pi
 
-        # Sway and bounce
-        rotation = math.sin(t) * 10
-        bounce = abs(math.sin(t * 2)) * 5
-        arm_angle = math.sin(t * 1.5) * 40
-        leg_angle = math.sin(t) * 15
+        # Rhythmic dancing with multiple components
+        sway_x = math.sin(t) * 8
+        rotation = math.sin(t) * 12
+        bounce = abs(math.sin(t * 2)) * 8
+        arm_angle = math.sin(t * 1.5) * 45 + math.sin(t * 0.75) * 15
+        leg_angle = math.sin(t * 2) * 18
 
-        draw_stick_figure(draw, WIDTH//2, HEIGHT//2 - bounce,
+        draw_stick_figure(draw, WIDTH//2 + sway_x, HEIGHT//2 - bounce,
                           rotation=rotation, arm_angle=arm_angle, leg_angle=leg_angle)
         frames.append(img)
     return frames
 
 
 def generate_wave_frames(num_frames):
-    """Generate waving animation frames"""
+    """Generate waving animation frames - friendly greeting"""
     frames = []
     for i in range(num_frames):
         img = Image.new('RGB', (WIDTH, HEIGHT), BG_COLOR)
         draw = ImageDraw.Draw(img)
 
-        t = i / num_frames * 3 * math.pi
+        t = i / num_frames * 4 * math.pi
 
-        # Only right arm waves
-        # First draw normal figure
-        draw_stick_figure(draw, WIDTH//2, HEIGHT//2)
+        # Subtle body sway while waving
+        sway = math.sin(t * 0.5) * 2
 
-        # Override with custom waving arm
-        center_x, center_y = WIDTH//2, HEIGHT//2
-        shoulder_y = center_y - 25
+        # Draw base figure
+        draw_stick_figure(draw, WIDTH//2 + sway, HEIGHT//2, rotation=sway * 0.5)
 
-        # Waving arm goes up and swings
-        wave_angle = math.sin(t) * 30 - 60  # Swings between -30 and -90 degrees
-        arm_len = 30
-        hand_x = center_x + arm_len * math.cos(math.radians(wave_angle))
-        hand_y = shoulder_y - arm_len * math.sin(math.radians(abs(wave_angle)))
+        # Draw waving arm raised high
+        shoulder_y = HEIGHT//2 - 38
+        shoulder = (WIDTH//2 + 2 + sway, shoulder_y)
+        arm_len = 28
 
-        # Draw waving arm (cover old arm with background, draw new)
-        draw.line([center_x, shoulder_y, hand_x, hand_y], fill=FIGURE_COLOR, width=4)
+        # Arm raised and waving
+        wave = math.sin(t) * 35
+        base_angle = -70
+
+        hand_x = shoulder[0] + arm_len * math.sin(math.radians(base_angle + wave))
+        hand_y = shoulder[1] - arm_len * math.cos(math.radians(base_angle + wave))
+
+        draw.line([shoulder, (hand_x, hand_y)], fill=FIGURE_COLOR, width=4)
+        draw.ellipse([hand_x - 4, hand_y - 4, hand_x + 4, hand_y + 4], fill=FIGURE_COLOR)
 
         frames.append(img)
     return frames
