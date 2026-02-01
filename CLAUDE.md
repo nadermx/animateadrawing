@@ -219,6 +219,7 @@ The main site proxies `/api/v1/*` to the GPU backend via nginx.
 
 ### Internal API Endpoints
 - `/api/accounts/api/deduct/` - Credit verification/deduction for GPU API
+- `/account/api/deduct/` - Compatibility alias (GPU backend calls this path)
 - `/api/accounts/rate_limit/` - Rate limit checking
 - `/animator/api/*` - Animation editor APIs (characters, scenes, etc.)
 
@@ -271,6 +272,21 @@ ansible -i servers server -m shell -a "nvidia-smi" --become
 # Check local worker logs
 ansible -i servers all -m shell -a "tail -50 /var/log/animateadrawing/animateadrawing.err.log" --become
 ```
+
+## Testing
+
+```bash
+# Run API endpoint test suite (40 tests)
+python scripts/test_api_endpoints.py --live --verbose
+
+# Test against localhost (default)
+python scripts/test_api_endpoints.py
+
+# Django management command wrapper
+python manage.py test_api [--live] [--verbose]
+```
+
+Tests cover: public pages, auth, protected pages, API proxy, GPU backend, accounts API, animator API, static files, SSL redirects.
 
 ## Analytics
 
