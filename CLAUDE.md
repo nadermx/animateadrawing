@@ -153,3 +153,53 @@ Custom user model `accounts.CustomUser`:
 - Subscription tracking (`is_plan_active`, `next_billing_date`, `plan_subscribed`)
 
 Payment processors in `finances/`: Stripe, Square, PayPal. Plans defined in admin.
+
+## Email System
+
+Self-hosted transactional email using Postfix + OpenDKIM on `mail.animateadrawing.com`.
+
+### Configuration
+- **Sending domain:** `mail.animateadrawing.com` (NOT the main domain)
+- **From address:** `Animate a Drawing <no-reply@mail.animateadrawing.com>`
+- **Server:** Postfix with OpenDKIM for DKIM signing
+- **Django backend:** `django.core.mail.backends.smtp.EmailBackend` via localhost:25
+
+### DNS Records (DigitalOcean)
+```
+A     mail.animateadrawing.com           → 140.82.28.166
+TXT   mail.animateadrawing.com           → v=spf1 ip4:140.82.28.166 a ~all
+TXT   _dmarc.mail.animateadrawing.com    → v=DMARC1; p=none; rua=mailto:postmaster@mail.animateadrawing.com; fo=1
+TXT   mail._domainkey.mail.animateadrawing.com → v=DKIM1; k=rsa; p=...
+```
+
+### Sending Email
+Use `app/utils.py` `Utils.send_email()`:
+```python
+from app.utils import Utils
+Utils.send_email(
+    recipients=['user@example.com'],
+    subject='Welcome!',
+    template='email-verification',  # templates/mailing/email-verification.html
+    data={'code': '123456', 'user': user}
+)
+```
+
+### Monitoring
+```bash
+# Check mail logs
+ansible -i servers all -m shell -a "tail -50 /var/log/mail.log" --become
+
+# Check DKIM signing
+ansible -i servers all -m shell -a "grep DKIM /var/log/mail.log | tail -10" --become
+
+# Check mail queue
+ansible -i servers all -m shell -a "mailq" --become
+
+# Test DKIM key
+ansible -i servers all -m shell -a "opendkim-testkey -d mail.animateadrawing.com -s mail -vvv" --become
+```
+
+### Troubleshooting
+- **DKIM not signing:** Check `/etc/opendkim/SigningTable` has `*@mail.animateadrawing.com`
+- **Email going to spam:** Verify SPF/DKIM/DMARC records with mail-tester.com
+- **Loops back error:** Don't send to `@mail.animateadrawing.com` addresses (no inbox configured)
