@@ -1,9 +1,7 @@
 server_tokens off;
 
 server {
-    listen [::]:80;
-    listen 80;
-    server_name {{ domain }} www.{{domain}};
+    server_name {{ domain }};
 
     client_max_body_size 500m;
     gzip_disable "msie6";
@@ -46,4 +44,56 @@ server {
         add_header Cache-Control "public, must-revalidate, proxy-revalidate";
         access_log off;
     }
+
+    ### CLICKY ANTI-ADBLOCK PROXY
+    location = /32fd4eea88e4.js {
+        resolver 1.1.1.1;
+        proxy_pass https://static.getclicky.com/js?in=%2Fb1be3608b208;
+        proxy_connect_timeout 10s;
+        proxy_http_version 1.1;
+        proxy_ssl_server_name on;
+        proxy_set_header Host static.getclicky.com;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Cookie "";
+    }
+
+    location = /b1be3608b208 {
+        resolver 1.1.1.1;
+        proxy_pass https://in.getclicky.com/in.php;
+        proxy_connect_timeout 10s;
+        proxy_http_version 1.1;
+        proxy_ssl_server_name on;
+        proxy_set_header Host in.getclicky.com;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Cookie "";
+    }
+
+    listen [::]:443 ssl;
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/{{ domain }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ domain }}/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+# Redirect www to non-www
+server {
+    server_name www.{{ domain }};
+    listen [::]:443 ssl;
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/{{ domain }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ domain }}/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    return 301 https://{{ domain }}$request_uri;
+}
+
+# HTTP to HTTPS redirect
+server {
+    listen [::]:80;
+    listen 80;
+    server_name {{ domain }} www.{{ domain }};
+    return 301 https://{{ domain }}$request_uri;
 }
