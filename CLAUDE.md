@@ -222,8 +222,55 @@ The main site proxies `/api/v1/*` to the GPU backend via nginx.
 - `/api/accounts/rate_limit/` - Rate limit checking
 - `/animator/api/*` - Animation editor APIs (characters, scenes, etc.)
 
-### Related Project
-`/home/john/drawinganimator/` - Simpler animation site using the same GPU backend (api.imageeditor.ai = api.animateadrawing.com, same server).
+### Related Projects
+- `/home/john/drawinganimator/` - Simpler animation site using the same GPU backend
+- `/home/john/texttospeechai/` - TTS processing using same GPU server
+- `/home/john/PycharmProjects/api.imageeditor.ai/` - The GPU API server itself
+
+## GPU Infrastructure
+
+This project uses the shared GPU server for heavy processing tasks.
+
+### GPU Server Details
+- **Server**: 38.248.6.142 (api.imageeditor.ai = api.animateadrawing.com)
+- **Hardware**: 4x Tesla P40 (24GB VRAM each, 96GB total)
+- **API Endpoint**: https://api.animateadrawing.com/v1/* (alias to api.imageeditor.ai)
+
+### Central Documentation
+For complete GPU infrastructure documentation, see:
+- `/home/john/ai/CLAUDE.md` - Central GPU infrastructure docs
+- `/home/john/PycharmProjects/api.imageeditor.ai/CLAUDE.md` - API server docs
+
+### Local GPU Processing
+
+This project also does local GPU processing for:
+- **MediaPipe**: Pose detection from drawings
+- **rembg (U2-Net)**: Background removal
+- **Coqui TTS**: Voice synthesis (optional)
+- **Stable Diffusion**: AI background generation (optional, GPU required)
+
+These run on the web server's local GPU (if available) or CPU fallback.
+
+### Error Handling
+
+The GPU API now supports OOM detection and automatic retry:
+- If GPU runs out of memory, job retries on a different GPU
+- GPU health tracking temporarily blacklists problematic GPUs
+- Pre-flight memory checks prevent jobs from starting on low-memory GPUs
+
+### Monitoring
+
+```bash
+# Check GPU status on API server
+cd /home/john/PycharmProjects/api.imageeditor.ai/ansible
+ansible -i servers server -m shell -a "nvidia-smi" --become
+
+# GPU status dashboard
+# Visit: https://api.imageeditor.ai/gpu/
+
+# Check local worker logs
+ansible -i servers all -m shell -a "tail -50 /var/log/animateadrawing/animateadrawing.err.log" --become
+```
 
 ## Analytics
 
