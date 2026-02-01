@@ -203,3 +203,30 @@ ansible -i servers all -m shell -a "opendkim-testkey -d mail.animateadrawing.com
 - **DKIM not signing:** Check `/etc/opendkim/SigningTable` has `*@mail.animateadrawing.com`
 - **Email going to spam:** Verify SPF/DKIM/DMARC records with mail-tester.com
 - **Loops back error:** Don't send to `@mail.animateadrawing.com` addresses (no inbox configured)
+
+### Email Forwarding
+- `hello@animateadrawing.com` → forwards to `john@nader.mx`
+- Virtual aliases configured in `/etc/postfix/virtual`
+
+## API Architecture
+
+### GPU API Backend
+External GPU processing at `api.animateadrawing.com` (38.248.6.142):
+- `/v1/animate/` - Submit animation job (POST with image + motion preset)
+- `/v1/animate/results/` - Poll for job status/results
+
+The main site proxies `/api/v1/*` to the GPU backend via nginx.
+
+### Internal API Endpoints
+- `/api/accounts/api/deduct/` - Credit verification/deduction for GPU API
+- `/api/accounts/rate_limit/` - Rate limit checking
+- `/animator/api/*` - Animation editor APIs (characters, scenes, etc.)
+
+### Related Project
+`/home/john/drawinganimator/` - Simpler animation site using the same GPU backend (api.imageeditor.ai = api.animateadrawing.com, same server).
+
+## Analytics
+
+- **Clicky** analytics with anti-adblock proxy
+- Script tag in `templates/base.html`
+- Nginx proxy endpoints: `/32fd4eea88e4.js` and `/b1be3608b208`
