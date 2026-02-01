@@ -45,6 +45,22 @@ server {
         access_log off;
     }
 
+    ### API PROXY - Forward /api/v1/ to GPU backend
+    location /api/v1/ {
+        resolver 1.1.1.1;
+        proxy_pass https://api.{{ domain }}/v1/;
+        proxy_connect_timeout 60s;
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+        proxy_http_version 1.1;
+        proxy_ssl_server_name on;
+        proxy_set_header Host api.{{ domain }};
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        client_max_body_size 50m;
+    }
+
     ### CLICKY ANTI-ADBLOCK PROXY
     location = /32fd4eea88e4.js {
         resolver 1.1.1.1;
