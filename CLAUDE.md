@@ -208,6 +208,13 @@ ansible -i servers all -m shell -a "opendkim-testkey -d mail.animateadrawing.com
 - `hello@animateadrawing.com` → forwards to `john@nader.mx`
 - Virtual aliases configured in `/etc/postfix/virtual`
 
+## API Configuration
+
+GPU processing is handled by the shared GPU server:
+- **API Domain**: `https://api.animateadrawing.com` (CNAME to api.imageeditor.ai)
+- **GPU Server**: 38.248.6.142 (4x Tesla P40, 96GB VRAM total)
+- **Config Variable**: No direct API_DOMAIN; API is proxied via nginx
+
 ## API Architecture
 
 ### GPU API Backend
