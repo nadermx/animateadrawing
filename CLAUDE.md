@@ -19,16 +19,50 @@ python manage.py runserver
 # Background workers (for animation processing)
 python manage.py rqworker default high low
 
-# Translations
-python manage.py run_translation  # Auto-translate TextBase entries (needs Google API key)
-
 # Collect static files (for production)
 python manage.py collectstatic --noinput
+```
+
+### All Management Commands
+
+```bash
+# accounts
+python manage.py rebill                    # Process subscription renewals
+python manage.py remove_pro_for_old_plans  # Remove pro status for old plans
+python manage.py expire_pro_users          # Expire pro users
+python manage.py up_users_backup           # Backup user data
+
+# animator
+python manage.py setup_motion_presets      # Setup motion presets
+python manage.py setup_pricing             # Setup pricing configuration
+python manage.py test_api                  # Run API endpoint tests
+
+# finances
+python manage.py set_plans                 # Setup payment plans
+python manage.py create_paypal_plans       # Create PayPal plans
+python manage.py create_paypal_product     # Create PayPal product
+
+# translations
+python manage.py set_languages             # Initialize translation languages
+python manage.py run_translation           # Auto-translate TextBase entries
+python manage.py delete_translations       # Delete translations
+python manage.py set_text_backup           # Backup translation text
+python manage.py replace_pdf               # Replace PDF translations
 ```
 
 ## Deployment
 
 **Production:** 140.82.28.166 (Vultr, Ubuntu 24.04) - https://animateadrawing.com
+**Shares server with:** drawinganimator.com (same IP: 140.82.28.166)
+**ansible_user:** Placeholder in group_vars/all -- check actual server credentials
+**Server deploy path:** /home/www/animateadrawing
+**Host group:** `[server]` (use `all` in ansible commands)
+**Has gitpull.yml:** No -- deploy with manual git pull commands (see below)
+**API Domain:** https://api.animateadrawing.com (CNAME to api.imageeditor.ai)
+
+Available Ansible playbooks:
+- `djangodeployubuntu20.yml` -- Full initial deployment
+- `disableroot.yml` -- Disable root login
 
 Always use Ansible for server operations. **IMPORTANT:** Run from `/home/john/animateadrawing/ansible` directory.
 
