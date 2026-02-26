@@ -269,3 +269,23 @@ This server is shared with drawinganimator. Both projects run under the same ngi
 - Public background library could be indexed
 - Neither has a sitemap currently
 - Adding view tracking would enable smart retention later
+
+---
+
+
+---
+
+## Revenue Acceleration Addendum (February 2026)
+
+### Portfolio Conversion System (Apply Across Projects)
+1. Enforce a clear funnel: first free action -> email gate -> strict daily free cap -> paywall.
+2. Add in-product upgrade triggers at high intent moments (download/export/API usage/advanced options).
+3. Standardize paid packaging: one highlighted plan, annual discount, and role-based tiers (creator/pro/team).
+4. Add reactivation flows for abandoned usage (1 hour, 24 hour, 72 hour reminders with resume links).
+5. Add referral loop (invite to unlock credits) and clear usage counters for free limits.
+
+### Project-Specific Revenue + SEO Actions
+- Add education licensing and classroom workflow packages.
+- Add pro export tiers (resolution, transparent assets, advanced formats).
+- Add creator/team collaboration tiers with project limits.
+- Expand SEO with tutorial and use-case pages (animate kids drawings, teacher classroom animation, mascot animation).
